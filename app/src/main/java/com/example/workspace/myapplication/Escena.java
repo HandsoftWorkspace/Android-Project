@@ -10,14 +10,12 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 public class Escena {
-
     Context context;
     int idEscena;
     int anchoPantalla, altoPantalla;
-    Bitmap fondo, capa1,capa2,capa3,capa4,capa5,capa6;
-    Bitmap idioma;
+    Bitmap fondo;
+    Bitmap capa,capa1,capa2,capa3,capa4,capa5,capa6,capa7,capa8,capa9,capa10;
     Paint pTexto, pTexto2, pBoton;
-    private Escena escena;
 
     public Escena(Context context, int idEscena, int anchoPantalla, int altoPantalla){
         this.context=context;
@@ -49,17 +47,13 @@ public class Escena {
     public void dibujar(Canvas c) {
         try {
             //if(idEscena!=0 &&)
-            if (idEscena == 1) {
-                Escena escena= new Escena(context,1,anchoPantalla,altoPantalla);
-            }
         } catch (Exception e) {
             Log.i("Error al dibujar",e.getLocalizedMessage());
         }
     }
 
-    public boolean pulsa(Rect rect, MotionEvent event){
-        if(rect.contains((int)event.getX(),(int)event.getY())){
-
+    public boolean pulsa(Rect boton, MotionEvent event){
+        if(boton.contains((int)event.getX(),(int)event.getY())){
             return true;
         }
         return false;

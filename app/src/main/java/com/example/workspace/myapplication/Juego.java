@@ -37,11 +37,15 @@ import android.view.WindowManager;
                int nuevaEscena = escenaActual.onTouchEvent(event);
                if(nuevaEscena!=escenaActual.idEscena){
                    switch (nuevaEscena){
-                       case 0: escenaActual = new Menu(context,nuevaEscena,anchoPantalla,altoPantalla);
-                       break;
                        case 1: escenaActual = new Game(context, nuevaEscena,anchoPantalla,altoPantalla);
                        break;
-                       case 99: escenaActual = new Records(context,nuevaEscena,anchoPantalla,altoPantalla);
+                       case 2: escenaActual = new Opciones(context, nuevaEscena,anchoPantalla,altoPantalla);
+                       break;
+                       case 3: escenaActual = new Records(context,nuevaEscena,anchoPantalla,altoPantalla);
+                       break;
+                       case 4: escenaActual = new Ayuda(context,nuevaEscena,anchoPantalla,altoPantalla);
+                       break;
+                       case 5: escenaActual = new Creditos(context,nuevaEscena,anchoPantalla,altoPantalla);
                        break;
                    }
                }
