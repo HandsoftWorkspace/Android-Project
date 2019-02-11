@@ -7,8 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
-public class Game extends Escena implements Runnable
-{
+public class Game extends Escena implements Runnable {
 
     Fondo[] parallax;
     Paint pincel;
@@ -23,6 +22,8 @@ public class Game extends Escena implements Runnable
 
     Enemigo enemigo;
     Bitmap bitmapEnemigo;
+
+    Yones yones = new Yones(context, 10, 80, 2, anchoPantalla, altoPantalla);
 
     public Game(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -44,52 +45,61 @@ public class Game extends Escena implements Runnable
         capa4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
         capa4 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
 
-//        capa5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-//        capa5 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
-//
-//        capa6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-//        capa6 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
-//
-//        capa7 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-//        capa7 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
-//
-//        capa8 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-//        capa8 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
-//
-//        capa9 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-//        capa9 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
-//
-//        capa10 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-//        capa10 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+        capa5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
+        capa5 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+
+        capa6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
+        capa6 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+
+        capa7 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
+        capa7 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+
+        capa8 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
+        capa8 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+
+        capa9 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
+        capa9 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+
+        capa10 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
+        capa10 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
 //
         parallax = new Fondo[10];
-        parallax[0] = new Fondo(capa,anchoPantalla);
-        parallax[1] = new Fondo(capa1,parallax[0].posicion.x+capa1.getWidth(),0);
-        parallax[2] = new Fondo(capa2,anchoPantalla);
-        parallax[3] = new Fondo(capa3,parallax[2].posicion.x+capa1.getWidth(),0);
-        parallax[4] = new Fondo(capa4,anchoPantalla);
-//        parallax[5] = new Fondo(capa5,parallax[0].posicion.x+capa1.getWidth(),0);
-//        parallax[6] = new Fondo(capa6,anchoPantalla);
-//        parallax[7] = new Fondo(capa7,parallax[0].posicion.x+capa1.getWidth(),0);
-//        parallax[8] = new Fondo(capa8,anchoPantalla);
-//        parallax[9] = new Fondo(capa9,parallax[0].posicion.x+capa1.getWidth(),0);
-//        parallax[10] = new Fondo(capa10,anchoPantalla);
+//        parallax[0] = new Fondo(capa, anchoPantalla);
+//        parallax[1] = new Fondo(capa1, anchoPantalla);
+//        parallax[2] = new Fondo(capa2, anchoPantalla);
+//        parallax[3] = new Fondo(capa3, anchoPantalla);
+//        parallax[4] = new Fondo(capa4, anchoPantalla);
+//        parallax[5] = new Fondo(capa5, parallax[0].posicion.x + capa.getWidth(), 0);
+//        parallax[6] = new Fondo(capa6, parallax[1].posicion.x + capa1.getWidth(), 0);
+//        parallax[7] = new Fondo(capa7, parallax[2].posicion.x + capa2.getWidth(), 0);
+//        parallax[8] = new Fondo(capa8, parallax[3].posicion.x + capa3.getWidth(), 0);
+//        parallax[9] = new Fondo(capa9, parallax[4].posicion.x + capa4.getWidth(), 0);
+
+
+        parallax[0] = new Fondo(capa, anchoPantalla);
+        parallax[1] = new Fondo(capa1, parallax[0].posicion.x + capa1.getWidth(), 0);
+        parallax[2] = new Fondo(capa2, anchoPantalla);
+        parallax[3] = new Fondo(capa3, parallax[2].posicion.x + capa1.getWidth(), 0);
+        parallax[4] = new Fondo(capa4, anchoPantalla);
+        parallax[5] = new Fondo(capa5, parallax[0].posicion.x + capa1.getWidth(), 0);
+        parallax[6] = new Fondo(capa6, anchoPantalla);
+        parallax[7] = new Fondo(capa7, parallax[0].posicion.x + capa1.getWidth(), 0);
+        parallax[8] = new Fondo(capa8, anchoPantalla);
+        parallax[9] = new Fondo(capa9, parallax[0].posicion.x + capa1.getWidth(), 0);
 
         // PERSONAJES
         //bitmapEnemigo = new Bitmap.createScaledBitmap(bitmapEnemigo,10,10,true);
-        bitmapEnemigo=BitmapFactory.decodeResource(context.getResources(),R.drawable.run_00);
-        enemigo = new Enemigo(bitmapEnemigo,30,45);
-
     }
 
-    public void dibujar(Canvas c){
-        try{
+    public void dibujar(Canvas c) {
+        try {
             //Aquí dibujo el array de bitmaps
-            c.drawBitmap(parallax[0].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
-            c.drawBitmap(parallax[1].imagen,parallax[1].posicion.x,parallax[0].posicion.y,null);
-            c.drawBitmap(parallax[2].imagen,parallax[2].posicion.x,parallax[0].posicion.y,null);
-            c.drawBitmap(parallax[3].imagen,parallax[3].posicion.x,parallax[0].posicion.y,null);
-            c.drawBitmap(parallax[4].imagen,parallax[4].posicion.x,parallax[0].posicion.y,null);
+            c.drawBitmap(parallax[0].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[1].imagen, parallax[1].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[2].imagen, parallax[2].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[3].imagen, parallax[3].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[4].imagen, parallax[4].posicion.x, parallax[0].posicion.y, null);
+
 //            c.drawBitmap(parallax[5].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
 //            c.drawBitmap(parallax[6].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
 //            c.drawBitmap(parallax[7].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
@@ -103,6 +113,7 @@ public class Game extends Escena implements Runnable
             parallax[2].mover(6);
             parallax[3].mover(6);
             parallax[4].mover(4);
+
 //            parallax[5].mover(4);
 //            parallax[6].mover(3);
 //            parallax[7].mover(3);
@@ -130,6 +141,8 @@ public class Game extends Escena implements Runnable
                 parallax[4].posicion.x = parallax[3].posicion.x - parallax[4].imagen.getWidth();
                 System.err.println("CAPA 4");
             }
+
+
 //            if (parallax[5].posicion.x > anchoPantalla) {
 //                parallax[5].posicion.x = parallax[4].posicion.x - parallax[5].imagen.getWidth();
 //                System.err.println("PASA POR AQUí");
@@ -141,9 +154,11 @@ public class Game extends Escena implements Runnable
 
 
             // Personajes
-            enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
-        }catch (Exception e){
-            Log.i("Error al dibujar",e.getLocalizedMessage());
+            //enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
+            yones.mover();
+            yones.dibujar(c);
+        } catch (Exception e) {
+            Log.i("Error al dibujar", e.getLocalizedMessage());
         }
     }
 
@@ -151,6 +166,6 @@ public class Game extends Escena implements Runnable
     @Override
     public void run() {
 
-        }
-
     }
+
+}

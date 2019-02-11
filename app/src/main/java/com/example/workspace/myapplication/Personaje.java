@@ -1,6 +1,8 @@
 package com.example.workspace.myapplication;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 public class Personaje {
     int velocidad;
@@ -9,15 +11,15 @@ public class Personaje {
     Bitmap[] frames;
 
     public Personaje(int posX, int posY){
-        frames[0] = frame0;
-        frames[1] = frame1;
-        frames[2] = frame2;
-        frames[3] = frame3;
-        frames[4] = frame4;
-        frames[5] = frame5;
-        frames[6] = frame6;
-        frames[7] = frame7;
-        frames[8] = frame8;
+//        frames[0] = frame0;
+//        frames[1] = frame1;
+//        frames[2] = frame2;
+//        frames[3] = frame3;
+//        frames[4] = frame4;
+//        frames[5] = frame5;
+//        frames[6] = frame6;
+//        frames[7] = frame7;
+//        frames[8] = frame8;
     }
 
     public Personaje() {
@@ -29,11 +31,14 @@ public class Personaje {
         for (int i = 0; i < frames.length; i++) {
             aux++;
             if(aux/2==0){
-
                 return frames[i];
             }
         }
         return null;
     }
+
+//    public void obtenerBitmap(Context context, String nombre){
+//        BitmapFactory.decodeResource(context.getResources(),R.drawable.nombre);
+//    }
 
 }

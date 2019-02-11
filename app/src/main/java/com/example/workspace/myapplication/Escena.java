@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 public class Escena {
     Context context;
     int idEscena;
-    int anchoPantalla, altoPantalla;
+    static int anchoPantalla, altoPantalla;
     Bitmap fondo;
     Bitmap capa,capa1,capa2,capa3,capa4,capa5,capa6,capa7,capa8,capa9,capa10;
     Paint pTexto, pTexto2, pBoton;

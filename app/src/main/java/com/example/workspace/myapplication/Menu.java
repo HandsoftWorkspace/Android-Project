@@ -16,7 +16,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 
-import com.example.workspace.myapplication.MainActivity;import com.example.workspace.myapplication.R;
+import com.example.workspace.myapplication.MainActivity;
+import com.example.workspace.myapplication.R;
 
 public class Menu extends Escena {
 
@@ -25,10 +26,10 @@ public class Menu extends Escena {
     int alto, ancho;
     Paint brocha = new Paint();
 
-    private MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private SoundPool efectos;
-    private int sonidoWoosh, sonidoPajaro,sonidoExplosion;
+    private int sonidoWoosh, sonidoPajaro, sonidoExplosion;
     private int maxSonidosSimul = 10;
     private SoundPool soundPool;
     Fondo parallax;
@@ -43,8 +44,7 @@ public class Menu extends Escena {
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
-//
-//        PRIMERA VERSION MENÚ
+        //        PRIMERA VERSION MENÚ
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
 
@@ -53,27 +53,18 @@ public class Menu extends Escena {
         ancho = anchoPantalla / 7;
 
         // Left, Top,   Right, Botton
-        juego = new Rect(ancho*2,alto*1,ancho*5,alto*2);
-        opciones = new Rect(ancho*1, alto*3, ancho * 3, alto * 4);
-        records = new Rect(ancho*4, alto*3, ancho * 6, alto * 4);
-        creditos = new Rect(0,0,ancho*1,alto*1);
-        ayuda = new Rect(ancho*6, 0, ancho * 7, alto * 1);
+        juego = new Rect(ancho * 2, alto * 1, ancho * 5, alto * 2);
+        opciones = new Rect(ancho * 1, alto * 3, ancho * 3, alto * 4);
+        logros = new Rect(ancho * 4, alto * 3, ancho * 6, alto * 4);
+        creditos = new Rect(0, 0, ancho * 1, alto * 1);
+        ayuda = new Rect(ancho * 6, 0, ancho * 7, alto * 1);
 
-        game = new Rect(ancho,alto,ancho*4,alto*4);
-
-        audioManager= (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mediaPlayer = MediaPlayer.create(context, R.raw.acoustic);
         int v = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setVolume(v / 2, v / 2);
+        mediaPlayer.start();
 
-        if ((android.os.Build.VERSION.SDK_INT) >= 21) {
-            SoundPool.Builder spb=new SoundPool.Builder();
-            //spb.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA.setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
-            spb.setMaxStreams(maxSonidosSimul);
-            this.efectos=spb.build();
-        }
-//       soundPool.play(explosion, x, y, 1,1,1);
-//        soundPool.play(R.raw.furrow,1,1,1,1,1);
-//        mediaPlayer = MediaPlayer.create(context,R.raw.furrow);
-//        mediaPlayer.setVolume(100,100);
     }
 
     // Actualizamos la física de los elementos en pantalla
@@ -88,41 +79,42 @@ public class Menu extends Escena {
             brocha.setAntiAlias(true);
             brocha.isAntiAlias();
 
-            c.drawRect(juego,brocha);
-            brocha.setColor(Color.GREEN);
+            brocha.setColor(Color.RED);
+            c.drawRect(juego, brocha);
 
-            c.drawRect(opciones,brocha);
             brocha.setColor(Color.GREEN);
+            c.drawRect(opciones, brocha);
 
-            c.drawRect(records, brocha);
             brocha.setColor(Color.GREEN);
+            c.drawRect(logros, brocha);
 
+            brocha.setColor(Color.GREEN);
             c.drawRect(ayuda, brocha);
-            brocha.setColor(Color.GREEN);
 
+            brocha.setColor(Color.GREEN);
             c.drawRect(creditos, brocha);
-            brocha.setColor(Color.GREEN);
 
+            pTexto.setColor(Color.YELLOW);
+            pTexto.setTextSize(50);
             c.drawText(strJugar, juego.centerX(), juego.centerY(), pTexto);
-            pTexto.setColor(Color.BLACK);
-            pTexto.setTextSize(50);
 
+            pTexto.setColor(Color.YELLOW);
+            pTexto.setTextSize(50);
             c.drawText(strOpciones, opciones.centerX(), opciones.centerY(), pTexto);
-            pTexto.setColor(Color.BLACK);
-            pTexto.setTextSize(50);
 
+            pTexto.setColor(Color.YELLOW);
+            pTexto.setTextSize(50);
+            c.drawText(strLogros, logros.centerX(), logros.centerY(), pTexto);
+
+            pTexto.setColor(Color.YELLOW);
+            pTexto.setTextSize(50);
             c.drawText(strCreditos, creditos.centerX(), creditos.centerY(), pTexto);
-            pTexto.setColor(Color.BLACK);
-            pTexto.setTextSize(50);
 
-            c.drawText(strAyuda,ayuda.centerX(),ayuda.centerY(),pTexto);
-            pTexto.setColor(Color.BLACK);
+            pTexto.setColor(Color.YELLOW);
             pTexto.setTextSize(50);
+            c.drawText(strAyuda, ayuda.centerX(), ayuda.centerY(), pTexto);
 
-            c.drawText(strLogros,logros.centerX(),logros.centerY(),pTexto);
-            pTexto.setColor(Color.BLACK);
-            pTexto.setTextSize(50);
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
     }
@@ -139,19 +131,16 @@ public class Menu extends Escena {
                 break;
             case MotionEvent.ACTION_UP:                     // Al levantar el último dedo
             case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es el último
-                if(pulsa(juego,event)){
+                if (pulsa(juego, event)) {
+                    mediaPlayer.stop();
                     return 1;
-                }
-                else if(pulsa(opciones,event)){
+                } else if (pulsa(opciones, event)) {
                     return 2;
-                }
-                else if(pulsa(records,event)){
+                } else if (pulsa(records, event)) {
                     return 3;
-                }
-                else if(pulsa(ayuda,event)){
+                } else if (pulsa(ayuda, event)) {
                     return 4;
-                }
-                else if(pulsa(creditos,event)){
+                } else if (pulsa(creditos, event)) {
                     return 5;
                 }
                 break;
