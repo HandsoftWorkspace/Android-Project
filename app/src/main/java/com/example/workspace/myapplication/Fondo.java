@@ -16,6 +16,6 @@ public class Fondo {
     }
 
     public void mover(int velocidad){
-        posicion.x+=velocidad;
+        posicion.x-=velocidad;
     }
 }

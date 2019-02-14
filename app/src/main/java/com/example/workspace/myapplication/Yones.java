@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 public class Yones extends Personaje {
 
@@ -14,11 +16,13 @@ public class Yones extends Personaje {
     Paint p;
     int posX, posY;
     int anchoPantalla, altoPantalla;
-    int tiempoFrame = 100;
+    int tiempoFrame = 20;
     long tFrameAuxm = 0;
     int indice = 0;
     int proporcionX;
     int proporcionY;
+
+    Rect rectYones;
 
     public Yones(Context context, int posX, int posY, int velocidad, int anchoPantalla, int altoPantalla) {
 
@@ -56,6 +60,9 @@ public class Yones extends Personaje {
 
         framesIndiana[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run9);
         framesIndiana[9] = Bitmap.createScaledBitmap(framesIndiana[9], proporcionX, proporcionY * 5, false);
+
+
+
     }
 
     public void mover() {
@@ -69,6 +76,7 @@ public class Yones extends Personaje {
 
     public void dibujar(Canvas c) {
         c.drawBitmap(frame, proporcionX, posY*9, p);
+        p.setColor(Color.RED);
     }
 
 }

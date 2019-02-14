@@ -72,45 +72,50 @@ public class Menu extends Escena {
 
     }
 
-    // Rutina de dibujo en el lienzo. Se le llamará desde el hilo
+    // Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+
+    /**
+     *
+     * @param c
+     */
     public void dibujar(Canvas c) {
         try {
             c.drawBitmap(fondo, 0, 0, brocha);
             brocha.setAntiAlias(true);
             brocha.isAntiAlias();
 
-            brocha.setColor(Color.RED);
+            brocha.setColor(Color.DKGRAY);
             c.drawRect(juego, brocha);
 
-            brocha.setColor(Color.GREEN);
+            brocha.setColor(Color.DKGRAY);
             c.drawRect(opciones, brocha);
 
-            brocha.setColor(Color.GREEN);
+            brocha.setColor(Color.DKGRAY);
             c.drawRect(logros, brocha);
 
-            brocha.setColor(Color.GREEN);
+            brocha.setColor(Color.DKGRAY);
             c.drawRect(ayuda, brocha);
 
-            brocha.setColor(Color.GREEN);
+            brocha.setColor(Color.DKGRAY);
             c.drawRect(creditos, brocha);
 
-            pTexto.setColor(Color.YELLOW);
-            pTexto.setTextSize(50);
-            c.drawText(strJugar, juego.centerX(), juego.centerY(), pTexto);
+            pTexto.setColor(Color.WHITE);
+            pTexto.setTextSize(200);
+//            c.drawText(strJugar, juego.centerX(), juego.centerY(), pTexto);
 
-            pTexto.setColor(Color.YELLOW);
+            pTexto.setColor(Color.WHITE);
             pTexto.setTextSize(50);
             c.drawText(strOpciones, opciones.centerX(), opciones.centerY(), pTexto);
 
-            pTexto.setColor(Color.YELLOW);
+            pTexto.setColor(Color.WHITE);
             pTexto.setTextSize(50);
             c.drawText(strLogros, logros.centerX(), logros.centerY(), pTexto);
 
-            pTexto.setColor(Color.YELLOW);
+            pTexto.setColor(Color.WHITE);
             pTexto.setTextSize(50);
             c.drawText(strCreditos, creditos.centerX(), creditos.centerY(), pTexto);
 
-            pTexto.setColor(Color.YELLOW);
+            pTexto.setColor(Color.WHITE);
             pTexto.setTextSize(50);
             c.drawText(strAyuda, ayuda.centerX(), ayuda.centerY(), pTexto);
 
@@ -151,7 +156,6 @@ public class Menu extends Escena {
             default:
                 Log.i("Otra acción", "Acción no definida: " + accion);
         }
-
 
         return idEscena;
     }

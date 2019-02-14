@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 
 public class Game extends Escena implements Runnable {
@@ -23,8 +24,16 @@ public class Game extends Escena implements Runnable {
     Enemigo enemigo;
     Bitmap bitmapEnemigo;
 
+    Rect rectYones;
+
     Yones yones = new Yones(context, 10, 80, 2, anchoPantalla, altoPantalla);
 
+    /**
+     * @param context       application
+     * @param idEscena      scene run in this moment
+     * @param anchoPantalla width screen this
+     * @param altoPantalla  heigth screen
+     */
     public Game(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         //fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.prueba);
@@ -64,6 +73,7 @@ public class Game extends Escena implements Runnable {
         capa10 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
 //
         parallax = new Fondo[10];
+
 //        parallax[0] = new Fondo(capa, anchoPantalla);
 //        parallax[1] = new Fondo(capa1, anchoPantalla);
 //        parallax[2] = new Fondo(capa2, anchoPantalla);
@@ -91,6 +101,9 @@ public class Game extends Escena implements Runnable {
         //bitmapEnemigo = new Bitmap.createScaledBitmap(bitmapEnemigo,10,10,true);
     }
 
+    /**
+     * @param c canvas this application
+     */
     public void dibujar(Canvas c) {
         try {
             //Aquí dibujo el array de bitmaps
@@ -100,59 +113,79 @@ public class Game extends Escena implements Runnable {
             c.drawBitmap(parallax[3].imagen, parallax[3].posicion.x, parallax[0].posicion.y, null);
             c.drawBitmap(parallax[4].imagen, parallax[4].posicion.x, parallax[0].posicion.y, null);
 
-//            c.drawBitmap(parallax[5].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
-//            c.drawBitmap(parallax[6].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
-//            c.drawBitmap(parallax[7].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
-//            c.drawBitmap(parallax[8].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
-//            c.drawBitmap(parallax[9].imagen,parallax[0].posicion.x,parallax[0].posicion.y,null);
+            c.drawBitmap(parallax[5].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[6].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[7].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[8].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
+            c.drawBitmap(parallax[9].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
 //            c.drawBitmap(capa10,0,0,null);
 
+
             // Movemos
-            parallax[0].mover(3);
+            parallax[0].mover(1);
             parallax[1].mover(3);
             parallax[2].mover(6);
-            parallax[3].mover(6);
-            parallax[4].mover(4);
+            parallax[3].mover(8);
+            parallax[4].mover(12);
 
-//            parallax[5].mover(4);
-//            parallax[6].mover(3);
-//            parallax[7].mover(3);
-//            parallax[8].mover(8);
-//            parallax[9].mover(8);
+            parallax[5].mover(4);
+            parallax[6].mover(3);
+            parallax[7].mover(4);
+            parallax[8].mover(8);
+            parallax[9].mover(8);
 
             // Comprobamos que se sobrepase la pantalla y reiniciamos
-            if (parallax[0].posicion.x > anchoPantalla) {
-                parallax[0].posicion.x = parallax[1].posicion.x - parallax[0].imagen.getWidth();
+            if (parallax[0].posicion.x == 0) {
+//                parallax[0].posicion.x = parallax[0].posicion.x - parallax[0].imagen.getWidth();
+                parallax[0].posicion.x = anchoPantalla;
                 System.err.println("CAPA 0");
             }
-            if (parallax[1].posicion.x > anchoPantalla) {
-                parallax[1].posicion.x = parallax[0].posicion.x - parallax[1].imagen.getWidth();
+            if (parallax[1].posicion.x == 0) {
+//                parallax[1].posicion.x = parallax[1].posicion.x - parallax[1].imagen.getWidth();
+                parallax[1].posicion.x = anchoPantalla;
                 System.err.println("CAPA 1");
             }
-            if (parallax[2].posicion.x > anchoPantalla) {
-                parallax[2].posicion.x = parallax[1].posicion.x - parallax[2].imagen.getWidth();
+            if (parallax[2].posicion.x == 0) {
+//                parallax[2].posicion.x = parallax[2].posicion.x - parallax[2].imagen.getWidth();
+                parallax[2].posicion.x = anchoPantalla;
                 System.err.println("CAPA 2");
             }
-            if (parallax[3].posicion.x > anchoPantalla) {
-                parallax[3].posicion.x = parallax[2].posicion.x - parallax[3].imagen.getWidth();
+            if (parallax[3].posicion.x == 0) {
+//                parallax[3].posicion.x = parallax[3].posicion.x - parallax[3].imagen.getWidth();
+                parallax[3].posicion.x = anchoPantalla;
                 System.err.println("CAPA 3");
             }
-            if (parallax[4].posicion.x > anchoPantalla) {
-                parallax[4].posicion.x = parallax[3].posicion.x - parallax[4].imagen.getWidth();
+            if (parallax[4].posicion.x == 0) {
+//                parallax[4].posicion.x = parallax[4].posicion.x - parallax[4].imagen.getWidth();
+                parallax[4].posicion.x = anchoPantalla;
                 System.err.println("CAPA 4");
             }
 
-
-//            if (parallax[5].posicion.x > anchoPantalla) {
-//                parallax[5].posicion.x = parallax[4].posicion.x - parallax[5].imagen.getWidth();
-//                System.err.println("PASA POR AQUí");
-//            }
-//            if (parallax[6].posicion.x > anchoPantalla) {
-//                parallax[6].posicion.x = parallax[7].posicion.x - parallax[6].imagen.getWidth();
-//                System.err.println("PASA POR AQUí");
-//            }
-
-
+            if (parallax[5].posicion.x > anchoPantalla) {
+//                parallax[5].posicion.x = parallax[5].posicion.x - parallax[5].imagen.getWidth();
+                parallax[5].posicion.x = 0;
+                System.err.println("CAPA 5");
+            }
+            if (parallax[6].posicion.x > anchoPantalla) {
+//                parallax[6].posicion.x = parallax[6].posicion.x - parallax[6].imagen.getWidth();
+                parallax[6].posicion.x = 0;
+                System.err.println("CAPA 6");
+            }
+            if (parallax[7].posicion.x > anchoPantalla) {
+//                parallax[7].posicion.x = parallax[7].posicion.x - parallax[6].imagen.getWidth();
+                parallax[7].posicion.x = 0;
+                System.err.println("CAPA 7");
+            }
+            if (parallax[8].posicion.x > anchoPantalla) {
+//                parallax[8].posicion.x = parallax[8].posicion.x - parallax[6].imagen.getWidth();
+                parallax[8].posicion.x = 0;
+                System.err.println("CAPA 8");
+            }
+            if (parallax[9].posicion.x > anchoPantalla) {
+//                parallax[9].posicion.x = parallax[9].posicion.x - parallax[6].imagen.getWidth();
+                parallax[9].posicion.x = 0;
+                System.err.println("CAPA 9");
+            }
             // Personajes
             //enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
             yones.mover();
