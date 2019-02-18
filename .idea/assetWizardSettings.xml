@@ -61,9 +61,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="C:\Users\WorkSpace\Documents\Proyecto Android\Pantallas\ico.png" />
-                                      <entry key="foregroundLayerName" value="ic_launcher" />
-                                      <entry key="outputName" value="fondo" />
+                                      <entry key="foregroundImage" value="C:\Users\WorkSpace\Documents\Proyecto Android\ASSETS\Jungle-GUI-PNG\PNG\menu\play.png" />
+                                      <entry key="foregroundLayerName" value="plays" />
+                                      <entry key="outputName" value="play" />
+                                      <entry key="previewDensity" value="HIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>

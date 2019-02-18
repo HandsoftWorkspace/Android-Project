@@ -4,101 +4,135 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Vibrator;
 import android.util.Log;
+import android.view.MotionEvent;
+
+import java.util.ArrayList;
+import java.util.MissingResourceException;
 
 public class Game extends Escena implements Runnable {
 
-    Fondo[] parallax;
+    private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
     Paint pincel;
-    // Fondos bitmaps
-//    Bitmap capa1,capa2,capa3,capa4;
 
-    // Fondos clase propia backgrounds
-    Background a1, a2;
-    Background b1, b2;
-    Background c1, c2;
-    Background d1, d2;
+    Bitmap capa, capa1, capa2, capa3, capa4, capa5, capa6, capa7, capa8, capa9, capa10;
 
-    Enemigo enemigo;
-    Bitmap bitmapEnemigo;
+    Enemigo enemigo; // Personaje secundario
 
     Rect rectYones;
 
+    public static boolean enSalto;
+    public static boolean enSlide;
+
+    int random;
+
     Yones yones = new Yones(context, 10, 80, 2, anchoPantalla, altoPantalla);
+    Caballero caballero = new Caballero(context, anchoPantalla, altoPantalla, 4, anchoPantalla, altoPantalla);
 
     /**
      * @param context       application
      * @param idEscena      scene run in this moment
-     * @param anchoPantalla width screen this
-     * @param altoPantalla  heigth screen
+     * @param anchoPantalla width screen this device
+     * @param altoPantalla  heigth screen this device
      */
     public Game(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
-        //fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.prueba);
-        //fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
 
+        // Se asocia cada bitmap a una imagen png
         capa = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa);
         capa = Bitmap.createScaledBitmap(capa, anchoPantalla, altoPantalla, false);
-
         capa1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa1);
         capa1 = Bitmap.createScaledBitmap(capa1, anchoPantalla, altoPantalla, false);
-
         capa2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa2);
         capa2 = Bitmap.createScaledBitmap(capa2, anchoPantalla, altoPantalla, false);
-
         capa3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa3);
         capa3 = Bitmap.createScaledBitmap(capa3, anchoPantalla, altoPantalla, false);
-
         capa4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
         capa4 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
 
-        capa5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-        capa5 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+        parallax = new ArrayList<>(); // Se inicia la coleccion;
 
-        capa6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-        capa6 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+        // Se añade la imagen a cada posición de la colección
+//        parallax.add(new Fondo(capa, 0, 0));
+//        parallax.add(new Fondo(capa1, 0, 0));
+//        parallax.add(new Fondo(capa2, 0, 0));
+//        parallax.add(new Fondo(capa3, 0, 0));
+//        parallax.add(new Fondo(capa4, 0, 0));
 
-        capa7 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-        capa7 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+//        segundo parallax
+        capa = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer1);
+        capa = Bitmap.createScaledBitmap(capa, anchoPantalla, altoPantalla, false);
 
-        capa8 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-        capa8 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+        capa1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer2);
+        capa1 = Bitmap.createScaledBitmap(capa1, anchoPantalla, altoPantalla, false);
 
-        capa9 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-        capa9 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
+        capa2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer3);
+        capa2 = Bitmap.createScaledBitmap(capa2, anchoPantalla, altoPantalla, false);
 
-        capa10 = BitmapFactory.decodeResource(context.getResources(), R.drawable.capa4);
-        capa10 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
-//
-        parallax = new Fondo[10];
+        capa3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer4);
+        capa3 = Bitmap.createScaledBitmap(capa3, anchoPantalla, altoPantalla, false);
 
-//        parallax[0] = new Fondo(capa, anchoPantalla);
-//        parallax[1] = new Fondo(capa1, anchoPantalla);
-//        parallax[2] = new Fondo(capa2, anchoPantalla);
-//        parallax[3] = new Fondo(capa3, anchoPantalla);
-//        parallax[4] = new Fondo(capa4, anchoPantalla);
-//        parallax[5] = new Fondo(capa5, parallax[0].posicion.x + capa.getWidth(), 0);
-//        parallax[6] = new Fondo(capa6, parallax[1].posicion.x + capa1.getWidth(), 0);
-//        parallax[7] = new Fondo(capa7, parallax[2].posicion.x + capa2.getWidth(), 0);
-//        parallax[8] = new Fondo(capa8, parallax[3].posicion.x + capa3.getWidth(), 0);
-//        parallax[9] = new Fondo(capa9, parallax[4].posicion.x + capa4.getWidth(), 0);
+        capa4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer5);
+        capa4 = Bitmap.createScaledBitmap(capa4, anchoPantalla, altoPantalla, false);
 
+        capa5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer6);
+        capa5 = Bitmap.createScaledBitmap(capa5, anchoPantalla, altoPantalla, false);
 
-        parallax[0] = new Fondo(capa, anchoPantalla);
-        parallax[1] = new Fondo(capa1, parallax[0].posicion.x + capa1.getWidth(), 0);
-        parallax[2] = new Fondo(capa2, anchoPantalla);
-        parallax[3] = new Fondo(capa3, parallax[2].posicion.x + capa1.getWidth(), 0);
-        parallax[4] = new Fondo(capa4, anchoPantalla);
-        parallax[5] = new Fondo(capa5, parallax[0].posicion.x + capa1.getWidth(), 0);
-        parallax[6] = new Fondo(capa6, anchoPantalla);
-        parallax[7] = new Fondo(capa7, parallax[0].posicion.x + capa1.getWidth(), 0);
-        parallax[8] = new Fondo(capa8, anchoPantalla);
-        parallax[9] = new Fondo(capa9, parallax[0].posicion.x + capa1.getWidth(), 0);
+        capa6 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer7);
+        capa6 = Bitmap.createScaledBitmap(capa6, anchoPantalla, altoPantalla, false);
+
+        capa7 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer8);
+        capa7 = Bitmap.createScaledBitmap(capa7, anchoPantalla, altoPantalla, false);
+
+        capa8 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer9);
+        capa8 = Bitmap.createScaledBitmap(capa8, anchoPantalla, altoPantalla, false);
+
+        capa9 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer10);
+        capa9 = Bitmap.createScaledBitmap(capa9, anchoPantalla, altoPantalla, false);
+
+        capa10 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer11);
+        capa10 = Bitmap.createScaledBitmap(capa10, anchoPantalla, altoPantalla, false);
+
+        parallax.add(new Fondo(capa, 0, 0));
+        parallax.add(new Fondo(capa1, 0, 0));
+        parallax.add(new Fondo(capa2, 0, 0));
+        parallax.add(new Fondo(capa3, 0, 0));
+        parallax.add(new Fondo(capa4, 0, 0));
+        parallax.add(new Fondo(capa5, 0, 0));
+        parallax.add(new Fondo(capa6, 0, 0));
+        parallax.add(new Fondo(capa7, 0, 0));
+        parallax.add(new Fondo(capa8, 0, 0));
+        parallax.add(new Fondo(capa9, 0, 0));
+        parallax.add(new Fondo(capa10, 0, 0));
 
         // PERSONAJES
-        //bitmapEnemigo = new Bitmap.createScaledBitmap(bitmapEnemigo,10,10,true);
+        enSalto = false;
+        enSlide = false;
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void actualizarFisica() {
+        super.actualizarFisica();
+
+        parallax.get(0).mover(4);
+        parallax.get(1).mover(6);
+        parallax.get(2).mover(8);
+        parallax.get(3).mover(10);
+        parallax.get(4).mover(12);
+        parallax.get(5).mover(14);
+        parallax.get(6).mover(16);
+        parallax.get(7).mover(18);
+        parallax.get(8).mover(20);
+        parallax.get(9).mover(22);
+        parallax.get(10).mover(24);
+
     }
 
     /**
@@ -106,92 +140,30 @@ public class Game extends Escena implements Runnable {
      */
     public void dibujar(Canvas c) {
         try {
-            //Aquí dibujo el array de bitmaps
-            c.drawBitmap(parallax[0].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[1].imagen, parallax[1].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[2].imagen, parallax[2].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[3].imagen, parallax[3].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[4].imagen, parallax[4].posicion.x, parallax[0].posicion.y, null);
-
-            c.drawBitmap(parallax[5].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[6].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[7].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[8].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
-            c.drawBitmap(parallax[9].imagen, parallax[0].posicion.x, parallax[0].posicion.y, null);
-//            c.drawBitmap(capa10,0,0,null);
-
-
-            // Movemos
-            parallax[0].mover(1);
-            parallax[1].mover(3);
-            parallax[2].mover(6);
-            parallax[3].mover(8);
-            parallax[4].mover(12);
-
-            parallax[5].mover(4);
-            parallax[6].mover(3);
-            parallax[7].mover(4);
-            parallax[8].mover(8);
-            parallax[9].mover(8);
-
-            // Comprobamos que se sobrepase la pantalla y reiniciamos
-            if (parallax[0].posicion.x == 0) {
-//                parallax[0].posicion.x = parallax[0].posicion.x - parallax[0].imagen.getWidth();
-                parallax[0].posicion.x = anchoPantalla;
-                System.err.println("CAPA 0");
-            }
-            if (parallax[1].posicion.x == 0) {
-//                parallax[1].posicion.x = parallax[1].posicion.x - parallax[1].imagen.getWidth();
-                parallax[1].posicion.x = anchoPantalla;
-                System.err.println("CAPA 1");
-            }
-            if (parallax[2].posicion.x == 0) {
-//                parallax[2].posicion.x = parallax[2].posicion.x - parallax[2].imagen.getWidth();
-                parallax[2].posicion.x = anchoPantalla;
-                System.err.println("CAPA 2");
-            }
-            if (parallax[3].posicion.x == 0) {
-//                parallax[3].posicion.x = parallax[3].posicion.x - parallax[3].imagen.getWidth();
-                parallax[3].posicion.x = anchoPantalla;
-                System.err.println("CAPA 3");
-            }
-            if (parallax[4].posicion.x == 0) {
-//                parallax[4].posicion.x = parallax[4].posicion.x - parallax[4].imagen.getWidth();
-                parallax[4].posicion.x = anchoPantalla;
-                System.err.println("CAPA 4");
+            // Se recorre la lista de imagen de la colección y se dibuja
+            for (Fondo f : parallax) {
+                f.dibujar(c);
             }
 
-            if (parallax[5].posicion.x > anchoPantalla) {
-//                parallax[5].posicion.x = parallax[5].posicion.x - parallax[5].imagen.getWidth();
-                parallax[5].posicion.x = 0;
-                System.err.println("CAPA 5");
-            }
-            if (parallax[6].posicion.x > anchoPantalla) {
-//                parallax[6].posicion.x = parallax[6].posicion.x - parallax[6].imagen.getWidth();
-                parallax[6].posicion.x = 0;
-                System.err.println("CAPA 6");
-            }
-            if (parallax[7].posicion.x > anchoPantalla) {
-//                parallax[7].posicion.x = parallax[7].posicion.x - parallax[6].imagen.getWidth();
-                parallax[7].posicion.x = 0;
-                System.err.println("CAPA 7");
-            }
-            if (parallax[8].posicion.x > anchoPantalla) {
-//                parallax[8].posicion.x = parallax[8].posicion.x - parallax[6].imagen.getWidth();
-                parallax[8].posicion.x = 0;
-                System.err.println("CAPA 8");
-            }
-            if (parallax[9].posicion.x > anchoPantalla) {
-//                parallax[9].posicion.x = parallax[9].posicion.x - parallax[6].imagen.getWidth();
-                parallax[9].posicion.x = 0;
-                System.err.println("CAPA 9");
-            }
             // Personajes
             //enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
+//            if (enSlide) {
+//                yones.dibujar(c);
+//                enSlide = false;
+//            } else if (enSalto) {
+//                yones.dibujar(c);
+//                enSalto = false;
+//            } else {
             yones.mover();
-            yones.dibujar(c);
-        } catch (Exception e) {
-            Log.i("Error al dibujar", e.getLocalizedMessage());
+            yones.dibujar(c); // Se llama a dibujar de la clase
+//            }
+//            random = (int) (Math.random() * 3) + 1;
+//            if (random == 1) {
+            //caballero.mover();
+            //caballero.dibujar(c);
+//            }
+        } catch (MissingResourceException e) {
+            //Log.i("Error al dibujar", e.getLocalizedMessage());
         }
     }
 
@@ -201,4 +173,30 @@ public class Game extends Escena implements Runnable {
 
     }
 
+    /**
+     * @param event
+     * @return
+     */
+    @Override
+    public int onTouchEvent(MotionEvent event) {
+        int pointerIndex = event.getActionIndex();        //Obtenemos el índice de la acción
+        int pointerID = event.getPointerId(pointerIndex); //Obtenemos el Id del pointer asociado a la acción
+        int accion = event.getActionMasked();
+
+        switch (accion) {
+            case MotionEvent.ACTION_DOWN:           // Primer dedo toca
+                enSalto = true;
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:  // Segundo y siguientes tocan
+                break;
+            case MotionEvent.ACTION_UP:                     // Al levantar el últ
+                break;
+            case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es
+                break;
+            case MotionEvent.ACTION_MOVE: // Se mueve alguno de los dedos
+                enSlide = true;
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
 }

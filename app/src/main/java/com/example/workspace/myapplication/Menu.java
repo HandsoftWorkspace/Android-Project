@@ -19,12 +19,21 @@ import android.view.SurfaceHolder;
 import com.example.workspace.myapplication.MainActivity;
 import com.example.workspace.myapplication.R;
 
+import java.util.ArrayList;
+
 public class Menu extends Escena {
 
-    Rect ayuda, opciones, juego, game, logros, records, creditos;
+    Rect rectJuego, rectOpciones, rectLogros, rectLeader, rectAyuda, rectCreditos;
 
-    int alto, ancho;
-    Paint brocha = new Paint();
+    Bitmap juego, opciones, logros, leader, ayuda;
+
+    Bitmap fondo0, fondo1, fondo2, fondo3, fondo4, fondo5;
+
+    private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
+
+
+    private int proporcionAlto, proporcionAncho;
+    private Paint brocha = new Paint();
 
     public MediaPlayer mediaPlayer;
     private AudioManager audioManager;
@@ -32,98 +41,150 @@ public class Menu extends Escena {
     private int sonidoWoosh, sonidoPajaro, sonidoExplosion;
     private int maxSonidosSimul = 10;
     private SoundPool soundPool;
-    Fondo parallax;
 
-    // SEGUNDA VERSION
-    String strJugar = context.getText(R.string.jugar).toString();
-    String strOpciones = context.getText(R.string.opciones).toString();
-    String strLogros = context.getText(R.string.logros).toString();
-    String strAyuda = context.getText(R.string.ayuda).toString();
-    String strCreditos = context.getText(R.string.creditos).toString();
+    public int volumen; // Volumen del menú
 
+    // Constructor de la escena MENÚ
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
-        //        PRIMERA VERSION MENÚ
+        // Fondo menú principal
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
+        fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky0);
+        fondo0 = Bitmap.createScaledBitmap(fondo0, anchoPantalla, altoPantalla, false);
+        fondo1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky1);
+        fondo1 = Bitmap.createScaledBitmap(fondo1, anchoPantalla, altoPantalla, false);
+        fondo2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky3);
+        fondo2 = Bitmap.createScaledBitmap(fondo2, anchoPantalla, altoPantalla, false);
+        fondo3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky4);
+        fondo3 = Bitmap.createScaledBitmap(fondo3, anchoPantalla, altoPantalla, false);
+        fondo4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky5);
+        fondo4 = Bitmap.createScaledBitmap(fondo4, anchoPantalla, altoPantalla, false);
+        // Se añade la imagen a cada posición de la colección
+//        parallax.add(new Fondo(fondo0, 0, 0));
+//        parallax.add(new Fondo(fondo1, 0, 0));
+//        parallax.add(new Fondo(fondo2, 0, 0));
+//        parallax.add(new Fondo(fondo3, 0, 0));
+//        parallax.add(new Fondo(fondo4, 0, 0));
 
-        // Proporciones pantalla
-        alto = altoPantalla / 5;
-        ancho = anchoPantalla / 7;
+        // Proporciones pantalla, se divide el alto y ancho de la pantalla del dispositivo, para conseguir asi nuestras proporciones
+        // para que se adapten asi a distintos dispositivos
+        proporcionAncho = anchoPantalla / 18;
+        proporcionAlto = altoPantalla / 9;
 
-        // Left, Top,   Right, Botton
-        juego = new Rect(ancho * 2, alto * 1, ancho * 5, alto * 2);
-        opciones = new Rect(ancho * 1, alto * 3, ancho * 3, alto * 4);
-        logros = new Rect(ancho * 4, alto * 3, ancho * 6, alto * 4);
-        creditos = new Rect(0, 0, ancho * 1, alto * 1);
-        ayuda = new Rect(ancho * 6, 0, ancho * 7, alto * 1);
+        // Se dibujan unos rectangulos, que será donde posiciones nuestros iconos de menú,
+        // para asi poder detectar la pulsación de cada uno de ellos
+        rectJuego = new Rect(proporcionAncho * 8, proporcionAlto * 3, proporcionAncho * 10, proporcionAlto * 5);
+        rectOpciones = new Rect(proporcionAncho * 3, proporcionAlto * 3, proporcionAncho * 5, proporcionAlto * 5);
+        rectLogros = new Rect(proporcionAncho * 13, proporcionAlto * 3, proporcionAncho * 15, proporcionAlto * 5);
+        rectCreditos = new Rect(0, proporcionAlto * 6, proporcionAncho * 2, proporcionAlto * 8);
+        rectAyuda = new Rect(proporcionAncho * 16, 6, proporcionAncho * 18, proporcionAlto * 8);
 
+        // Bitmaps de iconos del menú, se asocia la imagen PNG y se le da el tamaño, en este caso usaremos proporciones
+        // Iconos
+        juego = BitmapFactory.decodeResource(context.getResources(), R.drawable.play);
+        juego = Bitmap.createScaledBitmap(juego, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        opciones = BitmapFactory.decodeResource(context.getResources(), R.drawable.options);
+        opciones = Bitmap.createScaledBitmap(opciones, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        ayuda = BitmapFactory.decodeResource(context.getResources(), R.drawable.help);
+        ayuda = Bitmap.createScaledBitmap(ayuda, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        leader = BitmapFactory.decodeResource(context.getResources(), R.drawable.logros);
+        leader = Bitmap.createScaledBitmap(leader, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        // Controles de audio y musica
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mediaPlayer = MediaPlayer.create(context, R.raw.acoustic);
-        int v = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setVolume(v / 2, v / 2);
-        mediaPlayer.start();
-
+        volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setVolume(volumen / 2, volumen / 2);
+        mediaPlayer.start(); // Se arranca la secuencia musical
+        mediaPlayer.seekTo(7000); // La secuencia empieza en el segundo 7, por lo tanto se adelanta para no causar una espera
+        mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
     }
-
-    // Actualizamos la física de los elementos en pantalla
-    public void actualizarFisica() {
-
-    }
-
-    // Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
 
     /**
+     * Actualizamos la física de los elementos en pantalla
+     */
+    public void actualizarFisica() {
+//        parallax.get(0).mover(4);
+//        parallax.get(1).mover(6);
+//        parallax.get(2).mover(8);
+//        parallax.get(3).mover(10);
+//        parallax.get(4).mover(12);
+    }
+
+    /**
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
      *
      * @param c
      */
     public void dibujar(Canvas c) {
         try {
-            c.drawBitmap(fondo, 0, 0, brocha);
             brocha.setAntiAlias(true);
             brocha.isAntiAlias();
+            //c.drawBitmap(fondo, 0, 0, brocha);
+            c.drawBitmap(fondo0, 0, 0, brocha);
+            c.drawBitmap(fondo1, 0, 0, brocha);
+            c.drawBitmap(fondo2, 0, 0, brocha);
+            c.drawBitmap(fondo3, 0, 0, brocha);
+            c.drawBitmap(fondo4, 0, 0, brocha);
 
-            brocha.setColor(Color.DKGRAY);
-            c.drawRect(juego, brocha);
+            brocha.setColor(Color.TRANSPARENT);
+            c.drawRect(rectJuego, brocha);
+            brocha.setColor(Color.RED);
+            brocha.setAntiAlias(true);
+            brocha.isAntiAlias();
+            c.drawBitmap(juego, proporcionAncho * 8, proporcionAlto * 3, brocha);
 
-            brocha.setColor(Color.DKGRAY);
-            c.drawRect(opciones, brocha);
+            brocha.setColor(Color.TRANSPARENT);
+            c.drawRect(rectOpciones, brocha);
+            brocha.setColor(Color.RED);
+            brocha.setAntiAlias(true);
+            brocha.isAntiAlias();
+            c.drawBitmap(opciones, proporcionAncho * 3, proporcionAlto * 3, brocha);
 
-            brocha.setColor(Color.DKGRAY);
-            c.drawRect(logros, brocha);
+            brocha.setColor(Color.TRANSPARENT);
+            c.drawRect(rectLogros, brocha);
+            brocha.setColor(Color.RED);
+            brocha.setAntiAlias(true);
+            brocha.isAntiAlias();
+            c.drawBitmap(leader, proporcionAncho * 13, proporcionAlto * 3, brocha);
 
-            brocha.setColor(Color.DKGRAY);
-            c.drawRect(ayuda, brocha);
+            brocha.setColor(Color.TRANSPARENT);
+            c.drawRect(rectAyuda, brocha);
+            brocha.setColor(Color.RED);
+            brocha.setAntiAlias(true);
+            brocha.isAntiAlias();
+            c.drawBitmap(ayuda, proporcionAncho * 16, proporcionAlto * 6, brocha);
 
-            brocha.setColor(Color.DKGRAY);
-            c.drawRect(creditos, brocha);
+            brocha.setColor(Color.TRANSPARENT);
+            c.drawRect(rectCreditos, brocha);
+            brocha.setColor(Color.RED);
+            brocha.setAntiAlias(true);
+            brocha.isAntiAlias();
+            c.drawBitmap(juego, proporcionAncho * 0, proporcionAlto * 6, brocha);
 
-            pTexto.setColor(Color.WHITE);
-            pTexto.setTextSize(200);
-//            c.drawText(strJugar, juego.centerX(), juego.centerY(), pTexto);
 
-            pTexto.setColor(Color.WHITE);
-            pTexto.setTextSize(50);
-            c.drawText(strOpciones, opciones.centerX(), opciones.centerY(), pTexto);
-
-            pTexto.setColor(Color.WHITE);
-            pTexto.setTextSize(50);
-            c.drawText(strLogros, logros.centerX(), logros.centerY(), pTexto);
-
-            pTexto.setColor(Color.WHITE);
-            pTexto.setTextSize(50);
-            c.drawText(strCreditos, creditos.centerX(), creditos.centerY(), pTexto);
-
-            pTexto.setColor(Color.WHITE);
-            pTexto.setTextSize(50);
-            c.drawText(strAyuda, ayuda.centerX(), ayuda.centerY(), pTexto);
+//            brocha.setColor(Color.DKGRAY);
+//            brocha.isAntiAlias();
+//            brocha.setAntiAlias(true);
+//            brocha.setTextAlign(Paint.Align.CENTER);
+//            c.drawRect(juego, brocha);
 
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
     }
 
+    /**
+     * Gestiona el tipo de pulsación mediante la detección de un evento, con el cual devolvera un idEscena
+     *
+     * @param event conseguimos el tipo de evento que sucede
+     * @return
+     */
     @Override
     public int onTouchEvent(MotionEvent event) {
         //synchronized (surfaceHolder) {
@@ -136,16 +197,16 @@ public class Menu extends Escena {
                 break;
             case MotionEvent.ACTION_UP:                     // Al levantar el último dedo
             case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es el último
-                if (pulsa(juego, event)) {
+                if (pulsa(rectJuego, event)) {
                     mediaPlayer.stop();
                     return 1;
-                } else if (pulsa(opciones, event)) {
+                } else if (pulsa(rectOpciones, event)) {
                     return 2;
-                } else if (pulsa(records, event)) {
+                } else if (pulsa(rectLogros, event)) {
                     return 3;
-                } else if (pulsa(ayuda, event)) {
+                } else if (pulsa(rectAyuda, event)) {
                     return 4;
-                } else if (pulsa(creditos, event)) {
+                } else if (pulsa(rectCreditos, event)) {
                     return 5;
                 }
                 break;
@@ -159,4 +220,5 @@ public class Menu extends Escena {
 
         return idEscena;
     }
+
 }

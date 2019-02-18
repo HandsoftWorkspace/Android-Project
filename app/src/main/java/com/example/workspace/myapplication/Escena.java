@@ -14,8 +14,8 @@ public class Escena {
     int idEscena;
     static int anchoPantalla, altoPantalla;
     Bitmap fondo;
-    Bitmap capa,capa1,capa2,capa3,capa4,capa5,capa6,capa7,capa8,capa9,capa10;
-    Paint pTexto, pTexto2, pBoton;
+    //Bitmap capa,capa1,capa2,capa3,capa4,capa5,capa6,capa7,capa8,capa9,capa10;
+    public Paint p, pTexto2, pBoton;
 
     public Escena(Context context, int idEscena, int anchoPantalla, int altoPantalla){
         this.context=context;
@@ -23,19 +23,19 @@ public class Escena {
         this.anchoPantalla=anchoPantalla;
         this.altoPantalla = altoPantalla;
 
-        pTexto = new Paint();
-        pTexto2 = new Paint();
-
-        pTexto.setColor(Color.RED);
-        pTexto.setTextAlign(Paint.Align.CENTER);
-        pTexto.setTextSize(altoPantalla/5);
-
-        pTexto2.setColor(Color.RED);
-        pTexto2.setTextAlign(Paint.Align.CENTER);
-        pTexto2.setTextSize(altoPantalla/5);
-
-        pBoton = new Paint();
-        pBoton.setColor(Color.GREEN);
+//        pTexto = new Paint();
+//        pTexto2 = new Paint();
+//
+//        pTexto.setColor(Color.RED);
+//        pTexto.setTextAlign(Paint.Align.CENTER);
+//        pTexto.setTextSize(altoPantalla/5);
+//
+//        pTexto2.setColor(Color.RED);
+//        pTexto2.setTextAlign(Paint.Align.CENTER);
+//        pTexto2.setTextSize(altoPantalla/5);
+//
+//        pBoton = new Paint();
+//        pBoton.setColor(Color.GREEN);
     }
 
     // Actualizamos la física de los elementos en pantalla
@@ -58,6 +58,11 @@ public class Escena {
         }
         return false;
     }
+
+//    public boolean pulsa(int x, int y, MotionEvent event){
+//
+//        return false;
+//    }
 
     public int onTouchEvent(MotionEvent event) {
         //synchronized (surfaceHolder) {
