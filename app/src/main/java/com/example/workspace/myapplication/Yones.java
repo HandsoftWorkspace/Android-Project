@@ -45,123 +45,130 @@ public class Yones extends Personaje {
 
         this.posX = posX;
         this.posY = posY;
-        proporcionX = anchoPantalla / 10;
-        proporcionY = altoPantalla / 14;
+        proporcionX = anchoPantalla / 18;
+        proporcionY = altoPantalla / 9;
 
         //(Bitmap, width,height,bool)
         // Frames personaje principal, asociado a su imagen y relativo al tamaño proporcional de la pantalla
         framesIndiana[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run0);
-        framesIndiana[0] = Bitmap.createScaledBitmap(framesIndiana[0], proporcionX, proporcionY * 3, false);
+        framesIndiana[0] = Bitmap.createScaledBitmap(framesIndiana[0], proporcionX, proporcionY * 2, false);
 
         framesIndiana[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run1);
-        framesIndiana[1] = Bitmap.createScaledBitmap(framesIndiana[1], proporcionX, proporcionY * 3, false);
+        framesIndiana[1] = Bitmap.createScaledBitmap(framesIndiana[1], proporcionX, proporcionY * 2, false);
 
         framesIndiana[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run2);
-        framesIndiana[2] = Bitmap.createScaledBitmap(framesIndiana[2], proporcionX, proporcionY * 3, false);
+        framesIndiana[2] = Bitmap.createScaledBitmap(framesIndiana[2], proporcionX, proporcionY * 2, false);
 
         framesIndiana[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run3);
-        framesIndiana[3] = Bitmap.createScaledBitmap(framesIndiana[3], proporcionX, proporcionY * 3, false);
+        framesIndiana[3] = Bitmap.createScaledBitmap(framesIndiana[3], proporcionX, proporcionY * 2, false);
 
         framesIndiana[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run4);
-        framesIndiana[4] = Bitmap.createScaledBitmap(framesIndiana[4], proporcionX, proporcionY * 3, false);
+        framesIndiana[4] = Bitmap.createScaledBitmap(framesIndiana[4], proporcionX, proporcionY * 2, false);
 
         framesIndiana[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run5);
-        framesIndiana[5] = Bitmap.createScaledBitmap(framesIndiana[5], proporcionX, proporcionY * 3, false);
+        framesIndiana[5] = Bitmap.createScaledBitmap(framesIndiana[5], proporcionX, proporcionY * 2, false);
 
         framesIndiana[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run6);
-        framesIndiana[6] = Bitmap.createScaledBitmap(framesIndiana[6], proporcionX, proporcionY * 3, false);
+        framesIndiana[6] = Bitmap.createScaledBitmap(framesIndiana[6], proporcionX, proporcionY * 2, false);
 
         framesIndiana[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run7);
-        framesIndiana[7] = Bitmap.createScaledBitmap(framesIndiana[7], proporcionX, proporcionY * 3, false);
+        framesIndiana[7] = Bitmap.createScaledBitmap(framesIndiana[7], proporcionX, proporcionY * 2, false);
 
         framesIndiana[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run8);
-        framesIndiana[8] = Bitmap.createScaledBitmap(framesIndiana[8], proporcionX, proporcionY * 3, false);
+        framesIndiana[8] = Bitmap.createScaledBitmap(framesIndiana[8], proporcionX, proporcionY * 2, false);
 
         framesIndiana[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run9);
-        framesIndiana[9] = Bitmap.createScaledBitmap(framesIndiana[9], proporcionX, proporcionY * 3, false);
+        framesIndiana[9] = Bitmap.createScaledBitmap(framesIndiana[9], proporcionX, proporcionY * 2, false);
 
         // Frames de indiana, en la acción de salto
         saltosIndiana[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump0);
-        saltosIndiana[0] = Bitmap.createScaledBitmap(saltosIndiana[0], proporcionX, proporcionY * 3, false);
+        saltosIndiana[0] = Bitmap.createScaledBitmap(saltosIndiana[0], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump1);
-        saltosIndiana[1] = Bitmap.createScaledBitmap(saltosIndiana[1], proporcionX, proporcionY * 3, false);
+        saltosIndiana[1] = Bitmap.createScaledBitmap(saltosIndiana[1], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump2);
-        saltosIndiana[2] = Bitmap.createScaledBitmap(saltosIndiana[2], proporcionX, proporcionY * 3, false);
+        saltosIndiana[2] = Bitmap.createScaledBitmap(saltosIndiana[2], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump3);
-        saltosIndiana[3] = Bitmap.createScaledBitmap(saltosIndiana[3], proporcionX, proporcionY * 3, false);
+        saltosIndiana[3] = Bitmap.createScaledBitmap(saltosIndiana[3], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump4);
-        saltosIndiana[4] = Bitmap.createScaledBitmap(saltosIndiana[4], proporcionX, proporcionY * 3, false);
+        saltosIndiana[4] = Bitmap.createScaledBitmap(saltosIndiana[4], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump5);
-        saltosIndiana[5] = Bitmap.createScaledBitmap(saltosIndiana[5], proporcionX, proporcionY * 3, false);
+        saltosIndiana[5] = Bitmap.createScaledBitmap(saltosIndiana[5], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump6);
-        saltosIndiana[6] = Bitmap.createScaledBitmap(saltosIndiana[6], proporcionX, proporcionY * 3, false);
+        saltosIndiana[6] = Bitmap.createScaledBitmap(saltosIndiana[6], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump7);
-        saltosIndiana[7] = Bitmap.createScaledBitmap(saltosIndiana[7], proporcionX, proporcionY * 3, false);
+        saltosIndiana[7] = Bitmap.createScaledBitmap(saltosIndiana[7], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump8);
-        saltosIndiana[8] = Bitmap.createScaledBitmap(saltosIndiana[8], proporcionX, proporcionY * 3, false);
+        saltosIndiana[8] = Bitmap.createScaledBitmap(saltosIndiana[8], proporcionX, proporcionY * 2, false);
 
         saltosIndiana[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.jump9);
-        saltosIndiana[9] = Bitmap.createScaledBitmap(saltosIndiana[9], proporcionX, proporcionY * 3, false);
+        saltosIndiana[9] = Bitmap.createScaledBitmap(saltosIndiana[9], proporcionX, proporcionY * 2, false);
 
         // Arrays de slides indiana
         slidesIndiana[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide0);
-        slidesIndiana[0] = Bitmap.createScaledBitmap(slidesIndiana[0], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[0] = Bitmap.createScaledBitmap(slidesIndiana[0], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide1);
-        slidesIndiana[1] = Bitmap.createScaledBitmap(slidesIndiana[1], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[1] = Bitmap.createScaledBitmap(slidesIndiana[1], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide2);
-        slidesIndiana[2] = Bitmap.createScaledBitmap(slidesIndiana[2], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[2] = Bitmap.createScaledBitmap(slidesIndiana[2], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide3);
-        slidesIndiana[3] = Bitmap.createScaledBitmap(slidesIndiana[3], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[3] = Bitmap.createScaledBitmap(slidesIndiana[3], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide4);
-        slidesIndiana[4] = Bitmap.createScaledBitmap(slidesIndiana[4], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[4] = Bitmap.createScaledBitmap(slidesIndiana[4], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide5);
-        slidesIndiana[5] = Bitmap.createScaledBitmap(slidesIndiana[5], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[5] = Bitmap.createScaledBitmap(slidesIndiana[5], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide6);
-        slidesIndiana[6] = Bitmap.createScaledBitmap(slidesIndiana[6], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[6] = Bitmap.createScaledBitmap(slidesIndiana[6], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide7);
-        slidesIndiana[7] = Bitmap.createScaledBitmap(slidesIndiana[7], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[7] = Bitmap.createScaledBitmap(slidesIndiana[7], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide8);
-        slidesIndiana[8] = Bitmap.createScaledBitmap(slidesIndiana[8], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[8] = Bitmap.createScaledBitmap(slidesIndiana[8], proporcionX, proporcionY * 2, false);
 
         slidesIndiana[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.slide9);
-        slidesIndiana[9] = Bitmap.createScaledBitmap(slidesIndiana[9], proporcionX, proporcionY * ((int) 2.50), false);
+        slidesIndiana[9] = Bitmap.createScaledBitmap(slidesIndiana[9], proporcionX, proporcionY * 2, false);
     }
 
     public void mover() {
         if (enSalto) {
-            if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
-                indice++;
-                if (indice >= saltosIndiana.length) indice = 0;
-                enSalto = false;
-                tFrameAuxm = System.currentTimeMillis();
+            for (int i = 0; i < saltosIndiana.length; i++) {
+                if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+                    //this.posY -= 1;
+                    indice++;
+                    if (indice >= saltosIndiana.length) indice = 0;
+                    this.posY = proporcionY * 8;
+                    tFrameAuxm = System.currentTimeMillis();
+                }
+                frame = saltosIndiana[indice];
             }
-            frame = saltosIndiana[indice];
+            enSalto = false;
+            indice = 0;
         } else if (enSlide) {
-            if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
-                indice++;
-                if (indice >= slidesIndiana.length) indice = 0;
-                enSlide = false;
-                tFrameAuxm = System.currentTimeMillis();
+            for (int i = 0; i < slidesIndiana.length; i++) {
+                if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+                    indice++;
+                    if (indice >= slidesIndiana.length) indice = 0;
+                    tFrameAuxm = System.currentTimeMillis();
+                }
+                frame = slidesIndiana[indice];
             }
-            frame = slidesIndiana[indice];
+            enSlide = false;
+            indice = 0;
         } else if (enSalto == false && enSlide == false) {
-//            this.posY -= 1;
             if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
                 indice++;
                 if (indice >= framesIndiana.length) indice = 0;
@@ -171,38 +178,49 @@ public class Yones extends Personaje {
         }
     }
 
-//    public void mover() {
-//        if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
-//            indice++;
-//            if (indice >= framesIndiana.length) indice = 0;
-//            tFrameAuxm = System.currentTimeMillis();
-//        }
-//        frame = framesIndiana[indice];
-//    }
+    public void moverRun() {
+        if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+            indice++;
+            if (indice >= framesIndiana.length) indice = 0;
+            tFrameAuxm = System.currentTimeMillis();
+        }
+        frame = framesIndiana[indice];
+    }
 
-//    public void moverSalto() {
-//        if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
-//            indice++;
-//            if (indice >= saltosIndiana.length) indice = 0;
-//            tFrameAuxm = System.currentTimeMillis();
-//        }
-//        frame = saltosIndiana[indice];
-//    }
-//
-//    public void moverSlide() {
-//        if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
-//            indice++;
-//            if (indice >= slidesIndiana.length) indice = 0;
-//            tFrameAuxm = System.currentTimeMillis();
-//        }
-//        frame = slidesIndiana[indice];
-//    }
+    //
+    public void moverSalto() {
+        for (int i = 0; i <saltosIndiana.length; i++) {
+            if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+                indice++;
+                if (indice >= saltosIndiana.length) indice = 0;
+                tFrameAuxm = System.currentTimeMillis();
+            }
+            frame = saltosIndiana[indice];
+        }
+    }
+
+    public void moverSlide() {
+        for (int i = 0; i < slidesIndiana.length; i++) {
+
+            if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+                indice++;
+                if (indice >= slidesIndiana.length) indice = 0;
+                tFrameAuxm = System.currentTimeMillis();
+            }
+            frame = slidesIndiana[indice];
+        }
+    }
 
     public void dibujar(Canvas c) {
         if (enSlide) {
-            c.drawBitmap(frame, proporcionX, posY * ((int) 10.50), p);
+            c.drawBitmap(frame, proporcionX, posY * 7, p);
+        } else if (enSalto) {
+//            for (int i = 0; i < saltosIndiana.length; i++) {
+//                c.drawBitmap(saltosIndiana[i], proporcionX, posY, p);
+//            }
+            c.drawBitmap(frame, proporcionX, posY * ((int) 5), p);
         } else if (!enSlide) {
-            c.drawBitmap(frame, proporcionX, posY * 10, p);
+            c.drawBitmap(frame, proporcionX, (proporcionY * 6) + proporcionY / 2, p);
         }
     }
 
