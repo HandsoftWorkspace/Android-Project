@@ -7,7 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
+
+import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class Opciones extends Escena {
     Canvas c;
@@ -46,10 +49,10 @@ public class Opciones extends Escena {
         rectMusicoff = new Rect(proporcionAncho * 10, proporcionAlto * 3, proporcionAncho * 12, proporcionAlto * 5);
     }
 
-    @Override
-    public boolean pulsa(Rect boton, MotionEvent event) {
-        return super.pulsa(boton, event);
-    }
+//    @Override
+//    public boolean pulsa(Rect boton, MotionEvent event) {
+//        return super.pulsa(boton, event);
+//    }
 
     /**
      * @param event
@@ -57,36 +60,31 @@ public class Opciones extends Escena {
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
+        super.onTouchEvent(event);
         int pointerIndex = event.getActionIndex();        //Obtenemos el índice de la acción
         int pointerID = event.getPointerId(pointerIndex); //Obtenemos el Id del pointer asociado a la acción
         int accion = event.getActionMasked();
 
         switch (accion) {
-            case MotionEvent.ACTION_DOWN:           // Primer dedo toca
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:  // Segundo y siguientes tocan
-                break;
             case MotionEvent.ACTION_UP:                     // Al levantar el últ
-                break;
             case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es
                 if (pulsa(rectVolverMenu, event)) {
-                    Juego juego = new Juego(context);
-                    juego.setKeepScreenOn(true);
+                    Log.i("test", "pasa");
                     return 0;
-                } else if (pulsa(rectMusic, event)) {
-//                    volumen = !volumen;
-                    return 95;
-                } else if (pulsa(rectVibracion, event)) {
-//                    vibracion = !vibracion;
-                } else if (pulsa(rectVolverMenu, event)) {
-                    return -1;
                 }
-                break;
-            case MotionEvent.ACTION_MOVE: // Se mueve alguno de los dedos
+//                else if (pulsa(rectMusic, event)) {
+//                    volumen = !volumen;
+//                    mediaPlayer.start();
+//                    break;
+//                } else if (pulsa(rectVibracion, event)) {
+//                    vibracion = !vibracion;
+//                } else if (pulsa(rectMusicoff, event)) {
+//                    mediaPlayer.stop();
+//                    break;
+//                }
                 break;
         }
-        return super.onTouchEvent(event);
-
+        return idEscena;
     }
 
     /**
@@ -101,11 +99,9 @@ public class Opciones extends Escena {
             c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
             c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
             c.drawBitmap(musicoff, proporcionAncho * 10, proporcionAlto * 3, null);
-            p.setColor(Color.GREEN);
+            //p.setColor(Color.GREEN);
             c.drawRect(rectVolverMenu, p);
-            p.setColor(Color.GREEN);
             c.drawRect(rectMusic, p);
-            p.setColor(Color.GREEN);
             c.drawRect(rectMusicoff, p);
         } catch (Exception e) {
         }

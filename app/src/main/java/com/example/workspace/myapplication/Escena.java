@@ -17,10 +17,10 @@ public class Escena {
     //Bitmap capa,capa1,capa2,capa3,capa4,capa5,capa6,capa7,capa8,capa9,capa10;
     public Paint p, pTexto2, pBoton;
 
-    public Escena(Context context, int idEscena, int anchoPantalla, int altoPantalla){
-        this.context=context;
-        this.idEscena=idEscena;
-        this.anchoPantalla=anchoPantalla;
+    public Escena(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
+        this.context = context;
+        this.idEscena = idEscena;
+        this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
 
 //        pTexto = new Paint();
@@ -39,7 +39,7 @@ public class Escena {
     }
 
     // Actualizamos la física de los elementos en pantalla
-    public void actualizarFisica(){
+    public void actualizarFisica() {
 
     }
 
@@ -48,12 +48,12 @@ public class Escena {
         try {
             //if(idEscena!=0 &&)
         } catch (Exception e) {
-            Log.i("Error al dibujar",e.getLocalizedMessage());
+            Log.i("Error al dibujar", e.getLocalizedMessage());
         }
     }
 
-    public boolean pulsa(Rect boton, MotionEvent event){
-        if(boton.contains((int)event.getX(),(int)event.getY())){
+    public boolean pulsa(Rect boton, MotionEvent event) {
+        if (boton.contains((int) event.getX(), (int) event.getY())) {
             return true;
         }
         return false;

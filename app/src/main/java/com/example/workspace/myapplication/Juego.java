@@ -22,6 +22,17 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
     private boolean funcionando = false;      // Control del hilo
     public Escena escenaActual;
 
+    // Control temporal
+    long tiempo = 0;
+    int tiempoEspera = 1000;
+
+    private Menu menu;
+    private Game game;
+    private Opciones opciones;
+    private Records records;
+    private Ayuda ayuda;
+    private Creditos creditos;
+
     public Juego(Context context) {
         super(context);
         this.surfaceHolder = getHolder();       // Se obtiene el holder
@@ -29,6 +40,13 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
         this.context = context;                 // Obtenemos el contexto
         hilo = new Hilo();                      // Inicializamos el hilo
         setFocusable(true);                     // Aseguramos que reciba eventos de toque
+
+//        menu = new Menu(context, 0, anchoPantalla, altoPantalla);
+//        game = new Game(context, 1, anchoPantalla, altoPantalla);
+//        opciones = new Opciones(context, 2, anchoPantalla, altoPantalla);
+//        records = new Records(context, 3, anchoPantalla, altoPantalla);
+//        ayuda = new Ayuda(context, 4, anchoPantalla, altoPantalla);
+//        creditos = new Creditos(context, 5, anchoPantalla, altoPantalla);
     }
 
     @Override
@@ -38,21 +56,22 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
             if (nuevaEscena != escenaActual.idEscena) {
                 switch (nuevaEscena) {
                     case 0:
-                        escenaActual = new Menu(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        escenaActual = menu;
+                        break;
                     case 1:
-                        escenaActual = new Game(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        escenaActual = new Game(context, 1, anchoPantalla, altoPantalla);
                         break;
                     case 2:
-                        escenaActual = new Opciones(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        escenaActual = opciones;
                         break;
                     case 3:
-                        escenaActual = new Records(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        escenaActual = records;
                         break;
                     case 4:
-                        escenaActual = new Ayuda(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        escenaActual = ayuda;
                         break;
                     case 5:
-                        escenaActual = new Creditos(context, nuevaEscena, anchoPantalla, altoPantalla);
+                        escenaActual = creditos;
                         break;
                 }
             }
@@ -79,7 +98,24 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         anchoPantalla = width;               // se establece el nuevo ancho de pantalla
         altoPantalla = height;               // se establece el nuevo alto de pantalla
-        escenaActual = new Menu(context, 0, anchoPantalla, altoPantalla);
+
+        if (menu == null) {
+            menu = new Menu(context, 0, anchoPantalla, altoPantalla);
+        }
+        if (game == null) {
+            opciones = new Opciones(context, 2, anchoPantalla, altoPantalla);
+        }
+        if (records == null) {
+            records = new Records(context, 3, anchoPantalla, altoPantalla);
+        }
+        if (ayuda == null) {
+            ayuda = new Ayuda(context, 4, anchoPantalla, altoPantalla);
+        }
+        if (creditos == null) {
+            creditos = new Creditos(context, 5, anchoPantalla, altoPantalla);
+        }
+
+        escenaActual = menu;
         hilo.setSurfaceSize(width, height);   // se establece el nuevo ancho y alto de pantalla en el hilo
         hilo.setFuncionando(true); // Se le indica al hilo que puede arrancar
         if (hilo.getState() == Thread.State.NEW)
@@ -103,12 +139,20 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
             while (funcionando) {
                 Canvas c = null; //Necesario repintar todo el lienzo
                 try {
+
                     if (!surfaceHolder.getSurface().isValid())
                         continue; // si la superficie no está preparada repetimos
                     c = surfaceHolder.lockCanvas(); // Obtenemos el lienzo.  La sincronización es necesaria por ser recurso común
                     synchronized (surfaceHolder) {
                         escenaActual.actualizarFisica();
                         escenaActual.dibujar(c);
+                    }
+                    tiempo = System.currentTimeMillis();
+
+                    try {
+                        Thread.sleep(System.currentTimeMillis() - tiempo);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 } finally {  // Haya o no excepción, hay que liberar el lienzo
                     if (c != null) {

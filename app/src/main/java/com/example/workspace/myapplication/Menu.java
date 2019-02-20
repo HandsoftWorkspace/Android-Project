@@ -7,17 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-
-import com.example.workspace.myapplication.MainActivity;
-import com.example.workspace.myapplication.R;
 
 import java.util.ArrayList;
 
@@ -25,9 +19,9 @@ public class Menu extends Escena {
 
     Rect rectJuego, rectOpciones, rectLogros, rectLeader, rectAyuda, rectCreditos;
 
-    Bitmap juego, opciones, logros, leader, ayuda;
+    Bitmap juego, opciones, creditos, leader, ayuda;
 
-    Bitmap fondo0, fondo1, fondo2, fondo3, fondo4, fondo5;
+    Bitmap fondo0, fondo1, fondo2, fondo3, fondo4, fondo5, down, up, downGrande, upGrande;
 
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
 
@@ -35,7 +29,7 @@ public class Menu extends Escena {
     private int proporcionAlto, proporcionAncho;
     private Paint brocha = new Paint();
 
-    public MediaPlayer mediaPlayer;
+    public static MediaPlayer mediaPlayer;
     private AudioManager audioManager;
     private SoundPool efectos;
     private int sonidoWoosh, sonidoPajaro, sonidoExplosion;
@@ -45,12 +39,19 @@ public class Menu extends Escena {
     public int volumen; // Volumen del menú
 
     // Constructor de la escena MENÚ
+
+    /**
+     * @param context
+     * @param idEscena
+     * @param anchoPantalla
+     * @param altoPantalla
+     */
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
         // Fondo menú principal
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
-        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
+//        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
+//        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
         fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky0);
         fondo0 = Bitmap.createScaledBitmap(fondo0, anchoPantalla, altoPantalla, false);
         fondo1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky1);
@@ -89,11 +90,26 @@ public class Menu extends Escena {
         opciones = BitmapFactory.decodeResource(context.getResources(), R.drawable.options);
         opciones = Bitmap.createScaledBitmap(opciones, proporcionAncho * 2, proporcionAlto * 2, false);
 
-        ayuda = BitmapFactory.decodeResource(context.getResources(), R.drawable.help);
+        ayuda = BitmapFactory.decodeResource(context.getResources(), R.drawable.help2);
         ayuda = Bitmap.createScaledBitmap(ayuda, proporcionAncho * 2, proporcionAlto * 2, false);
 
         leader = BitmapFactory.decodeResource(context.getResources(), R.drawable.logros);
         leader = Bitmap.createScaledBitmap(leader, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        creditos = BitmapFactory.decodeResource(context.getResources(), R.drawable.info);
+        creditos = Bitmap.createScaledBitmap(creditos, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        down = BitmapFactory.decodeResource(context.getResources(), R.drawable.down);
+        down = Bitmap.createScaledBitmap(down, proporcionAncho * 6, proporcionAlto * 1, false);
+
+        up = BitmapFactory.decodeResource(context.getResources(), R.drawable.up);
+        up = Bitmap.createScaledBitmap(up, proporcionAncho * 6, proporcionAlto * 1, false);
+
+        downGrande = BitmapFactory.decodeResource(context.getResources(), R.drawable.down);
+        downGrande = Bitmap.createScaledBitmap(downGrande, proporcionAncho * 8, proporcionAlto * 1, false);
+
+        upGrande = BitmapFactory.decodeResource(context.getResources(), R.drawable.up);
+        upGrande = Bitmap.createScaledBitmap(upGrande, proporcionAncho * 8, proporcionAlto * 1, false);
 
         // Controles de audio y musica
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -103,6 +119,9 @@ public class Menu extends Escena {
         mediaPlayer.start(); // Se arranca la secuencia musical
         mediaPlayer.seekTo(7000); // La secuencia empieza en el segundo 7, por lo tanto se adelanta para no causar una espera
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
+
+        brocha.setColor(Color.TRANSPARENT);
+
     }
 
     /**
@@ -123,56 +142,36 @@ public class Menu extends Escena {
      */
     public void dibujar(Canvas c) {
         try {
-            brocha.setAntiAlias(true);
-            brocha.isAntiAlias();
+//            for (Fondo f : parallax) {
+//                f.dibujar(c);
+//            }
+
             //c.drawBitmap(fondo, 0, 0, brocha);
-            c.drawBitmap(fondo0, 0, 0, brocha);
-            c.drawBitmap(fondo1, 0, 0, brocha);
-            c.drawBitmap(fondo2, 0, 0, brocha);
-            c.drawBitmap(fondo3, 0, 0, brocha);
-            c.drawBitmap(fondo4, 0, 0, brocha);
+            c.drawBitmap(fondo0, 0, 0, null);
+            c.drawBitmap(fondo1, 0, 0, null);
+            c.drawBitmap(fondo2, 0, 0, null);
+            c.drawBitmap(fondo3, 0, 0, null);
+            c.drawBitmap(fondo4, 0, 0, null);
 
-            brocha.setColor(Color.TRANSPARENT);
+            c.drawBitmap(down, proporcionAncho * 6, proporcionAlto * 1, null);
+            c.drawBitmap(up, proporcionAncho * 6, proporcionAlto * 2, null);
+            c.drawBitmap(downGrande, proporcionAncho * 5, proporcionAlto * 5, null);
+            c.drawBitmap(upGrande, proporcionAncho * 5, proporcionAlto * 6, null);
+
             c.drawRect(rectJuego, brocha);
-            brocha.setColor(Color.RED);
-            brocha.setAntiAlias(true);
-            brocha.isAntiAlias();
-            c.drawBitmap(juego, proporcionAncho * 8, proporcionAlto * 3, brocha);
+            c.drawBitmap(juego, proporcionAncho * 8, proporcionAlto * 3, null);
 
-            brocha.setColor(Color.TRANSPARENT);
             c.drawRect(rectOpciones, brocha);
-            brocha.setColor(Color.RED);
-            brocha.setAntiAlias(true);
-            brocha.isAntiAlias();
-            c.drawBitmap(opciones, proporcionAncho * 3, proporcionAlto * 3, brocha);
+            c.drawBitmap(opciones, proporcionAncho * 3, proporcionAlto * 3, null);
 
-            brocha.setColor(Color.TRANSPARENT);
             c.drawRect(rectLogros, brocha);
-            brocha.setColor(Color.RED);
-            brocha.setAntiAlias(true);
-            brocha.isAntiAlias();
-            c.drawBitmap(leader, proporcionAncho * 13, proporcionAlto * 3, brocha);
+            c.drawBitmap(leader, proporcionAncho * 13, proporcionAlto * 3, null);
 
-            brocha.setColor(Color.TRANSPARENT);
             c.drawRect(rectAyuda, brocha);
-            brocha.setColor(Color.RED);
-            brocha.setAntiAlias(true);
-            brocha.isAntiAlias();
-            c.drawBitmap(ayuda, proporcionAncho * 16, proporcionAlto * 6, brocha);
+            c.drawBitmap(ayuda, proporcionAncho * 16, proporcionAlto * 6, null);
 
-            brocha.setColor(Color.TRANSPARENT);
             c.drawRect(rectCreditos, brocha);
-            brocha.setColor(Color.RED);
-            brocha.setAntiAlias(true);
-            brocha.isAntiAlias();
-            c.drawBitmap(juego, proporcionAncho * 0, proporcionAlto * 6, brocha);
-
-
-//            brocha.setColor(Color.DKGRAY);
-//            brocha.isAntiAlias();
-//            brocha.setAntiAlias(true);
-//            brocha.setTextAlign(Paint.Align.CENTER);
-//            c.drawRect(juego, brocha);
+            c.drawBitmap(creditos, proporcionAncho * 0, proporcionAlto * 6, null);
 
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());

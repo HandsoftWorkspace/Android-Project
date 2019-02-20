@@ -146,13 +146,13 @@ public class Yones extends Personaje {
     public void mover() {
         if (enSalto) {
             for (int i = 0; i < saltosIndiana.length; i++) {
-                if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
-                    //this.posY -= 1;
-                    indice++;
-                    if (indice >= saltosIndiana.length) indice = 0;
-                    this.posY = proporcionY * 8;
-                    tFrameAuxm = System.currentTimeMillis();
-                }
+//                if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+//                    //this.posY -= 1; TODO
+//                    indice++;
+//                    if (indice >= saltosIndiana.length) indice = 0;
+//                    this.posY = proporcionY * 8;
+//                    tFrameAuxm = System.currentTimeMillis();
+//                }
                 frame = saltosIndiana[indice];
             }
             enSalto = false;
