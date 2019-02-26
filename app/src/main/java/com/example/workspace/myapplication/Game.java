@@ -20,12 +20,14 @@ public class Game extends Escena implements Runnable {
     private int proporcionAncho, proporcionAlto;
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
     Paint p = new Paint();
+    Utils utils = new Utils(context);
 
     Bitmap capa, capa1, capa2, capa3, capa4, capa5, capa6, capa7, capa8, capa9, capa10;
 
     Bitmap btnA, btnB;
 
     Enemigo enemigo; // Personaje secundario
+    ArrayList<Personaje> personajes=new ArrayList<>();
 
     Rect rectYones;
     Rect rectBtnA, rectBtnB;
@@ -120,6 +122,15 @@ public class Game extends Escena implements Runnable {
         enSlide = false;
 
         p.setColor(ContextCompat.getColor(context, R.color.colorBackGr));
+
+
+        Bitmap[] auxc,auxp;
+
+        auxc=utils.getFrames(10,"caba","Run",utils.getDpH(300));
+        auxp=utils.getFrames(10,"caba","Idle",utils.getDpH(300));
+        DrYones yones=new Personaje(auxc, auxp, utils.getDpW(640), utils.getDpH(50),utils.getDpW(10));
+        personajes.add(caballero);
+
     }
 
     /**
@@ -195,6 +206,9 @@ public class Game extends Escena implements Runnable {
                 if (pulsa(rectBtnB, event)) {
                     enSlide = true;
                 }
+//
+                for (Personaje p:personajes)
+                    p.isPulsado((int)x,(int)y);
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:  // Segundo y siguientes tocan
                 break;
