@@ -14,6 +14,10 @@ public class Utils {
 
     Context context;
 
+    public Utils(){
+
+    }
+
     public Utils(Context context) {
         this.context = context;
     }

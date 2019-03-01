@@ -27,7 +27,7 @@ public class Game extends Escena implements Runnable {
     Bitmap btnA, btnB;
 
     Enemigo enemigo; // Personaje secundario
-    ArrayList<Personaje> personajes=new ArrayList<>();
+    ArrayList<Personaje> personajes = new ArrayList<>();
 
     Rect rectYones;
     Rect rectBtnA, rectBtnB;
@@ -37,6 +37,8 @@ public class Game extends Escena implements Runnable {
 
     int random;
 
+//    DrYones drYones=new DrYones();
+//    DrYones drYones = new DrYones(anchoPantalla / 2, altoPantalla * 7, proporcionAncho, proporcionAlto, anchoPantalla, altoPantalla, 30);
     Yones yones = new Yones(context, proporcionAncho, proporcionAlto * 8, 2, anchoPantalla, altoPantalla);
     Caballero caballero = new Caballero(context, proporcionAncho * 18, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
 //    Caballero caballero2 = new Caballero(context, proporcionAncho, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
@@ -59,15 +61,11 @@ public class Game extends Escena implements Runnable {
         options.inSampleSize = 2;
 
         // Se asocia cada bitmap a una imagen png
-//        capa = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer1, options); // Reducción tamaño imagen a la mitad
-//        capa = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer1);
-//        capa = Bitmap.createScaledBitmap(capa, anchoPantalla, altoPantalla, false);
-
         capa1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer2);
         capa1 = Bitmap.createScaledBitmap(capa1, anchoPantalla, altoPantalla, false);
 
         capa2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer3);
-        capa2 = Bitmap.createScaledBitmap(capa2, anchoPantalla, altoPantalla , false);
+        capa2 = Bitmap.createScaledBitmap(capa2, anchoPantalla, altoPantalla, false);
 
         capa3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.layer4);
         capa3 = Bitmap.createScaledBitmap(capa3, anchoPantalla, altoPantalla, false);
@@ -123,13 +121,7 @@ public class Game extends Escena implements Runnable {
 
         p.setColor(ContextCompat.getColor(context, R.color.colorBackGr));
 
-
-        Bitmap[] auxc,auxp;
-
-        auxc=utils.getFrames(10,"caba","Run",utils.getDpH(300));
-        auxp=utils.getFrames(10,"caba","Idle",utils.getDpH(300));
-        DrYones yones=new Personaje(auxc, auxp, utils.getDpW(640), utils.getDpH(50),utils.getDpW(10));
-        personajes.add(caballero);
+//        personajes.add(caballero);
 
     }
 
@@ -142,8 +134,12 @@ public class Game extends Escena implements Runnable {
         for (Fondo f : parallax) {
             f.mover();
         }
-        yones.mover();
-        caballero.mover();
+
+        //drYones.move();
+        //drYones.cambiaFrame();
+
+//        yones.mover();
+//        caballero.mover();
     }
 
     /**
@@ -151,6 +147,8 @@ public class Game extends Escena implements Runnable {
      */
     public void dibujar(Canvas c) {
         try {
+            Log.d("hard", String.valueOf(c.isHardwareAccelerated()));
+
             // Parallax background
             // Se recorre la lista de imagen de la colección y se dibuja
             for (Fondo f : parallax) {
@@ -171,13 +169,14 @@ public class Game extends Escena implements Runnable {
 //                enSalto = false;
 //            } else {
 
-            yones.dibujar(c); // Se llama a dibujar de la clase
+//            yones.dibujar(c); // Se llama a dibujar de la clase
 //            }
 //            random = (int) (Math.random() * 3) + 1;
 //            if (random == 1) {
 
-            caballero.dibujar(c);
+//            caballero.dibujar(c);
 //            }
+//            drYones.dibuja(c);
         } catch (MissingResourceException e) {
             //Log.i("Error al dibujar", e.getLocalizedMessage());
         }
@@ -199,22 +198,31 @@ public class Game extends Escena implements Runnable {
         int pointerID = event.getPointerId(pointerIndex); //Obtenemos el Id del pointer asociado a la acción
         int accion = event.getActionMasked();
         switch (accion) {
-            case MotionEvent.ACTION_DOWN:           // Primer dedo toca
+            case MotionEvent.ACTION_DOWN:
                 if (pulsa(rectBtnA, event)) {
-                    enSalto = true;
+                    enSalto = true; //yones
+//                    drYones.seMueve = true; // dryones
+//                    drYones.enRetroceso = true;
                 }
                 if (pulsa(rectBtnB, event)) {
-                    enSlide = true;
+                    enSlide = true; //yones
+//                    drYones.seMueve = true; // dryones
+//                    drYones.enAvance = true; // dryones
                 }
-//
-                for (Personaje p:personajes)
-                    p.isPulsado((int)x,(int)y);
+                //drYones.isPulsado ((int) x, (int) y);
                 break;
-            case MotionEvent.ACTION_POINTER_DOWN:  // Segundo y siguientes tocan
+            case MotionEvent.ACTION_POINTER_DOWN:
                 break;
-            case MotionEvent.ACTION_UP:                     // Al levantar el últ
-                break;
-            case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                if (pulsa(rectBtnA, event)) {
+//                    drYones.seMueve = false;
+//                    drYones.enRetroceso = false;
+                }
+                if (pulsa(rectBtnB, event)) {
+//                    drYones.seMueve = false;
+//                    drYones.enAvance = false;
+                }
                 break;
             case MotionEvent.ACTION_MOVE: // Se mueve alguno de los dedos
                 break;
