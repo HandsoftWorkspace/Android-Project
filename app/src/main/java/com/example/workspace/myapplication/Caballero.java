@@ -6,9 +6,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 
-import static com.example.workspace.myapplication.Game.enSalto;
-
 public class Caballero extends Personaje {
+    Context context;
     int ancho, alto;
     int velocidad;
 
@@ -24,7 +23,11 @@ public class Caballero extends Personaje {
     private int proporcionX; // Divide la pantalla para adaptarnos a distintas resoluciones de pantalla
     private int proporcionY; // Divide la pantalla para adaptarnos a distintas resoluciones de pantalla
 
+    //public Personaje(Context context, int posX, int posY, int velocidad, int anchoPantalla, int altoPantalla) {
+
     public Caballero(Context context, int posX, int posY, int velocidad, int anchoPantalla, int altoPantalla) {
+        super(context, posX, posY, velocidad, anchoPantalla, altoPantalla);
+        this.context = context;
         this.posX = posX;
         this.posY = posY;
         this.ancho = anchoPantalla;
@@ -74,11 +77,10 @@ public class Caballero extends Personaje {
         framesCaballero[9] = espejo(framesCaballero[9], true);
     }
 
-
     public void mover() {
         if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
             indice++;
-            posX -= velocidad;
+            this.posX -= velocidad;
             if (indice >= framesCaballero.length) indice = 0;
             tFrameAuxm = System.currentTimeMillis();
         }

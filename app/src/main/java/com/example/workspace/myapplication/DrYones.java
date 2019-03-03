@@ -6,9 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 
-public class DrYones {
-    private Bitmap[] framesc, framesic, framesp, framesip;
+public class DrYones extends Personaje {
+    //    private Bitmap[] framesc, framesic, framesp, framesip;
+    Bitmap frame;
     private int posX, posY;
     private int anchoPantalla, altoPantalla;
     private int proporcionAncho, proporcionAlto;
@@ -35,7 +37,7 @@ public class DrYones {
     private Bitmap[] runEspejo;
 
     Context context;
-    Utils utils = new Utils();
+    Utils utils = new Utils(context);
 
     /**
      * @param posX
@@ -44,14 +46,16 @@ public class DrYones {
      * @param altoPantalla
      * @param velocidad
      */
-    public DrYones(int posX, int posY, int proporcionX, int proporcionY, int anchoPantalla, int altoPantalla, int velocidad) {
+    public DrYones(Context context, int posX, int posY, int anchoPantalla, int altoPantalla, int velocidad) {
+        super(context, posX, posY, velocidad, anchoPantalla, altoPantalla);
+        this.context = context;
         this.posX = posX;
         this.posY = posY;
         this.velocidad = velocidad;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
-        this.proporcionAncho = proporcionX;
-        this.proporcionAlto = proporcionY;
+
+        utils = new Utils(context);
 
         idle = new Bitmap[10];
         idleEspejo = new Bitmap[10];
@@ -61,91 +65,50 @@ public class DrYones {
         this.p = new Paint();
         p.setAlpha(alfa);
 
-        idle[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle0);
-        idle[0] = Bitmap.createScaledBitmap(idle[0], proporcionX, proporcionY * 2, false);
+        // bitmaps idle
+        for (int i = 0; i < 10; i++) {
+            idle[i] = utils.getBitmapFromAssets("idle/" + "idle" + i + ".png");
+            idle[i] = Bitmap.createScaledBitmap(idle[i], anchoPantalla / 18, altoPantalla / 9 * 2, false);
+        }
+        // idle espejo
+        for (int j = 0; j < idle.length; j++) {
+            idleEspejo[j] = espejo(idle[j], true);
+            idleEspejo[j] = Bitmap.createScaledBitmap(idleEspejo[j], anchoPantalla / 18, altoPantalla / 9 * 2, false);
+        }
 
-        idle[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle1);
-        idle[1] = Bitmap.createScaledBitmap(idle[1], proporcionX, proporcionY * 2, false);
-
-        idle[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle2);
-        idle[2] = Bitmap.createScaledBitmap(idle[2], proporcionX, proporcionY * 2, false);
-
-        idle[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle3);
-        idle[3] = Bitmap.createScaledBitmap(idle[3], proporcionX, proporcionY * 2, false);
-
-        idle[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle4);
-        idle[4] = Bitmap.createScaledBitmap(idle[4], proporcionX, proporcionY * 2, false);
-
-        idle[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle5);
-        idle[5] = Bitmap.createScaledBitmap(idle[5], proporcionX, proporcionY * 2, false);
-
-        idle[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle6);
-        idle[6] = Bitmap.createScaledBitmap(idle[6], proporcionX, proporcionY * 2, false);
-
-        idle[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle7);
-        idle[7] = Bitmap.createScaledBitmap(idle[7], proporcionX, proporcionY * 2, false);
-
-        idle[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle8);
-        idle[8] = Bitmap.createScaledBitmap(idle[8], proporcionX, proporcionY * 2, false);
-
-        idle[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.idle9);
-        idle[9] = Bitmap.createScaledBitmap(idle[9], proporcionX, proporcionY * 2, false);
-
-//        for (int i = 0; i < idle.length; i++) {
-//            idleEspejo[i] = espejo(idle[i], true);
-//        }
-
-        run[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run0);
-        run[0] = Bitmap.createScaledBitmap(run[0], proporcionX, proporcionY * 2, false);
-
-        run[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run1);
-        run[1] = Bitmap.createScaledBitmap(run[1], proporcionX, proporcionY * 2, false);
-
-        run[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run2);
-        run[2] = Bitmap.createScaledBitmap(run[2], proporcionX, proporcionY * 2, false);
-
-        run[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run3);
-        run[3] = Bitmap.createScaledBitmap(run[3], proporcionX, proporcionY * 2, false);
-
-        run[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run4);
-        run[4] = Bitmap.createScaledBitmap(run[4], proporcionX, proporcionY * 2, false);
-
-        run[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run5);
-        run[5] = Bitmap.createScaledBitmap(run[5], proporcionX, proporcionY * 2, false);
-
-        run[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run6);
-        run[6] = Bitmap.createScaledBitmap(run[6], proporcionX, proporcionY * 2, false);
-
-        run[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run7);
-        run[7] = Bitmap.createScaledBitmap(run[7], proporcionX, proporcionY * 2, false);
-
-        run[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run8);
-        run[8] = Bitmap.createScaledBitmap(run[8], proporcionX, proporcionY * 2, false);
-
-        run[9] = BitmapFactory.decodeResource(context.getResources(), R.drawable.run9);
-        run[9] = Bitmap.createScaledBitmap(run[9], proporcionX, proporcionY * 2, false);
-
-//        for (int i = 0; i < run.length; i++) {
-//            runEspejo[i] = espejo(run[i], true);
-//        }
-
+        // bitmaps run
+        for (int k = 0; k < 10; k++) {
+            run[k] = utils.getBitmapFromAssets("run/" + "run" + k + ".png");
+            run[k] = Bitmap.createScaledBitmap(run[k], anchoPantalla / 18, altoPantalla / 9 * 2, false);
+        }
+        // run espejo
+        for (int l = 0; l < run.length; l++) {
+            runEspejo[l] = espejo(run[l], true);
+            runEspejo[l] = Bitmap.createScaledBitmap(runEspejo[l], anchoPantalla / 18, altoPantalla / 9 * 2, false);
+        }
     }
 
     /**
      * @param c
      */
     public void dibuja(Canvas c) {
+        Log.d("Dibuja", "Dibuja a DrYones");
         if (enAvance) {
             if (seMueve) {
-                c.drawBitmap(run[indice], posX, posY, p);
+                c.drawBitmap(run[indice], posX, 0 - proporcionAlto, p);
             } else {
-                c.drawBitmap(idle[indice], posX, posY, p);
+                c.drawBitmap(idle[indice], posX, 0 - proporcionAlto, p);
             }
-        }  if (seMueve) {
-            c.drawBitmap(runEspejo[indice], posX, posY, p);
-        } else {
-            c.drawBitmap(idleEspejo[indice], posX, posY, p);
         }
+        if (enRetroceso) {
+            if (seMueve) {
+                c.drawBitmap(runEspejo[indice], posX, altoPantalla / 2 + proporcionAlto, p);
+            } else {
+                c.drawBitmap(idleEspejo[indice], posX, altoPantalla / 2 + proporcionAlto, p);
+            }
+        }
+//        c.drawBitmap(run[indice], posX, proporcionAlto * 8, p);
+//        c.drawBitmap(frame, anchoPantalla / 2, altoPantalla / 2, p);
     }
 
     /**
@@ -154,7 +117,7 @@ public class DrYones {
     public void cambiaFrame() {
         if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
             indice++;
-            if (indice >= framesc.length) {
+            if (indice >= idle.length) {
                 indice = 0;
             }
             tFrameAuxm = System.currentTimeMillis();
@@ -164,49 +127,52 @@ public class DrYones {
     /**
      *
      */
-    public void move() {
-        if (seMueve) {
-            if (System.currentTimeMillis() - tMoveAux > tiempoMove) {
-                if (enAvance) {
-                    posX += velocidad;
-                    if (posX > this.anchoPantalla - framesc[indice].getWidth()) {
-                        posX = this.anchoPantalla - framesc[indice].getWidth();
-                        seMueve = false;
-                    }
-                    //posX = Math.min(posX, PantallaInicioView.anchoPantalla - framesc[indice].getWidth());
+    public Bitmap move() {
+//        if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+//            indice++;
+//            if (indice >= idle.length) {
+//                indice = 0;
+//            }
+//            tFrameAuxm = System.currentTimeMillis();
+//        }
+        if (seMueve && enAvance) {
+            if (enAvance) {
+                posX += velocidad;
+                if (posX > this.anchoPantalla - run[indice].getWidth()) {
+                    posX = this.anchoPantalla - run[indice].getWidth();
+                    seMueve = false;
                 }
-                if (enRetroceso) {
-                    posX -= velocidad;
-                    //posX = Math.max(posX, 0);
-                    if (posX < 0) {
-                        posX = 0;
-                        seMueve = false;
-                    }
-                }
-                tMoveAux = System.currentTimeMillis();
+                //posX = Math.min(posX, PantallaInicioView.anchoPantalla - framesc[indice].getWidth());
+            }
+//            tMoveAux = System.currentTimeMillis();
+        }
+        if (seMueve && enRetroceso) {
+            posX -= velocidad;
+//                posX = Math.max(posX, 0);
+            if (posX < 0) {
+                posX = 0;
+                seMueve = false;
             }
         }
+        return null;
     }
 
     /**
-     * @param x
-     * @param y
+     * @param pulsado
      */
+    public void isPulsado(boolean pulsado) {
 //    public void isPulsado(int x, int y) {
-//        if (x > posX && x < posX + framesc[indice].getWidth() &&
-//                y > posY && y < posY + framesc[indice].getHeight()) {
-//            if (!seMueve && pulsado) {
-//                avanza = !avanza;
-//                pulsado = false;
-//            } else if (!seMueve && !pulsado) {
-//                pulsado = true;
-//                seMueve = true;
-//            } else {
-//                seMueve = false;
-//                pulsado = true;
-//            }
-//        } else pulsado = false;
-//    }
+        if (!seMueve && pulsado) {
+            avanza = !avanza;
+            pulsado = false;
+        } else if (!seMueve && !pulsado) {
+            pulsado = true;
+            seMueve = true;
+        } else {
+            seMueve = false;
+            pulsado = true;
+        }
+    }
 
     /**
      * @param imagen
@@ -267,22 +233,6 @@ public class DrYones {
 
     public int getAlfa() {
         return alfa;
-    }
-
-    public Bitmap[] getFramesc() {
-        return framesc;
-    }
-
-    public void setFramesc(Bitmap[] framesc) {
-        this.framesc = framesc;
-    }
-
-    public Bitmap[] getFramesp() {
-        return framesp;
-    }
-
-    public void setFramesp(Bitmap[] framesp) {
-        this.framesp = framesp;
     }
 
     public int getPosX() {

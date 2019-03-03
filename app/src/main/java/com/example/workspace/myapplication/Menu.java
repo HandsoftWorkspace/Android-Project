@@ -38,6 +38,9 @@ public class Menu extends Escena {
 
     public int volumen; // Volumen del menú
 
+    private Bitmap nubes;
+    Fondo parallaxMenu;
+
     // Constructor de la escena MENÚ
 
     /**
@@ -50,24 +53,13 @@ public class Menu extends Escena {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
         // Fondo menú principal
-//        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
-//        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
-        fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky0);
+        fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
         fondo0 = Bitmap.createScaledBitmap(fondo0, anchoPantalla, altoPantalla, false);
-        fondo1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky1);
-        fondo1 = Bitmap.createScaledBitmap(fondo1, anchoPantalla, altoPantalla, false);
-        fondo2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky3);
-        fondo2 = Bitmap.createScaledBitmap(fondo2, anchoPantalla, altoPantalla, false);
-        fondo3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky4);
-        fondo3 = Bitmap.createScaledBitmap(fondo3, anchoPantalla, altoPantalla, false);
-        fondo4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.sky5);
-        fondo4 = Bitmap.createScaledBitmap(fondo4, anchoPantalla, altoPantalla, false);
-        // Se añade la imagen a cada posición de la colección
-//        parallax.add(new Fondo(fondo0, 0, 0));
-//        parallax.add(new Fondo(fondo1, 0, 0));
-//        parallax.add(new Fondo(fondo2, 0, 0));
-//        parallax.add(new Fondo(fondo3, 0, 0));
-//        parallax.add(new Fondo(fondo4, 0, 0));
+
+        nubes = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche5);
+        nubes = Bitmap.createScaledBitmap(nubes, anchoPantalla, altoPantalla, false);
+
+        parallaxMenu = new Fondo(nubes, 0, 0, 8);
 
         // Proporciones pantalla, se divide el alto y ancho de la pantalla del dispositivo, para conseguir asi nuestras proporciones
         // para que se adapten asi a distintos dispositivos
@@ -128,11 +120,7 @@ public class Menu extends Escena {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
-//        parallax.get(0).mover(4);
-//        parallax.get(1).mover(6);
-//        parallax.get(2).mover(8);
-//        parallax.get(3).mover(10);
-//        parallax.get(4).mover(12);
+//        parallaxMenu.mover();
     }
 
     /**
@@ -142,16 +130,10 @@ public class Menu extends Escena {
      */
     public void dibujar(Canvas c) {
         try {
-//            for (Fondo f : parallax) {
-//                f.dibujar(c);
-//            }
+//            parallaxMenu.dibujar(c);
 
             //c.drawBitmap(fondo, 0, 0, brocha);
             c.drawBitmap(fondo0, 0, 0, null);
-            c.drawBitmap(fondo1, 0, 0, null);
-            c.drawBitmap(fondo2, 0, 0, null);
-            c.drawBitmap(fondo3, 0, 0, null);
-            c.drawBitmap(fondo4, 0, 0, null);
 
             c.drawBitmap(down, proporcionAncho * 6, proporcionAlto * 1, null);
             c.drawBitmap(up, proporcionAncho * 6, proporcionAlto * 2, null);

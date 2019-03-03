@@ -21,6 +21,9 @@ public class Opciones extends Escena {
     private float x;
     private Bitmap volverMenu, music, musicoff;
 
+    boolean volumen;
+    boolean vibracion;
+
     /**
      * @param context       Contexto de la aplicación
      * @param idEscena      Número que identifica la escena actual
@@ -32,7 +35,7 @@ public class Opciones extends Escena {
         proporcionAncho = anchoPantalla / 18;
         proporcionAlto = altoPantalla / 9;
 
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
+        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
 
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
@@ -66,22 +69,21 @@ public class Opciones extends Escena {
         int accion = event.getActionMasked();
 
         switch (accion) {
-            case MotionEvent.ACTION_UP:                     // Al levantar el últ
-            case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
                 if (pulsa(rectVolverMenu, event)) {
                     Log.i("test", "pasa");
                     return 0;
+                } else if (pulsa(rectMusic, event)) {
+                    volumen = !volumen;
+                    mediaPlayer.start();
+                    break;
+                } else if (pulsa(rectVibracion, event)) {
+                    vibracion = !vibracion;
+                } else if (pulsa(rectMusicoff, event)) {
+                    mediaPlayer.stop();
+                    break;
                 }
-//                else if (pulsa(rectMusic, event)) {
-//                    volumen = !volumen;
-//                    mediaPlayer.start();
-//                    break;
-//                } else if (pulsa(rectVibracion, event)) {
-//                    vibracion = !vibracion;
-//                } else if (pulsa(rectMusicoff, event)) {
-//                    mediaPlayer.stop();
-//                    break;
-//                }
                 break;
         }
         return idEscena;

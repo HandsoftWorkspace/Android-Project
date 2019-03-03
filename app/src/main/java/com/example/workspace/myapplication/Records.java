@@ -23,7 +23,7 @@ public class Records extends Escena {
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
 
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.fondo);
+        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
 
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
