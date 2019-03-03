@@ -20,11 +20,13 @@ public class Game extends Escena implements Runnable {
     private int proporcionAncho, proporcionAlto;
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
     Paint p = new Paint();
-    Utils utils = new Utils(context);
+    Utils utils;
 
     Bitmap noche0, noche1, noche2, noche3, noche4, noche5;
 
-    Bitmap btnA, btnB;
+    protected static Bitmap listaNumeros[] = new Bitmap[10];
+    private Bitmap btnA, btnB;
+    private Bitmap heart, lose, win;
 
     Enemigo enemigo; // Personaje secundario
     ArrayList<Personaje> personajes = new ArrayList<>();
@@ -33,9 +35,10 @@ public class Game extends Escena implements Runnable {
     Rect rectBtnA, rectBtnB;
 
     int random;
+    int vidas = 3;
+    int time = 0;
 
     DrYones drYones = new DrYones(context, anchoPantalla / 2, altoPantalla * 8, anchoPantalla, altoPantalla, 5);
-    //    Yones yones = new Yones(context, proporcionAncho, proporcionAlto * 8, 2, anchoPantalla, altoPantalla);
     //    Caballero caballero = new Caballero(context, proporcionAncho * 18, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
     Caballero caballero = new Caballero(context, anchoPantalla, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
 //    Caballero caballero2 = new Caballero(context, proporcionAncho, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
@@ -104,6 +107,23 @@ public class Game extends Escena implements Runnable {
         drYones.enAvance = true;
         drYones.seMueve = false;
 //        personajes.add(caballero);
+
+        utils = new Utils(context);
+
+        heart = utils.getBitmapFromAssets("varios/heart.png");
+        heart = Bitmap.createScaledBitmap(heart, proporcionAncho * 1, proporcionAlto * 1, false);
+
+        // Bitmaps de números
+        for (int i = 0; i < 10; i++) {
+            listaNumeros[i] = utils.getBitmapFromAssets("varios/" + i + ".png");
+            listaNumeros[i] = Bitmap.createScaledBitmap(listaNumeros[i], proporcionAncho * 1, proporcionAlto * 1, false);
+        }
+
+        lose = utils.getBitmapFromAssets("varios/lose.png");
+        lose = Bitmap.createScaledBitmap(lose, proporcionAncho * 4, proporcionAlto * 2, false);
+
+        win = utils.getBitmapFromAssets("varios/win.png");
+        win = Bitmap.createScaledBitmap(win, proporcionAncho * 4, proporcionAlto * 2, false);
     }
 
     /**
@@ -116,7 +136,6 @@ public class Game extends Escena implements Runnable {
 //            f.mover();
 //        }
         drYones.move();
-
     }
 
     /**
@@ -132,10 +151,35 @@ public class Game extends Escena implements Runnable {
 //            }
 
             c.drawBitmap(fondo, 0, 0, null);
+            c.drawBitmap(heart, proporcionAncho / 2, 0, null);
+
+            switch (vidas) {
+                case 0:
+                    c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
+                    break;
+                case 1:
+                    c.drawBitmap(listaNumeros[1], proporcionAncho, 0, null);
+                    break;
+                case 2:
+                    c.drawBitmap(listaNumeros[2], proporcionAncho, 0, null);
+                    break;
+                case 3:
+                    c.drawBitmap(listaNumeros[3], proporcionAncho + proporcionAncho / 2, 0, null);
+                    break;
+                case 4:
+                    c.drawBitmap(listaNumeros[4], proporcionAncho, 0, null);
+                    break;
+                case 5:
+                    c.drawBitmap(listaNumeros[5], proporcionAncho, 0, null);
+                    break;
+            }
+
             p.setColor(Color.GREEN);
             c.drawRect(rectBtnA, p);
             c.drawRect(rectBtnB, p);
-
+            drYones.setRectangulo();
+//            c.drawRect(drYones.setRectangulo(), p);
+            c.drawRect(drYones.rectDrYones, p);
 
             // Botones
             c.drawBitmap(btnA, 0, proporcionAlto * 6, null);
@@ -145,7 +189,7 @@ public class Game extends Escena implements Runnable {
             //enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
             drYones.cambiaFrame();
             drYones.dibuja(c);
-        } catch (MissingResourceException e) {
+        } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
     }

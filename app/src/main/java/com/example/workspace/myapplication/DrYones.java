@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.Log;
 
 public class DrYones extends Personaje {
@@ -14,6 +16,8 @@ public class DrYones extends Personaje {
     private int posX, posY;
     private int anchoPantalla, altoPantalla;
     private int proporcionAncho, proporcionAlto;
+
+    int vidas;
 
     private int velocidad;
     private int tiempoFrame = 100;
@@ -36,6 +40,8 @@ public class DrYones extends Personaje {
     private Bitmap[] run;
     private Bitmap[] runEspejo;
 
+    public Rect rectDrYones;
+
     Context context;
     Utils utils = new Utils(context);
 
@@ -57,6 +63,9 @@ public class DrYones extends Personaje {
 
         utils = new Utils(context);
 
+        proporcionAncho = anchoPantalla / 9;
+        proporcionAlto = altoPantalla / 18;
+
         idle = new Bitmap[10];
         idleEspejo = new Bitmap[10];
         run = new Bitmap[10];
@@ -64,6 +73,8 @@ public class DrYones extends Personaje {
 
         this.p = new Paint();
         p.setAlpha(alfa);
+
+        vidas = 3;
 
         // bitmaps idle
         for (int i = 0; i < 10; i++) {
@@ -86,6 +97,10 @@ public class DrYones extends Personaje {
             runEspejo[l] = espejo(run[l], true);
             runEspejo[l] = Bitmap.createScaledBitmap(runEspejo[l], anchoPantalla / 18, altoPantalla / 9 * 2, false);
         }
+
+        // HitBox
+        rectDrYones = new Rect(posX, posY, run[0].getWidth(), run[0].getWidth());
+
     }
 
     /**
@@ -95,18 +110,21 @@ public class DrYones extends Personaje {
         Log.d("Dibuja", "Dibuja a DrYones");
         if (enAvance) {
             if (seMueve) {
-                c.drawBitmap(run[indice], posX, 0 - proporcionAlto, p);
+                c.drawBitmap(run[indice], posX, altoPantalla - proporcionAlto * 5, p);
             } else {
-                c.drawBitmap(idle[indice], posX, 0 - proporcionAlto, p);
+                c.drawBitmap(idle[indice], posX, altoPantalla - proporcionAlto * 5, p);
             }
         }
         if (enRetroceso) {
             if (seMueve) {
-                c.drawBitmap(runEspejo[indice], posX, altoPantalla / 2 + proporcionAlto, p);
+                c.drawBitmap(runEspejo[indice], posX, altoPantalla - proporcionAlto * 5, p);
             } else {
-                c.drawBitmap(idleEspejo[indice], posX, altoPantalla / 2 + proporcionAlto, p);
+                c.drawBitmap(idleEspejo[indice], posX, altoPantalla - proporcionAlto * 5, p);
             }
         }
+        p.setColor(Color.GREEN);
+        p.setStyle(Paint.Style.STROKE);
+        c.drawRect(rectDrYones, p);
 //        c.drawBitmap(run[indice], posX, proporcionAlto * 8, p);
 //        c.drawBitmap(frame, anchoPantalla / 2, altoPantalla / 2, p);
     }
@@ -128,13 +146,6 @@ public class DrYones extends Personaje {
      *
      */
     public Bitmap move() {
-//        if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
-//            indice++;
-//            if (indice >= idle.length) {
-//                indice = 0;
-//            }
-//            tFrameAuxm = System.currentTimeMillis();
-//        }
         if (seMueve && enAvance) {
             if (enAvance) {
                 posX += velocidad;
@@ -142,9 +153,7 @@ public class DrYones extends Personaje {
                     posX = this.anchoPantalla - run[indice].getWidth();
                     seMueve = false;
                 }
-                //posX = Math.min(posX, PantallaInicioView.anchoPantalla - framesc[indice].getWidth());
             }
-//            tMoveAux = System.currentTimeMillis();
         }
         if (seMueve && enRetroceso) {
             posX -= velocidad;
@@ -154,24 +163,19 @@ public class DrYones extends Personaje {
                 seMueve = false;
             }
         }
+        this.setRectangulo();
         return null;
     }
 
-    /**
-     * @param pulsado
-     */
-    public void isPulsado(boolean pulsado) {
-//    public void isPulsado(int x, int y) {
-        if (!seMueve && pulsado) {
-            avanza = !avanza;
-            pulsado = false;
-        } else if (!seMueve && !pulsado) {
-            pulsado = true;
-            seMueve = true;
-        } else {
-            seMueve = false;
-            pulsado = true;
-        }
+    public void setRectangulo() {
+//        float x = posicion.x;
+//        float y = posicion.y;
+//        float x = posX;
+//        float y = posY;
+//        rectDrYones = new Rect((int) (x + 0.2 * run[0].getWidth()), (int) (y + 0.2 * run[0].getHeight()), (int) (x + 0.8 * run[0].getWidth()), (int) (y + 0.8 * run[0].getHeight()));
+//        rectDrYones = new Rect((int) x, (int) y, (int) x + run[0].getWidth(), (int) y + run[0].getWidth());
+        rectDrYones = new Rect(posX, posY, posX + run[0].getWidth(), altoPantalla - proporcionAlto * 5);
+
     }
 
     /**
@@ -274,5 +278,14 @@ public class DrYones extends Personaje {
     public void setTiempoMove(int tiempoMove) {
         this.tiempoMove = tiempoMove;
     }
+
+    public int getVidas() {
+        return vidas;
+    }
+
+    public void setVidas(int vidas) {
+        this.vidas = vidas;
+    }
+
 
 }

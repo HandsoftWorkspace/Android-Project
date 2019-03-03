@@ -10,8 +10,6 @@ public class Personaje {
     private int posX, posY, vel, vida;
     Bitmap[] frames;
 
-    //public Yones(Context context, int posX, int posY, int velocidad, int anchoPantalla, int altoPantalla) {
-
     public Personaje(Context context, int posX, int posY, int velocidad, int anchoPantalla, int altoPantalla) {
 
     }
