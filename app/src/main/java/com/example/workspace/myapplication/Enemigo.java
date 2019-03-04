@@ -2,9 +2,12 @@ package com.example.workspace.myapplication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.Random;
 
@@ -33,7 +36,10 @@ public class Enemigo extends Personaje {
     boolean avanza = true;
     public boolean enAvance = false;
     public boolean enRetroceso = false;
+    private boolean seDibuja = true;
 
+    Bitmap frameEnemigo;
+    Bitmap bitmaps[];
     private Bitmap[] idle;
     private Bitmap[] idleEspejo;
     private Bitmap[] run;
@@ -42,7 +48,9 @@ public class Enemigo extends Personaje {
     public Rect rectEnemigo;
 
     Context context;
-    Utils utils = new Utils(context);
+    Utils utils;
+
+    int rand;
 
     public Enemigo(Context context, int posX, int posY, int anchoPantalla, int altoPantalla, int velocidad) {
         super(context, posX, posY, anchoPantalla, altoPantalla, velocidad);
@@ -52,33 +60,64 @@ public class Enemigo extends Personaje {
         this.velocidad = velocidad;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
+
+        utils = new Utils(context);
+
+        bitmaps = new Bitmap[5];
+
+        rand = (int) Math.random() * 2 + 1;
+
+        switch (rand) {
+            case 1:
+                frameEnemigo = utils.getBitmapFromAssets("varios/rock.png");
+                frameEnemigo = Bitmap.createScaledBitmap(frameEnemigo, anchoPantalla / 18, altoPantalla / 9, false);
+                bitmaps[0] = frameEnemigo;
+                break;
+            case 2:
+                frameEnemigo = utils.getBitmapFromAssets("varios/snake.png");
+                frameEnemigo = Bitmap.createScaledBitmap(frameEnemigo, anchoPantalla / 18, altoPantalla / 9, false);
+                bitmaps[1] = frameEnemigo;
+                break;
+        }
     }
 
-//        public Enemigo(Bitmap imagen, float x, float y) {
-//            super();
-//            this.imagen = imagen;
-//            this.posicion = new PointF(x, y);
-//            g = new Random();
-//        }
-
-    //Establece el movimiento de un enemigo en una pantalla definida por alto y ancho y cierta velocidad
-    public void moverEnemigo(int alto, int ancho, int velocidad) {
-        posicion.y += velocidad;
-        if (posicion.y > alto) {
-            posicion.y = 0;
-            posicion.x = g.nextFloat() * (ancho - imagen.getWidth());
+    /**
+     *
+     */
+    public void cambiaFrame() {
+        if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
+            indice++;
+            if (indice >= idle.length) {
+                indice = 0;
+            }
+            tFrameAuxm = System.currentTimeMillis();
         }
     }
 
     public void setRectangulo() {
-//        float x = posicion.x;
-//        float y = posicion.y;
-//        float x = posX;
-//        float y = posY;
-//        rectDrYones = new Rect((int) (x + 0.2 * run[0].getWidth()), (int) (y + 0.2 * run[0].getHeight()), (int) (x + 0.8 * run[0].getWidth()), (int) (y + 0.8 * run[0].getHeight()));
-//        rectDrYones = new Rect((int) x, (int) y, (int) x + run[0].getWidth(), (int) y + run[0].getWidth());
         rectEnemigo = new Rect(posX, posY, posX + run[0].getWidth(), altoPantalla - proporcionAlto * 5);
-
     }
+
+    public Bitmap move() {
+        posY += velocidad;
+        if (posY > altoPantalla + frameEnemigo.getHeight()) {
+            seDibuja = false;
+        }
+//        this.setRectangulo();
+        return null;
+    }
+
+    /**
+     * @param c
+     */
+    public void dibuja(Canvas c) {
+        if (seDibuja) {
+            c.drawBitmap(frameEnemigo, posX, posY, null);
+        }
+        p.setColor(Color.GREEN);
+        p.setStyle(Paint.Style.STROKE);
+        c.drawRect(rectEnemigo, p);
+    }
+
 
 }

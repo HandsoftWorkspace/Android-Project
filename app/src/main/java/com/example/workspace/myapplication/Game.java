@@ -102,11 +102,16 @@ public class Game extends Escena implements Runnable {
         rectBtnB = new Rect(proporcionAncho * 17, proporcionAlto * 6, proporcionAncho * 18, proporcionAlto * 7);
 
         // PERSONAJES
-
         p.setColor(ContextCompat.getColor(context, R.color.colorBackGr));
         drYones.enAvance = true;
         drYones.seMueve = false;
 //        personajes.add(caballero);
+        random = (int) Math.random() * 5 + 1;
+        if (random == 2) {
+            int auxPosX = proporcionAncho * (int) Math.random() * 18 + 1;
+            int auxVelocidad = (int) Math.random() * 40 + 15;
+            enemigo = new Enemigo(context, auxPosX, 0 - enemigo.frameEnemigo.getHeight(), anchoPantalla, altoPantalla, auxVelocidad);
+        }
 
         utils = new Utils(context);
 
@@ -136,6 +141,7 @@ public class Game extends Escena implements Runnable {
 //            f.mover();
 //        }
         drYones.move();
+        enemigo.move();
     }
 
     /**
@@ -189,6 +195,7 @@ public class Game extends Escena implements Runnable {
             //enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
             drYones.cambiaFrame();
             drYones.dibuja(c);
+            enemigo.dibuja(c);
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
