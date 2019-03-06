@@ -5,4 +5,12 @@
     <string name="logros">Logros</string>
     <string name="creditos">Créditos</string>
     <string name="ayuda">Ayuda</string>
+    <string name="hechopor">Creado por</string>
+    <string name="fuentes">Recursos</string>
+    <string name="name">Nombre juego</string>
+    <string name="juego">Juego</string>
+    <string name="projectname">Nombre proyecto</string>
+    <string name="proyecto">Proyecto</string>
+    <string name="confirmarsalida">Deseas salir del juego?</string>
+    <string name="confirmarvaciado">Deseas borrar las puntuaciones?</string>
 </resources>

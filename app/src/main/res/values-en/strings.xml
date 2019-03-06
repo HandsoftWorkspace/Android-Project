@@ -6,4 +6,12 @@
     <string name="logros">Records</string>
     <string name="creditos">Credits</string>
     <string name="ayuda">Help</string>
+    <string name="hechopor">Created by</string>
+    <string name="fuentes">Resources</string>
+    <string name="name">Game name</string>
+    <string name="juego">Game</string>
+    <string name="projectname">Project name</string>
+    <string name="proyecto">Project</string>
+    <string name="confirmarsalida">Do you want exit this game?</string>
+    <string name="confirmarvaciado">Do you want to delete the scores?</string>
 </resources>

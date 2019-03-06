@@ -32,8 +32,8 @@ public class DrYones extends Personaje {
     boolean animado = true;
     boolean avanza = true;
     boolean pulsado = false;
-    public boolean enAvance = false;
-    public boolean enRetroceso = false;
+    public static boolean enAvance = false;
+    public static boolean enRetroceso = false;
 
     private Bitmap[] idle;
     private Bitmap[] idleEspejo;
@@ -175,7 +175,6 @@ public class DrYones extends Personaje {
 //        rectDrYones = new Rect((int) (x + 0.2 * run[0].getWidth()), (int) (y + 0.2 * run[0].getHeight()), (int) (x + 0.8 * run[0].getWidth()), (int) (y + 0.8 * run[0].getHeight()));
 //        rectDrYones = new Rect((int) x, (int) y, (int) x + run[0].getWidth(), (int) y + run[0].getWidth());
         rectDrYones = new Rect(posX, posY, posX + run[0].getWidth(), altoPantalla - proporcionAlto * 5);
-
     }
 
     /**
@@ -287,5 +286,11 @@ public class DrYones extends Personaje {
         this.vidas = vidas;
     }
 
+    /*javi */public Bitmap[] getRun() {
+        /*javi */return run;
+        /*javi */}
 
+    /*javi */public Rect getRectDrYones() {
+        /*javi */return rectDrYones;
+        /*javi */}
 }

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -17,9 +18,9 @@ import java.util.ArrayList;
 
 public class Menu extends Escena {
 
-    Rect rectJuego, rectOpciones, rectLogros, rectLeader, rectAyuda, rectCreditos;
+    Rect rectJuego, rectOpciones, rectLogros, rectAyuda, rectCreditos, rectCierre, rectBtnOk, rectBtnCancel;
 
-    Bitmap juego, opciones, creditos, leader, ayuda;
+    Bitmap juego, opciones, creditos, leader, ayuda, cierre, btnOk, btnCancel;
 
     Bitmap fondo0, fondo1, fondo2, fondo3, fondo4, fondo5, down, up, downGrande, upGrande;
 
@@ -28,9 +29,10 @@ public class Menu extends Escena {
 
     private int proporcionAlto, proporcionAncho;
     private Paint brocha = new Paint();
+    Typeface faw;
 
     public static MediaPlayer mediaPlayer;
-    private AudioManager audioManager;
+    public static AudioManager audioManager;
     private SoundPool efectos;
     private int sonidoWoosh, sonidoPajaro, sonidoExplosion;
     private int maxSonidosSimul = 10;
@@ -73,6 +75,7 @@ public class Menu extends Escena {
         rectLogros = new Rect(proporcionAncho * 13, proporcionAlto * 3, proporcionAncho * 15, proporcionAlto * 5);
         rectCreditos = new Rect(0, proporcionAlto * 6, proporcionAncho * 2, proporcionAlto * 8);
         rectAyuda = new Rect(proporcionAncho * 16, 6, proporcionAncho * 18, proporcionAlto * 8);
+        rectCierre = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
 
         // Bitmaps de iconos del menú, se asocia la imagen PNG y se le da el tamaño, en este caso usaremos proporciones
         // Iconos
@@ -103,15 +106,19 @@ public class Menu extends Escena {
         upGrande = BitmapFactory.decodeResource(context.getResources(), R.drawable.up);
         upGrande = Bitmap.createScaledBitmap(upGrande, proporcionAncho * 8, proporcionAlto * 1, false);
 
+        cierre = BitmapFactory.decodeResource(context.getResources(), R.drawable.cancel);
+        cierre = Bitmap.createScaledBitmap(cierre, proporcionAncho * 2, proporcionAlto * 2, false);
+
         // Controles de audio y musica
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mediaPlayer = MediaPlayer.create(context, R.raw.acoustic);
+        mediaPlayer = MediaPlayer.create(context, R.raw.laciudadperdida);
         volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         mediaPlayer.setVolume(volumen / 2, volumen / 2);
         mediaPlayer.start(); // Se arranca la secuencia musical
-        mediaPlayer.seekTo(7000); // La secuencia empieza en el segundo 7, por lo tanto se adelanta para no causar una espera
+        mediaPlayer.seekTo(2000); // Se adelanta para no causar un vacio
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
 
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
         brocha.setColor(Color.TRANSPARENT);
 
     }
@@ -136,6 +143,7 @@ public class Menu extends Escena {
             c.drawBitmap(fondo0, 0, 0, null);
 
             c.drawBitmap(down, proporcionAncho * 6, proporcionAlto * 1, null);
+//            c.drawText("DR YONES", proporcionAlto * 7, proporcionAlto * 1, p);
             c.drawBitmap(up, proporcionAncho * 6, proporcionAlto * 2, null);
             c.drawBitmap(downGrande, proporcionAncho * 5, proporcionAlto * 5, null);
             c.drawBitmap(upGrande, proporcionAncho * 5, proporcionAlto * 6, null);
@@ -155,6 +163,8 @@ public class Menu extends Escena {
             c.drawRect(rectCreditos, brocha);
             c.drawBitmap(creditos, proporcionAncho * 0, proporcionAlto * 6, null);
 
+            c.drawRect(rectCierre, brocha);
+            c.drawBitmap(cierre, proporcionAncho * 0, proporcionAlto * 0, null);
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
@@ -189,11 +199,11 @@ public class Menu extends Escena {
                     return 4;
                 } else if (pulsa(rectCreditos, event)) {
                     return 5;
+                } else if (pulsa(rectCierre, event)) {
+                    return 6;  // TODO al crear el constructor no se ve nada en pantalla
                 }
                 break;
-
             case MotionEvent.ACTION_MOVE: // Se mueve alguno de los dedos
-
                 break;
             default:
                 Log.i("Otra acción", "Acción no definida: " + accion);

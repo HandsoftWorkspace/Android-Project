@@ -32,6 +32,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
     private Records records;
     private Ayuda ayuda;
     private Creditos creditos;
+    private ConfirmacionCierre cierre;
+    private ConfirmacionBorrado borrado;
 
     public Juego(Context context) {
         super(context);
@@ -73,6 +75,12 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
                     case 5:
                         escenaActual = creditos;
                         break;
+                    case 6:
+                        escenaActual = cierre;
+                        break;
+//                    case 7:
+//                        escenaActual = borrado;
+//                        break;
                 }
             }
         }
@@ -114,6 +122,13 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
         if (creditos == null) {
             creditos = new Creditos(context, 5, anchoPantalla, altoPantalla);
         }
+        if (cierre == null) {
+            cierre = new ConfirmacionCierre(context, 6, anchoPantalla, altoPantalla);
+        }
+        // TODO
+//        if (borrado == null) {
+//            borrado = new ConfirmacionBorrado(context, 7, anchoPantalla, altoPantalla);
+//        }
 
         escenaActual = menu;
         hilo.setSurfaceSize(width, height);   // se establece el nuevo ancho y alto de pantalla en el hilo

@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -20,28 +22,43 @@ public class Game extends Escena implements Runnable {
     private int proporcionAncho, proporcionAlto;
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
     Paint p = new Paint();
+    Vibrator vibrator;
     Utils utils;
 
     Bitmap noche0, noche1, noche2, noche3, noche4, noche5;
 
     protected static Bitmap listaNumeros[] = new Bitmap[10];
-    private Bitmap btnA, btnB;
+    private Bitmap btnA, btnB, btnDisparo;
     private Bitmap heart, lose, win;
+    private Bitmap frameEnemigo;
 
     Enemigo enemigo; // Personaje secundario
+    Enemigo[] arrayEnemigos;
+    ArrayList<Enemigo> listaEnemigos = new ArrayList<>();
     ArrayList<Personaje> personajes = new ArrayList<>();
+//    Bitmap enemigosBitmaps[] = new Enemigo[5];
 
     Rect rectYones;
-    Rect rectBtnA, rectBtnB;
+    Rect rectBtnA, rectBtnB, rectBtnDisparo;
 
-    int random;
-    int vidas = 3;
-    int time = 0;
+    private boolean dispara = false;
 
-    DrYones drYones = new DrYones(context, anchoPantalla / 2, altoPantalla * 8, anchoPantalla, altoPantalla, 5);
+    private int posicion;
+
+    private int volumen;
+
+    private int random;
+    private int vidas = 5;
+    private int time = 0;
+
+    public static MediaPlayer mediaPlayer;
+    public static AudioManager audioManager;
+
+    /*javi*/ DrYones drYones;
     //    Caballero caballero = new Caballero(context, proporcionAncho * 18, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
-    Caballero caballero = new Caballero(context, anchoPantalla, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
-//    Caballero caballero2 = new Caballero(context, proporcionAncho, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
+    /*javi*/ Caballero caballero;
+    //    Caballero caballero2 = new Caballero(context, proporcionAncho, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
+    /*javi*/ Latigo latigo;
 
     /**
      * @param context       application
@@ -55,6 +72,15 @@ public class Game extends Escena implements Runnable {
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
 
+        /*javi*/ //  drYones = new DrYones(context, anchoPantalla / 2, altoPantalla * 8, anchoPantalla, altoPantalla, 10); // le estas poniendo que la posY es ancho de pantalla * 8, se sale por abajo, por eso no se ve el látigo
+        /*javi*/
+        drYones = new DrYones(context, anchoPantalla / 2, altoPantalla, anchoPantalla, altoPantalla, 10); // le estas pone
+        /*javi*/
+        caballero = new Caballero(context, anchoPantalla, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
+        /*javi*/
+        latigo = new Latigo(context, drYones.getPosX(), drYones.getPosY() - drYones.getRun()[0].getHeight() / 2, anchoPantalla, altoPantalla);
+        vibrator = (Vibrator) getContext().getSystemService(context.VIBRATOR_SERVICE);
+
         // segundo parallax
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
@@ -63,33 +89,6 @@ public class Game extends Escena implements Runnable {
         // Se asocia cada bitmap a una imagen png
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundnight);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
-//
-//        noche0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche0);
-//        noche0 = Bitmap.createScaledBitmap(noche0, anchoPantalla, altoPantalla, false);
-//
-//        noche1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche1);
-//        noche1 = Bitmap.createScaledBitmap(noche1, anchoPantalla, altoPantalla, false);
-//
-//        noche2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche2);
-//        noche2 = Bitmap.createScaledBitmap(noche2, anchoPantalla, altoPantalla, false);
-//
-//        noche3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche3);
-//        noche3 = Bitmap.createScaledBitmap(noche3, anchoPantalla, altoPantalla, false);
-//
-//        noche4 = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche4);
-//        noche4 = Bitmap.createScaledBitmap(noche4, anchoPantalla, altoPantalla, false);
-//
-//        noche5 = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche5);
-//        noche5 = Bitmap.createScaledBitmap(noche5, anchoPantalla, altoPantalla, false);
-
-        // Colección
-//        parallax = new ArrayList<>(); // Se inicia la coleccion;
-//        parallax.add(new Fondo(noche0, 0, 0, 4));
-//        parallax.add(new Fondo(noche1, 0, 0, 6));
-//        parallax.add(new Fondo(noche2, 0, 0, 6));
-//        parallax.add(new Fondo(noche3, 0, 0, 8));
-//        parallax.add(new Fondo(noche4, 0, 0, 10));
-//        parallax.add(new Fondo(noche5, 0, 0, 12));
 
         // Botones
         btnA = BitmapFactory.decodeResource(context.getResources(), R.drawable.btn);
@@ -98,20 +97,37 @@ public class Game extends Escena implements Runnable {
         btnB = BitmapFactory.decodeResource(context.getResources(), R.drawable.btn);
         btnB = Bitmap.createScaledBitmap(btnB, proporcionAncho * 1, proporcionAlto * 1, false);
 
+//        btnDisparo = utils.getBitmapFromAssets("varios/rock.png");
+        btnDisparo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mira);
+        btnDisparo = Bitmap.createScaledBitmap(btnDisparo, proporcionAncho * 1, proporcionAlto * 1, false);
+
+        // Rect botones
         rectBtnA = new Rect(0, proporcionAlto * 6, proporcionAncho * 1, proporcionAlto * 7);
         rectBtnB = new Rect(proporcionAncho * 17, proporcionAlto * 6, proporcionAncho * 18, proporcionAlto * 7);
+        rectBtnDisparo = new Rect(proporcionAncho * 17, proporcionAlto * 4, proporcionAncho * 18, proporcionAlto * 5);
 
         // PERSONAJES
         p.setColor(ContextCompat.getColor(context, R.color.colorBackGr));
         drYones.enAvance = true;
         drYones.seMueve = false;
 //        personajes.add(caballero);
-        random = (int) Math.random() * 5 + 1;
-        if (random == 2) {
-            int auxPosX = proporcionAncho * (int) Math.random() * 18 + 1;
+
+        // Creación de 10 objetos tipo enemigo, con parámetros aleatorios
+        for (int i = 0; i < 10; i++) {
+//            random = (int) Math.random() * 5 + 1;
+//            if (random == 2) {
+            /*javi*/
+            int auxPosX = (int) (proporcionAncho * Math.random() * 18 + 1);
             int auxVelocidad = (int) Math.random() * 40 + 15;
-            enemigo = new Enemigo(context, auxPosX, 0 - enemigo.frameEnemigo.getHeight(), anchoPantalla, altoPantalla, auxVelocidad);
+            /*javi*/
+            enemigo = new Enemigo(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
+//            enemigo = new Enemigo(context, auxPosX, 0 - enemigo.frameEnemigo.getHeight(), proporcionAncho, proporcionAlto, auxVelocidad);
+
+            listaEnemigos.add(enemigo);
+//            }
         }
+
+        arrayEnemigos = new Enemigo[10];
 
         utils = new Utils(context);
 
@@ -129,6 +145,29 @@ public class Game extends Escena implements Runnable {
 
         win = utils.getBitmapFromAssets("varios/win.png");
         win = Bitmap.createScaledBitmap(win, proporcionAncho * 4, proporcionAlto * 2, false);
+
+        // Array de bitmaps objeto TODO
+//        posicion = r.nextInt(anchoPantalla - fondonormal.getWidth());
+//
+//        for(int i=0;i<obj.length;i++) {
+//            aleatorio=r.nextInt(90);
+//            if(aleatorio==i){
+//                if (normales[i].posY > altoPantalla) {
+//                    normales[i].setPosY(0);
+//                    posicion = r.nextInt(anchoPantalla - fondonormal.getWidth());
+//                    normales[i].setPosX(posicion);
+//                }
+//            }
+//    }
+
+        // Controles de audio y musica
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mediaPlayer = MediaPlayer.create(context, R.raw.ambienteselva);
+        volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setVolume(volumen / 2, volumen / 2);
+        mediaPlayer.start(); // Se arranca la secuencia musical
+        mediaPlayer.seekTo(2000); // Se adelanta para no causar un vacio
+        mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
     }
 
     /**
@@ -137,11 +176,35 @@ public class Game extends Escena implements Runnable {
     @Override
     public void actualizarFisica() {
         super.actualizarFisica();
-//        for (Fondo f : parallax) {
-//            f.mover();
-//        }
         drYones.move();
-        enemigo.move();
+//        enemigo.move();
+//        enemigo.actualizarFisica();
+
+        /*javi*/
+        for (Enemigo e : listaEnemigos) {
+            /*javi*/
+            e.move();
+            /*javi*/
+        }
+
+        if (dispara) {
+            latigo.move();
+            if (latigo.getX() > anchoPantalla + latigo.getWidth() || latigo.getX() < 0 - latigo.getWidth()) {
+                dispara = false;
+                latigo.setPosX(drYones.getRectDrYones().centerX());
+            }
+        }
+
+        for (Enemigo e : listaEnemigos) {
+//            if (e.rectEnemigo.intersect(drYones.rectDrYones)) {
+            if (drYones.rectDrYones.intersect(e.rectEnemigo)) {
+                vidas--;
+                vibrator.vibrate(250);
+                if (vidas == 0) {
+                    System.exit(1);
+                }
+            }
+        }
     }
 
     /**
@@ -149,13 +212,8 @@ public class Game extends Escena implements Runnable {
      */
     public void dibujar(Canvas c) {
         try {
+            // Prueba aceleración de hardware
 //            Log.d("hard", String.valueOf(c.isHardwareAccelerated()));
-            // Parallax background
-            // Se recorre la lista de imagen de la colección y se dibuja
-//            for (Fondo f : parallax) {
-//                f.dibujar(c);
-//            }
-
             c.drawBitmap(fondo, 0, 0, null);
             c.drawBitmap(heart, proporcionAncho / 2, 0, null);
 
@@ -186,18 +244,26 @@ public class Game extends Escena implements Runnable {
             drYones.setRectangulo();
 //            c.drawRect(drYones.setRectangulo(), p);
             c.drawRect(drYones.rectDrYones, p);
+            c.drawRect(rectBtnDisparo, p);
 
             // Botones
             c.drawBitmap(btnA, 0, proporcionAlto * 6, null);
             c.drawBitmap(btnB, anchoPantalla - proporcionAncho, proporcionAlto * 6, null);
+            c.drawBitmap(btnDisparo, anchoPantalla - proporcionAncho, proporcionAlto * 4, null);
 
             // Personajes
             //enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
             drYones.cambiaFrame();
             drYones.dibuja(c);
-            enemigo.dibuja(c);
+            /*javi*/
+            for (Enemigo e : listaEnemigos) e.dibuja(c);
+//            enemigo.dibuja(c);
+            if (dispara) {
+                latigo.dibuja(c);
+            }
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 
@@ -228,6 +294,13 @@ public class Game extends Escena implements Runnable {
                     drYones.enAvance = true;
                     drYones.seMueve = true;
                 }
+                if (pulsa(rectBtnDisparo, event)) {
+                    mediaPlayer = MediaPlayer.create(context, R.raw.sonidolatigo);
+                    volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setVolume(volumen / 2, volumen / 2);
+                    mediaPlayer.start(); // Se arranca la secuencia musical
+                    dispara = true;
+                }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 break;
@@ -239,8 +312,13 @@ public class Game extends Escena implements Runnable {
                 if (pulsa(rectBtnB, event)) {
                     drYones.seMueve = false;
                 }
-                break;
-            case MotionEvent.ACTION_MOVE: // Se mueve alguno de los dedos
+                if (pulsa(rectBtnDisparo, event)) {
+                    dispara = false;
+                }
+                /*javi*/
+                dispara = false;
+                /*javi*/
+                latigo.setPosX(drYones.getRectDrYones().centerX());
                 break;
         }
         return super.onTouchEvent(event);

@@ -7,8 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioManager;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.PopupMenu;
 
 import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
@@ -17,12 +19,14 @@ public class Opciones extends Escena {
 
     private int proporcionAlto, proporcionAncho; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
 
-    private Rect rectMusic, rectMusicoff, rectVibracion, rectVolverMenu; // Rectangulos que nos serviran para detectar pulsaciones en la pantalla del dispositivo
+    private Rect rectMusic, rectMusicoff, rectVibracion, getRectVibracionoff, rectVolverMenu; // Rectangulos que nos serviran para detectar pulsaciones en la pantalla del dispositivo
     private float x;
-    private Bitmap volverMenu, music, musicoff;
+    private Bitmap volverMenu, music, musicoff, vibracion, vibracionoff;
 
+    boolean musicaActiva = true;
+    boolean vibracionActiva = true;
     boolean volumen;
-    boolean vibracion;
+//    boolean vibracion;
 
     /**
      * @param context       Contexto de la aplicación
@@ -47,9 +51,17 @@ public class Opciones extends Escena {
         musicoff = BitmapFactory.decodeResource(context.getResources(), R.drawable.musicoff);
         musicoff = Bitmap.createScaledBitmap(musicoff, proporcionAncho * 2, proporcionAlto * 2, false);
 
+        vibracion = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibrate);
+        vibracion = Bitmap.createScaledBitmap(vibracion, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        vibracion = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibrate);
+        vibracion = Bitmap.createScaledBitmap(vibracion, proporcionAncho * 2, proporcionAlto * 2, false);
+
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
         rectMusic = new Rect(proporcionAncho * 6, proporcionAlto * 3, proporcionAncho * 8, proporcionAlto * 5);
-        rectMusicoff = new Rect(proporcionAncho * 10, proporcionAlto * 3, proporcionAncho * 12, proporcionAlto * 5);
+        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 3, proporcionAncho * 11, proporcionAlto * 5);
+//        rectVibracion = new Rect(proporcionAncho * 6, proporcionAlto * 6, proporcionAncho * 8, proporcionAlto * 8);
+//        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 6, proporcionAncho * 11, proporcionAlto * 8);
     }
 
 //    @Override
@@ -72,19 +84,40 @@ public class Opciones extends Escena {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 if (pulsa(rectVolverMenu, event)) {
-                    Log.i("test", "pasa");
                     return 0;
                 } else if (pulsa(rectMusic, event)) {
-                    volumen = !volumen;
+//                            Opciones.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
                     mediaPlayer.start();
+                    volumen = true;
                     break;
-                } else if (pulsa(rectVibracion, event)) {
-                    vibracion = !vibracion;
                 } else if (pulsa(rectMusicoff, event)) {
+                    volumen = !volumen;
                     mediaPlayer.stop();
                     break;
                 }
-                break;
+
+
+//                else if (pulsa(rectMusic, event)) {
+//                    if (musicaActiva) {
+//                    volumen = !volumen;
+//                    mediaPlayer.stop();
+//                    musicaActiva = false;
+//                    break;
+//                } else if (!musicaActiva) {
+//                    volumen = true;
+//                    mediaPlayer.start();
+//                    musicaActiva = true;
+//                    break;
+//                }
+//                break;
+//        } else if (pulsa(rectVibracion, event)) {
+//            vibracion = !vibracion;
+//        }
+//                else if (pulsa(rectMusicoff, event)) {
+//                    mediaPlayer.stop();
+//                    break;
+//                }
+//        break;
         }
         return idEscena;
     }
@@ -100,13 +133,24 @@ public class Opciones extends Escena {
 
             c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
             c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
-            c.drawBitmap(musicoff, proporcionAncho * 10, proporcionAlto * 3, null);
-            //p.setColor(Color.GREEN);
+            c.drawBitmap(musicoff, proporcionAncho * 9, proporcionAlto * 3, null);
+            c.drawBitmap(vibracion, proporcionAncho * 6, proporcionAlto * 6, null);
+            c.drawBitmap(musicoff, proporcionAncho * 9, proporcionAlto * 6, null);
+            p.setColor(Color.GREEN);
             c.drawRect(rectVolverMenu, p);
             c.drawRect(rectMusic, p);
             c.drawRect(rectMusicoff, p);
-        } catch (Exception e) {
+
+//            if (musicaActiva) {
+//            c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
+//            c.drawText("ACTIVA", proporcionAncho * 9, proporcionAncho * 17, proporcionAncho * 5, proporcionAlto * 1, p);
+//            }
+//            if (!musicaActiva) {
+//                c.drawBitmap(musicoff, proporcionAncho * 6, proporcionAlto * 3, null);
+//                c.drawText("DESACTIVA", proporcionAncho * 9, proporcionAncho * 17, proporcionAncho * 5, proporcionAlto * 1, p);
+//            }
+        } catch (NullPointerException e) {
+            Log.d("Error", "Dibujado canvas Opciones");
         }
     }
-
 }

@@ -87,7 +87,7 @@ public class Records extends Escena {
 
         c.drawBitmap(one, proporcionAncho * 4, proporcionAlto * 2, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 2, null);
-        c.drawBitmap(star1, proporcionAncho * 11, proporcionAlto * 2, null);
+        c.drawBitmap(star3, proporcionAncho * 11, proporcionAlto * 2, null);
 
         c.drawBitmap(two, proporcionAncho * 4, proporcionAlto * 4, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 4, null);
@@ -95,6 +95,6 @@ public class Records extends Escena {
 
         c.drawBitmap(three, proporcionAncho * 4, proporcionAlto * 6, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 6, null);
-        c.drawBitmap(star3, proporcionAncho * 11, proporcionAlto * 6, null);
+        c.drawBitmap(star1, proporcionAncho * 11, proporcionAlto * 6, null);
     }
 }
