@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -22,26 +23,27 @@ public class Game extends Escena implements Runnable {
     private int proporcionAncho, proporcionAlto;
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
     Paint p = new Paint();
+    Paint paintTexto = new Paint();
     Vibrator vibrator;
     Utils utils;
 
-    Bitmap noche0, noche1, noche2, noche3, noche4, noche5;
+    Bitmap noche0;
 
     protected static Bitmap listaNumeros[] = new Bitmap[10];
     private Bitmap btnA, btnB, btnDisparo;
     private Bitmap heart, lose, win;
-    private Bitmap frameEnemigo;
 
-    Enemigo enemigo; // Personaje secundario
     Enemigo[] arrayEnemigos;
     ArrayList<Enemigo> listaEnemigos = new ArrayList<>();
+    ArrayList<Caliz> listaCaliz = new ArrayList<>();
     ArrayList<Personaje> personajes = new ArrayList<>();
 //    Bitmap enemigosBitmaps[] = new Enemigo[5];
 
-    Rect rectYones;
+    //Rect rectYones;
     Rect rectBtnA, rectBtnB, rectBtnDisparo;
 
     private boolean dispara = false;
+    public boolean gameOver = false;
 
     private int posicion;
 
@@ -49,22 +51,28 @@ public class Game extends Escena implements Runnable {
 
     private int random;
     private int vidas = 5;
-    private int time = 0;
+    private int puntuacion = 0;
+    private int ronda = 1;
+    private String strPuntuacion = "";
+    String strRonda;
 
     public static MediaPlayer mediaPlayer;
     public static AudioManager audioManager;
 
-    /*javi*/ DrYones drYones;
-    //    Caballero caballero = new Caballero(context, proporcionAncho * 18, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
-    /*javi*/ Caballero caballero;
-    //    Caballero caballero2 = new Caballero(context, proporcionAncho, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
-    /*javi*/ Latigo latigo;
+    Typeface faw;
+
+    DrYones drYones;
+    Caballero caballero;
+    Enemigo enemigo;
+    Latigo latigo;
+    Caliz caliz;
 
     /**
-     * @param context       application
-     * @param idEscena      scene run in this moment
-     * @param anchoPantalla width screen this device
-     * @param altoPantalla  heigth screen this device
+     * Constructor que inicializa las propiedades de la clase
+     * @param context       Contexto de la app
+     * @param idEscena      Escena asociado a un número
+     * @param anchoPantalla ancho pantalla del dispositivo
+     * @param altoPantalla  alto pantalla del dispositivo
      */
     public Game(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -72,13 +80,10 @@ public class Game extends Escena implements Runnable {
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
 
-        /*javi*/ //  drYones = new DrYones(context, anchoPantalla / 2, altoPantalla * 8, anchoPantalla, altoPantalla, 10); // le estas poniendo que la posY es ancho de pantalla * 8, se sale por abajo, por eso no se ve el látigo
-        /*javi*/
         drYones = new DrYones(context, anchoPantalla / 2, altoPantalla, anchoPantalla, altoPantalla, 10); // le estas pone
-        /*javi*/
         caballero = new Caballero(context, anchoPantalla, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
-        /*javi*/
         latigo = new Latigo(context, drYones.getPosX(), drYones.getPosY() - drYones.getRun()[0].getHeight() / 2, anchoPantalla, altoPantalla);
+
         vibrator = (Vibrator) getContext().getSystemService(context.VIBRATOR_SERVICE);
 
         // segundo parallax
@@ -92,18 +97,18 @@ public class Game extends Escena implements Runnable {
 
         // Botones
         btnA = BitmapFactory.decodeResource(context.getResources(), R.drawable.btn);
-        btnA = Bitmap.createScaledBitmap(btnA, proporcionAncho * 1, proporcionAlto * 1, false);
+        btnA = Bitmap.createScaledBitmap(btnA, proporcionAncho * 1 + proporcionAlto / 2, proporcionAlto * 1 + proporcionAlto / 2, false);
 
         btnB = BitmapFactory.decodeResource(context.getResources(), R.drawable.btn);
-        btnB = Bitmap.createScaledBitmap(btnB, proporcionAncho * 1, proporcionAlto * 1, false);
+        btnB = Bitmap.createScaledBitmap(btnB, proporcionAncho * 1 + proporcionAlto / 2, proporcionAlto * 1 + proporcionAlto / 2, false);
 
 //        btnDisparo = utils.getBitmapFromAssets("varios/rock.png");
         btnDisparo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mira);
         btnDisparo = Bitmap.createScaledBitmap(btnDisparo, proporcionAncho * 1, proporcionAlto * 1, false);
 
         // Rect botones
-        rectBtnA = new Rect(0, proporcionAlto * 6, proporcionAncho * 1, proporcionAlto * 7);
-        rectBtnB = new Rect(proporcionAncho * 17, proporcionAlto * 6, proporcionAncho * 18, proporcionAlto * 7);
+        rectBtnA = new Rect(0, proporcionAlto * 6, proporcionAncho + proporcionAncho / 2, proporcionAlto * 7 + proporcionAlto / 2);
+        rectBtnB = new Rect(proporcionAncho * 17 - proporcionAncho / 2, proporcionAlto * 6, proporcionAncho * 18, proporcionAlto * 7 + proporcionAlto / 2);
         rectBtnDisparo = new Rect(proporcionAncho * 17, proporcionAlto * 4, proporcionAncho * 18, proporcionAlto * 5);
 
         // PERSONAJES
@@ -113,18 +118,19 @@ public class Game extends Escena implements Runnable {
 //        personajes.add(caballero);
 
         // Creación de 10 objetos tipo enemigo, con parámetros aleatorios
-        for (int i = 0; i < 10; i++) {
-//            random = (int) Math.random() * 5 + 1;
-//            if (random == 2) {
-            /*javi*/
+        for (int i = 0; i < 5; i++) {
             int auxPosX = (int) (proporcionAncho * Math.random() * 18 + 1);
             int auxVelocidad = (int) Math.random() * 40 + 15;
-            /*javi*/
             enemigo = new Enemigo(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
-//            enemigo = new Enemigo(context, auxPosX, 0 - enemigo.frameEnemigo.getHeight(), proporcionAncho, proporcionAlto, auxVelocidad);
-
             listaEnemigos.add(enemigo);
-//            }
+        }
+
+        // Creación de calizez
+        for (int i = 0; i < 3; i++) {
+            int auxPosX = (int) (proporcionAncho * Math.random() * 18 + 1);
+            int auxVelocidad = (int) Math.random() * 40 + 15;
+            caliz = new Caliz(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
+            listaCaliz.add(caliz);
         }
 
         arrayEnemigos = new Enemigo[10];
@@ -146,19 +152,8 @@ public class Game extends Escena implements Runnable {
         win = utils.getBitmapFromAssets("varios/win.png");
         win = Bitmap.createScaledBitmap(win, proporcionAncho * 4, proporcionAlto * 2, false);
 
-        // Array de bitmaps objeto TODO
-//        posicion = r.nextInt(anchoPantalla - fondonormal.getWidth());
-//
-//        for(int i=0;i<obj.length;i++) {
-//            aleatorio=r.nextInt(90);
-//            if(aleatorio==i){
-//                if (normales[i].posY > altoPantalla) {
-//                    normales[i].setPosY(0);
-//                    posicion = r.nextInt(anchoPantalla - fondonormal.getWidth());
-//                    normales[i].setPosX(posicion);
-//                }
-//            }
-//    }
+//        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+//        strRonda = context.getString(R.string.ronda);
 
         // Controles de audio y musica
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -171,22 +166,15 @@ public class Game extends Escena implements Runnable {
     }
 
     /**
-     *
+     * Actualiza física de los personajes y objetos en pantalla
      */
     @Override
     public void actualizarFisica() {
         super.actualizarFisica();
         drYones.move();
-//        enemigo.move();
-//        enemigo.actualizarFisica();
+        drYones.setRectangulo();
 
-        /*javi*/
-        for (Enemigo e : listaEnemigos) {
-            /*javi*/
-            e.move();
-            /*javi*/
-        }
-
+        // Control de látigo
         if (dispara) {
             latigo.move();
             if (latigo.getX() > anchoPantalla + latigo.getWidth() || latigo.getX() < 0 - latigo.getWidth()) {
@@ -195,71 +183,121 @@ public class Game extends Escena implements Runnable {
             }
         }
 
+        // Rocas y serpientes
+        for (Enemigo e : listaEnemigos) {
+            e.move();
+            e.setRectangulo();
+        }
+
+        // Comprueba hitboxes
         for (Enemigo e : listaEnemigos) {
 //            if (e.rectEnemigo.intersect(drYones.rectDrYones)) {
             if (drYones.rectDrYones.intersect(e.rectEnemigo)) {
-                vidas--;
-                vibrator.vibrate(250);
+                this.vidas--;
+                vibrator.vibrate(300);
                 if (vidas == 0) {
-                    System.exit(1);
+                    gameOver = true;
                 }
+            }
+        }
+
+        // Calices
+        for (Caliz c : listaCaliz) {
+            c.move();
+        }
+
+        // Comprueba hitboxes
+        for (Caliz c : listaCaliz) {
+            if (drYones.rectDrYones.intersect(c.rectCaliz)) {
+                if (vidas <= 5) {
+                    this.vidas++;
+                }
+                vibrator.vibrate(100);
             }
         }
     }
 
     /**
+     * Método que dibuja los elementos necesarios, asociados al juego
      * @param c canvas this application
      */
     public void dibujar(Canvas c) {
         try {
-            // Prueba aceleración de hardware
+            if (gameOver) {
+                c.drawBitmap(lose, anchoPantalla / 2, altoPantalla / 2, null);
+            } else {
+                // Prueba aceleración de hardware
 //            Log.d("hard", String.valueOf(c.isHardwareAccelerated()));
-            c.drawBitmap(fondo, 0, 0, null);
-            c.drawBitmap(heart, proporcionAncho / 2, 0, null);
+                c.drawBitmap(fondo, 0, 0, null);
+                c.drawBitmap(heart, proporcionAncho / 2, 0, null);
 
-            switch (vidas) {
-                case 0:
-                    c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
-                    break;
-                case 1:
-                    c.drawBitmap(listaNumeros[1], proporcionAncho, 0, null);
-                    break;
-                case 2:
-                    c.drawBitmap(listaNumeros[2], proporcionAncho, 0, null);
-                    break;
-                case 3:
-                    c.drawBitmap(listaNumeros[3], proporcionAncho + proporcionAncho / 2, 0, null);
-                    break;
-                case 4:
-                    c.drawBitmap(listaNumeros[4], proporcionAncho, 0, null);
-                    break;
-                case 5:
-                    c.drawBitmap(listaNumeros[5], proporcionAncho, 0, null);
-                    break;
-            }
+                switch (vidas) {
+                    case 0:
+                        c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
+                        break;
+                    case 1:
+                        c.drawBitmap(listaNumeros[1], proporcionAncho, 0, null);
+                        break;
+                    case 2:
+                        c.drawBitmap(listaNumeros[2], proporcionAncho, 0, null);
+                        break;
+                    case 3:
+                        c.drawBitmap(listaNumeros[3], proporcionAncho + proporcionAncho / 2, 0, null);
+                        break;
+                    case 4:
+                        c.drawBitmap(listaNumeros[4], proporcionAncho, 0, null);
+                        break;
+                    case 5:
+                        c.drawBitmap(listaNumeros[5], proporcionAncho, 0, null);
+                        break;
+                }
 
-            p.setColor(Color.GREEN);
-            c.drawRect(rectBtnA, p);
-            c.drawRect(rectBtnB, p);
-            drYones.setRectangulo();
+                p.setColor(Color.GREEN);
+                c.drawRect(rectBtnA, p);
+                c.drawRect(rectBtnB, p);
+//            drYones.setRectangulo();
 //            c.drawRect(drYones.setRectangulo(), p);
-            c.drawRect(drYones.rectDrYones, p);
-            c.drawRect(rectBtnDisparo, p);
+                c.drawRect(drYones.rectDrYones, p);
+                c.drawRect(rectBtnDisparo, p);
 
-            // Botones
-            c.drawBitmap(btnA, 0, proporcionAlto * 6, null);
-            c.drawBitmap(btnB, anchoPantalla - proporcionAncho, proporcionAlto * 6, null);
-            c.drawBitmap(btnDisparo, anchoPantalla - proporcionAncho, proporcionAlto * 4, null);
+                // Botones
+                c.drawBitmap(btnA, 0, proporcionAlto * 6, null);
+                c.drawBitmap(btnB, anchoPantalla - proporcionAncho - proporcionAncho / 2, proporcionAlto * 6, null);
+                c.drawBitmap(btnDisparo, anchoPantalla - proporcionAncho, proporcionAlto * 4, null);
 
-            // Personajes
-            //enemigo.moverEnemigo(altoPantalla,anchoPantalla,10);
-            drYones.cambiaFrame();
-            drYones.dibuja(c);
-            /*javi*/
-            for (Enemigo e : listaEnemigos) e.dibuja(c);
-//            enemigo.dibuja(c);
-            if (dispara) {
-                latigo.dibuja(c);
+                // Personajes
+                drYones.cambiaFrame();
+                drYones.dibuja(c);
+
+                for (Enemigo e : listaEnemigos) {
+                    e.dibuja(c);
+                }
+
+                for (Caliz caliz : listaCaliz) {
+                    caliz.dibuja(c);
+                }
+
+                if (dispara) {
+                    latigo.dibuja(c);
+                }
+
+                strPuntuacion = String.valueOf(puntuacion);
+                paintTexto.setColor(Color.YELLOW);
+                paintTexto.setTextSize(80);
+                paintTexto.setTypeface(faw);
+                c.drawText(strPuntuacion, proporcionAncho * 17 - proporcionAncho, 0, paintTexto);
+
+                if (vidas == 0) {
+                    c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
+                } else if (puntuacion == 100 && ronda == 1) {
+                    ronda++;
+
+                    c.drawBitmap(win, anchoPantalla / 2 - win.getWidth(), altoPantalla / 2 - win.getHeight(), null);
+                    c.drawText(strRonda + " " + ronda, proporcionAncho * 17 - proporcionAncho, 0, paintTexto);
+                } else if (puntuacion == 200) {
+                    c.drawBitmap(win, anchoPantalla / 2 - win.getWidth(), altoPantalla / 2 - win.getHeight(), null);
+                    c.drawText(strRonda + " " + ronda, proporcionAncho * 17 - proporcionAncho, 0, paintTexto);
+                }
             }
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
@@ -274,8 +312,9 @@ public class Game extends Escena implements Runnable {
     }
 
     /**
-     * @param event
-     * @return
+     * Controla los eventos que suceden sobre la pantalla del dispositivo
+     * @param event Tipo de evento que sucede
+     * @return Devuelve el tipo de evento
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -315,9 +354,7 @@ public class Game extends Escena implements Runnable {
                 if (pulsa(rectBtnDisparo, event)) {
                     dispara = false;
                 }
-                /*javi*/
                 dispara = false;
-                /*javi*/
                 latigo.setPosX(drYones.getRectDrYones().centerX());
                 break;
         }

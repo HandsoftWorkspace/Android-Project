@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.util.Log;
 
 public class Latigo {
+
     Context context;
     private Utils utils;
     private Bitmap latigo, latigoEspejo;
@@ -21,10 +22,19 @@ public class Latigo {
 
     Paint paint = new Paint();
 
+    /**
+     * Contructor que inicializa las propiedas de la clase 'Latigo'
+     *
+     * @param context       Contexto de la aplicación
+     * @param posX          Posición en el eje X del látigo
+     * @param posY          Posicion en el eje Y del látigo
+     * @param anchoPantalla Ancho de pantalla del dispositivo
+     * @param altoPantalla  Alto de pantalla del dispositivo
+     */
     public Latigo(Context context, int posX, int posY, int anchoPantalla, int altoPantalla) {
         this.posX = posX;
         this.posY = posY;
-        Log.i("latigo", "posy "+posY);
+        Log.i("latigo", "posy " + posY);
         this.altoPantalla = altoPantalla;
         utils = new Utils(context);
 
@@ -33,17 +43,27 @@ public class Latigo {
 
         latigo = utils.getBitmapFromAssets("varios/latigo.png");
         latigo = Bitmap.createScaledBitmap(latigo, proporcionAncho / 2, proporcionAlto / 2, false);
-        /*javi */paint=new Paint();
-        /*javi */paint.setColor(Color.RED);
+        /*javi */
+        paint = new Paint();
+        /*javi */
+        paint.setColor(Color.RED);
     }
 
+    /**
+     * Dibuja el objeto de la clase látigo
+     *
+     * @param c Es el canvas asociado a la aplicación
+     */
     public void dibuja(Canvas c) {
-
         c.drawBitmap(latigo, posX, posY, null);
-        /*javi */c.drawRect(rectLatigo,paint);
+        /*javi */
+        c.drawRect(rectLatigo, paint);
 
     }
 
+    /**
+     * Mueve al objeto látigo en posición horizontal en dirección 'X' negativo y 'X' positivo
+     */
     public void move() {
         if (DrYones.enAvance) {
             posX += velocidadLatigo;
@@ -53,22 +73,24 @@ public class Latigo {
         this.setRectangulo();
     }
 
+    /**
+     *
+     */
     public void setRectangulo() {
-//        float x = posicion.x;
-//        float y = posicion.y;
-//        float x = posX;
-//        float y = posY;
         paint.setColor(Color.GREEN);
-   /*javi*/     rectLatigo = new Rect(posX, posY, posX + latigo.getWidth(), posY+latigo.getHeight());
+        rectLatigo = new Rect(posX, posY, posX + latigo.getWidth(), posY + latigo.getHeight());
     }
 
     public int getX() {
         return posX;
     }
 
-    /*javi */  public void setPosX(int posX) {
-        /*javi */this.posX = posX;
-        /*javi */}
+    /*javi */
+    public void setPosX(int posX) {
+        /*javi */
+        this.posX = posX;
+        /*javi */
+    }
 
     public int getY() {
         return posY;

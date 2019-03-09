@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Profesor Yones</string>
+    <string name="app_name">Dr. Yones</string>
     <string name="jugar">Jugar</string>
     <string name="opciones">Opciones</string>
     <string name="logros">Logros</string>
@@ -13,4 +13,6 @@
     <string name="proyecto">Proyecto</string>
     <string name="confirmarsalida">Deseas salir del juego?</string>
     <string name="confirmarvaciado">Deseas borrar las puntuaciones?</string>
+    <string name="nombreversion">La ciudad perdida</string>
+    <string name="ronda">Ronda</string>
 </resources>

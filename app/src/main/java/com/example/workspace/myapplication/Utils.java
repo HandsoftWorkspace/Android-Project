@@ -1,6 +1,7 @@
 package com.example.workspace.myapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,10 +15,19 @@ public class Utils {
 
     Context context;
 
+    /**
+     * Contructor de la clase Utils
+     * @param context Contexto de la applicación
+     */
     public Utils(Context context) {
         this.context = context;
     }
 
+    /**
+     * Método que recibe una cadena que deberá ser un archivo, la asociará a un bitmap
+     * @param fichero Cadena de texto que será el nombre del archivo, ubicado en la carpeta del proyecto, 'assets'
+     * @return Devuelve un bitmap
+     */
     public Bitmap getBitmapFromAssets(String fichero) {
         try {
             InputStream is = context.getAssets().open(fichero);
@@ -25,6 +35,25 @@ public class Utils {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    /**
+     * Método que guarda las preferencias de ajustes del juego, vibración y sonido
+     */
+    public void guardarPreferencias() {
+
+    }
+
+    /**
+     * Método que carga las preferencias de ajustes del juego, vibración y sonido
+     * @return
+     */
+    public boolean[] cargarPreferencias() {
+        boolean prefs[] = new boolean[2];
+        SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+        prefs[0] = sharedPreferences.getBoolean("musica", true);
+        prefs[1] = sharedPreferences.getBoolean("vibracion", true);
+        return prefs;
     }
 
     public Bitmap[] tiempo(int tiempo) {

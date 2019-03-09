@@ -28,7 +28,8 @@ public class Menu extends Escena {
 
 
     private int proporcionAlto, proporcionAncho;
-    private Paint brocha = new Paint();
+    private Paint paint = new Paint();
+    private Paint paintTexto = new Paint();
     Typeface faw;
 
     public static MediaPlayer mediaPlayer;
@@ -43,13 +44,17 @@ public class Menu extends Escena {
     private Bitmap nubes;
     Fondo parallaxMenu;
 
+    String nombreJuego;
+    String nombreVersion;
+
     // Constructor de la escena MENÚ
 
     /**
-     * @param context
-     * @param idEscena
-     * @param anchoPantalla
-     * @param altoPantalla
+     * Contructor que inicializa las propiedas de la clase
+     * @param context contexto de la applicación
+     * @param idEscena número asociado a una escena de la aplicación
+     * @param anchoPantalla ancho pantalla del dispositivo
+     * @param altoPantalla alto pantalla del dispositivo
      */
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -119,8 +124,10 @@ public class Menu extends Escena {
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
 
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
-        brocha.setColor(Color.TRANSPARENT);
+        paint.setColor(Color.TRANSPARENT);
 
+        nombreJuego = context.getString(R.string.app_name);
+        nombreVersion = context.getString(R.string.nombreversion);
     }
 
     /**
@@ -148,23 +155,32 @@ public class Menu extends Escena {
             c.drawBitmap(downGrande, proporcionAncho * 5, proporcionAlto * 5, null);
             c.drawBitmap(upGrande, proporcionAncho * 5, proporcionAlto * 6, null);
 
-            c.drawRect(rectJuego, brocha);
+            c.drawRect(rectJuego, paint);
             c.drawBitmap(juego, proporcionAncho * 8, proporcionAlto * 3, null);
 
-            c.drawRect(rectOpciones, brocha);
+            c.drawRect(rectOpciones, paint);
             c.drawBitmap(opciones, proporcionAncho * 3, proporcionAlto * 3, null);
 
-            c.drawRect(rectLogros, brocha);
+            c.drawRect(rectLogros, paint);
             c.drawBitmap(leader, proporcionAncho * 13, proporcionAlto * 3, null);
 
-            c.drawRect(rectAyuda, brocha);
+            c.drawRect(rectAyuda, paint);
             c.drawBitmap(ayuda, proporcionAncho * 16, proporcionAlto * 6, null);
 
-            c.drawRect(rectCreditos, brocha);
+            c.drawRect(rectCreditos, paint);
             c.drawBitmap(creditos, proporcionAncho * 0, proporcionAlto * 6, null);
 
-            c.drawRect(rectCierre, brocha);
+            c.drawRect(rectCierre, paint);
             c.drawBitmap(cierre, proporcionAncho * 0, proporcionAlto * 0, null);
+//            paint.setColor(Color.GREEN);
+
+            paintTexto.setColor(Color.YELLOW);
+            paintTexto.setTextSize(80);
+            paintTexto.setTypeface(faw);
+            c.drawText(nombreJuego, proporcionAncho * 6 + proporcionAncho / 3, proporcionAlto * 2 + proporcionAlto / 3, paintTexto);
+            paintTexto.setTextSize(65);
+            c.drawText(nombreVersion, proporcionAncho * 5 + proporcionAncho / 3, proporcionAlto * 6 + proporcionAlto / 3, paintTexto);
+
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
@@ -192,6 +208,7 @@ public class Menu extends Escena {
                     mediaPlayer.stop();
                     return 1;
                 } else if (pulsa(rectOpciones, event)) {
+                    // efecto pulsación
                     return 2;
                 } else if (pulsa(rectLogros, event)) {
                     return 3;
@@ -210,6 +227,20 @@ public class Menu extends Escena {
         }
 
         return idEscena;
+    }
+
+    /**
+     * Método que para la música
+     */
+    public void pararMusica() {
+        mediaPlayer.pause();
+    }
+
+    /**
+     * Método que reanuda la música
+     */
+    public void reanudarMusica() {
+        mediaPlayer.start();
     }
 
 }

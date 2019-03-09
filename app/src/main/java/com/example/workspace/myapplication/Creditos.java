@@ -16,6 +16,7 @@ import static com.example.workspace.myapplication.Menu.mediaPlayer;
 public class Creditos extends Escena {
 
     Context context;
+    Paint p = new Paint();
 
     int anchoPantalla, altoPantalla;
     int proporcionAncho, proporcionAlto;
@@ -66,7 +67,7 @@ public class Creditos extends Escena {
         c.drawBitmap(volverMenu, 0, 0, null);
 
         // Textos
-        p = new Paint();
+
 
 //        p.setColor(Color.WHITE);
         p.setColor(Color.YELLOW);

@@ -35,6 +35,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
     private ConfirmacionCierre cierre;
     private ConfirmacionBorrado borrado;
 
+    /**
+     * * Contructor que inicializa las propiedas de la clase
+     *
+     * @param context contexto de la aplicación
+     */
     public Juego(Context context) {
         super(context);
         this.surfaceHolder = getHolder();       // Se obtiene el holder
@@ -89,12 +94,17 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-
+//        if (escenaActual == menu) {
+//            menu.reanudarMusica();
+//        }
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         hilo.setFuncionando(false);  // Se para el hilo
+//        if (escenaActual == menu) {
+//            menu.pararMusica();
+//        }
         try {
             hilo.join();   // Se espera a que finalize
         } catch (InterruptedException e) {
@@ -141,7 +151,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
         }
 
     }
-
 
     // Clase Hilo en la cual implementamos el método de dibujo (y física) para que se haga en paralelo con la gestión de la interfaz de usuario
     class Hilo extends Thread {

@@ -1,12 +1,14 @@
 package com.example.workspace.myapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,6 +18,9 @@ import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class Opciones extends Escena {
     Canvas c;
+    Typeface faw;
+    Utils utils;
+    Paint paintTexto = new Paint();
 
     private int proporcionAlto, proporcionAncho; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
 
@@ -28,7 +33,12 @@ public class Opciones extends Escena {
     boolean volumen;
 //    boolean vibracion;
 
+
+    String nombreOpciones;
+
     /**
+     * Contructor que inicializa las propiedas de la clase
+     *
      * @param context       Contexto de la aplicación
      * @param idEscena      Número que identifica la escena actual
      * @param anchoPantalla Ancho de la pantalla del dispositivo
@@ -62,6 +72,12 @@ public class Opciones extends Escena {
         rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 3, proporcionAncho * 11, proporcionAlto * 5);
 //        rectVibracion = new Rect(proporcionAncho * 6, proporcionAlto * 6, proporcionAncho * 8, proporcionAlto * 8);
 //        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 6, proporcionAncho * 11, proporcionAlto * 8);
+
+        // Fuentes
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+
+        utils = new Utils(context);
+        nombreOpciones = context.getString(R.string.opciones);
     }
 
 //    @Override
@@ -141,6 +157,11 @@ public class Opciones extends Escena {
             c.drawRect(rectMusic, p);
             c.drawRect(rectMusicoff, p);
 
+            paintTexto.setColor(Color.YELLOW); //
+            paintTexto.setTextSize(100); //
+            paintTexto.setTypeface(faw);//
+            c.drawText(nombreOpciones + "", anchoPantalla / 2, altoPantalla / 2, paintTexto); //
+
 //            if (musicaActiva) {
 //            c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
 //            c.drawText("ACTIVA", proporcionAncho * 9, proporcionAncho * 17, proporcionAncho * 5, proporcionAlto * 1, p);
@@ -152,5 +173,23 @@ public class Opciones extends Escena {
         } catch (NullPointerException e) {
             Log.d("Error", "Dibujado canvas Opciones");
         }
+    }
+
+    private void guardarPreferencias() {
+        SharedPreferences preferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        if (musicaActiva) {
+            editor.putBoolean("musica", true);
+        } else {
+            editor.putBoolean("musica", false);
+        }
+        if (vibracionActiva) {
+            editor.putBoolean("vibracion", true);
+        } else {
+            editor.putBoolean("vibracion", false);
+        }
+
+        editor.commit();
     }
 }

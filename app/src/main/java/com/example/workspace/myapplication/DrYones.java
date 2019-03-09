@@ -46,11 +46,14 @@ public class DrYones extends Personaje {
     Utils utils = new Utils(context);
 
     /**
-     * @param posX
-     * @param posY
-     * @param anchoPantalla
-     * @param altoPantalla
-     * @param velocidad
+     * Está clase hereda de la clase pesonaje
+     *
+     * @param context       Contexto de la app
+     * @param posX          coordenada eje X del DrYones
+     * @param posY          coordenada eje Y del DrYones
+     * @param anchoPantalla ancho pantalla del dispositivo
+     * @param altoPantalla  alto pantalla del dispositivo
+     * @param velocidad     velocidad a la que se mueve el personaje
      */
     public DrYones(Context context, int posX, int posY, int anchoPantalla, int altoPantalla, int velocidad) {
         super(context, posX, posY, velocidad, anchoPantalla, altoPantalla);
@@ -104,7 +107,8 @@ public class DrYones extends Personaje {
     }
 
     /**
-     * @param c
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * @param c canvas asociado a la aplicación
      */
     public void dibuja(Canvas c) {
         Log.d("Dibuja", "Dibuja a DrYones");
@@ -130,7 +134,7 @@ public class DrYones extends Personaje {
     }
 
     /**
-     *
+     * Comprueba que cambia una fracción de tiempo, antes de cambiar el índice
      */
     public void cambiaFrame() {
         if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
@@ -143,7 +147,9 @@ public class DrYones extends Personaje {
     }
 
     /**
+     * Comprueba mediante booleanas, si se está moviendo o parado, además de la dirección en la que se muestra
      *
+     * @return
      */
     public Bitmap move() {
         if (seMueve && enAvance) {
@@ -167,19 +173,22 @@ public class DrYones extends Personaje {
         return null;
     }
 
+    /**
+     * Se crea y se asocia una rect, que será el hitbox de nuestro de personaje
+     */
     public void setRectangulo() {
-//        float x = posicion.x;
-//        float y = posicion.y;
-//        float x = posX;
-//        float y = posY;
 //        rectDrYones = new Rect((int) (x + 0.2 * run[0].getWidth()), (int) (y + 0.2 * run[0].getHeight()), (int) (x + 0.8 * run[0].getWidth()), (int) (y + 0.8 * run[0].getHeight()));
 //        rectDrYones = new Rect((int) x, (int) y, (int) x + run[0].getWidth(), (int) y + run[0].getWidth());
-        rectDrYones = new Rect(posX, posY, posX + run[0].getWidth(), altoPantalla - proporcionAlto * 5);
+//        rectDrYones = new Rect(posX, posY, posX + run[0].getWidth(), altoPantalla - proporcionAlto * 5);
+        rectDrYones = new Rect((int) (posX + 0.2 * run[0].getWidth()), (int) (posY + 0.2 * run[0].getHeight()), (int) (posX + 0.8 * run[0].getWidth()), (int) (posY + 0.8 * run[0].getHeight()));
+
     }
 
     /**
-     * @param imagen
-     * @param horizontal
+     * Función que recibe como parámetro un bitmap, el cual será volteado
+     *
+     * @param imagen     Bitmap que será la imagen a mostrar
+     * @param horizontal Índica si se muestra en posición horizontal, en caso de ser true, vértical en caso de ser false
      * @return
      */
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
@@ -189,6 +198,11 @@ public class DrYones extends Personaje {
         return Bitmap.createBitmap(imagen, 0, 0, imagen.getWidth(), imagen.getHeight(), matrix, false);
     }
 
+    /**
+     * Método que crea una transparencia sobre un objeto
+     *
+     * @param alfa Índice el grado de transparencia
+     */
     public void setAlfa(int alfa) {
         this.alfa = alfa;
         p.setAlpha(alfa);
@@ -286,11 +300,17 @@ public class DrYones extends Personaje {
         this.vidas = vidas;
     }
 
-    /*javi */public Bitmap[] getRun() {
-        /*javi */return run;
-        /*javi */}
+    /*javi */
+    public Bitmap[] getRun() {
+        /*javi */
+        return run;
+        /*javi */
+    }
 
-    /*javi */public Rect getRectDrYones() {
-        /*javi */return rectDrYones;
-        /*javi */}
+    /*javi */
+    public Rect getRectDrYones() {
+        /*javi */
+        return rectDrYones;
+        /*javi */
+    }
 }
