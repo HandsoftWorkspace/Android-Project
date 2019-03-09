@@ -23,6 +23,7 @@ public class Yones extends Personaje {
     private Bitmap[] run;
     private Bitmap[] runEspejo;
 
+    private int velocidad;
     private int cont = 0; // Contador para reiniciar el bucle de imagenes
     private Paint p;
     private int posX, posY; // Posiciones vertical y horizontal del personaje en pantalla, X será estática

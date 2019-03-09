@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -24,7 +25,10 @@ public class ConfirmacionCierre extends Escena {
 
     int idUltimaEscena;
 
+    Typeface faw;
+
     Paint paint;
+    Paint pTexto;
     Utils utils;
 
     // TODO al crear el constructor no se ve nada en pantalla
@@ -36,6 +40,7 @@ public class ConfirmacionCierre extends Escena {
 
         utils = new Utils(context);
         paint = new Paint();
+        pTexto = new Paint();
 
         fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
         fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
@@ -48,6 +53,9 @@ public class ConfirmacionCierre extends Escena {
 
         rectBtnOk = new Rect(proporcionAncho * 5, proporcionAlto * 3, proporcionAncho * 7, proporcionAlto * 5);
         rectBtnCancel = new Rect(proporcionAncho * 11, proporcionAlto * 3, proporcionAncho * 13, proporcionAlto * 5);
+
+        // Fuentes
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
     }
 
     @Override
@@ -64,10 +72,11 @@ public class ConfirmacionCierre extends Escena {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 if (pulsa(rectBtnOk, event)) {
-                    //System.exit(0);
+                    System.exit(0);
                     break;
                 } else if (pulsa(rectBtnCancel, event)) {
-                    return idUltimaEscena;
+//                    return idUltimaEscena;
+                    return 0;
                 }
         }
 //        return super.onTouchEvent(event);
@@ -77,15 +86,17 @@ public class ConfirmacionCierre extends Escena {
     public void dibujar(Canvas c) {
         try {
 //            super.dibujar(c);
+            // Rects
+//            c.drawRect(rectBtnOk, paint);
+//            c.drawRect(rectBtnCancel, paint);
             // Bitmaps
             c.drawBitmap(fondo, 0, 0, null);
             c.drawBitmap(btnOk, proporcionAncho * 5, proporcionAlto * 3, null);
             c.drawBitmap(btnCancel, proporcionAncho * 11, proporcionAlto * 3, null);
-            // Rects
-//            p.setColor(Color.GREEN);
-            c.drawRect(rectBtnOk, paint);
-            c.drawRect(rectBtnCancel, paint);
             // Text
+            pTexto.setColor(Color.YELLOW);
+            pTexto.setTextSize(80);
+            pTexto.setTypeface(faw);
             c.drawText(R.string.confirmarsalida + "", proporcionAncho * 6, proporcionAlto * 1, p);
         } catch (NullPointerException e) {
             Log.d("Error", "Dibujado canvas Opciones");

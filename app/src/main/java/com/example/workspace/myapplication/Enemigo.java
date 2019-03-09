@@ -33,15 +33,13 @@ public class Enemigo extends Personaje {
     public boolean enRetroceso = false;
     private boolean seDibuja = true;
 
-    public Bitmap frameEnemigo, frameRoca, frameSerpiente;
+    public Bitmap frameRoca, frameSerpiente;
     Bitmap bitmaps[];
 
     public Rect rectEnemigo;
 
     Context context;
     Utils utils;
-
-    int rand;
 
     public Enemigo(Context context, int posX, int posY, int anchoPantalla, int altoPantalla, int velocidad) {
         super(context, posX, posY, anchoPantalla, altoPantalla, velocidad);

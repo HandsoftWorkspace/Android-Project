@@ -48,12 +48,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
         hilo = new Hilo();                      // Inicializamos el hilo
         setFocusable(true);                     // Aseguramos que reciba eventos de toque
 
-//        menu = new Menu(context, 0, anchoPantalla, altoPantalla);
-//        game = new Game(context, 1, anchoPantalla, altoPantalla);
-//        opciones = new Opciones(context, 2, anchoPantalla, altoPantalla);
-//        records = new Records(context, 3, anchoPantalla, altoPantalla);
-//        ayuda = new Ayuda(context, 4, anchoPantalla, altoPantalla);
-//        creditos = new Creditos(context, 5, anchoPantalla, altoPantalla);
     }
 
     @Override

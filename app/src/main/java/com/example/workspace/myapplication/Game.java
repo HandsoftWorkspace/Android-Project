@@ -22,9 +22,8 @@ public class Game extends Escena implements Runnable {
 
     private int proporcionAncho, proporcionAlto;
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
-    Paint p = new Paint();
-    Paint paintTexto = new Paint();
-    Vibrator vibrator;
+    private Paint p = new Paint();
+    private Paint paintTexto = new Paint();
     Utils utils;
 
     Bitmap noche0;
@@ -33,10 +32,10 @@ public class Game extends Escena implements Runnable {
     private Bitmap btnA, btnB, btnDisparo;
     private Bitmap heart, lose, win;
 
-    Enemigo[] arrayEnemigos;
-    ArrayList<Enemigo> listaEnemigos = new ArrayList<>();
-    ArrayList<Caliz> listaCaliz = new ArrayList<>();
-    ArrayList<Personaje> personajes = new ArrayList<>();
+    //    Enemigo[] arrayEnemigos;
+    private ArrayList<Enemigo> listaEnemigos = new ArrayList<>();
+    private ArrayList<Caliz> listaCaliz = new ArrayList<>();
+//    ArrayList<Personaje> personajes = new ArrayList<>();
 //    Bitmap enemigosBitmaps[] = new Enemigo[5];
 
     //Rect rectYones;
@@ -58,6 +57,7 @@ public class Game extends Escena implements Runnable {
 
     public static MediaPlayer mediaPlayer;
     public static AudioManager audioManager;
+    public static Vibrator vibrator;
 
     Typeface faw;
 
@@ -69,6 +69,7 @@ public class Game extends Escena implements Runnable {
 
     /**
      * Constructor que inicializa las propiedades de la clase
+     *
      * @param context       Contexto de la app
      * @param idEscena      Escena asociado a un número
      * @param anchoPantalla ancho pantalla del dispositivo
@@ -132,8 +133,6 @@ public class Game extends Escena implements Runnable {
             caliz = new Caliz(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
             listaCaliz.add(caliz);
         }
-
-        arrayEnemigos = new Enemigo[10];
 
         utils = new Utils(context);
 
@@ -219,6 +218,7 @@ public class Game extends Escena implements Runnable {
 
     /**
      * Método que dibuja los elementos necesarios, asociados al juego
+     *
      * @param c canvas this application
      */
     public void dibujar(Canvas c) {
@@ -313,6 +313,7 @@ public class Game extends Escena implements Runnable {
 
     /**
      * Controla los eventos que suceden sobre la pantalla del dispositivo
+     *
      * @param event Tipo de evento que sucede
      * @return Devuelve el tipo de evento
      */
