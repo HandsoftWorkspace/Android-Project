@@ -51,8 +51,10 @@ public class Game extends Escena implements Runnable {
     private int random;
     private int vidas = 5;
     private int puntuacion = 0;
+    private int puntosAux = 0;
     private int ronda = 1;
     private String strPuntuacion = "";
+    private String strPuntos = "";
     String strRonda;
 
     public static MediaPlayer mediaPlayer;
@@ -151,8 +153,9 @@ public class Game extends Escena implements Runnable {
         win = utils.getBitmapFromAssets("varios/win.png");
         win = Bitmap.createScaledBitmap(win, proporcionAncho * 4, proporcionAlto * 2, false);
 
-//        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
-//        strRonda = context.getString(R.string.ronda);
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        strPuntos = context.getString(R.string.puntos);
+        strRonda = context.getString(R.string.ronda);
 
         // Controles de audio y musica
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -194,7 +197,7 @@ public class Game extends Escena implements Runnable {
             if (drYones.rectDrYones.intersect(e.rectEnemigo)) {
                 this.vidas--;
                 vibrator.vibrate(300);
-                if (vidas == 0) {
+                if (vidas < 1) {
                     gameOver = true;
                 }
             }
@@ -208,11 +211,20 @@ public class Game extends Escena implements Runnable {
         // Comprueba hitboxes
         for (Caliz c : listaCaliz) {
             if (drYones.rectDrYones.intersect(c.rectCaliz)) {
-                if (vidas <= 5) {
-                    this.vidas++;
+                puntuacion += 100;
+                if (puntuacion == 10000) {
+                    ronda++;
+                    puntosAux = puntuacion;
                 }
-                vibrator.vibrate(100);
+//                   else if (puntosAux + puntuacion % 10000 == 0) {
+                else if (puntosAux + puntuacion % 10000 > 0) {
+                    ronda++;
+                }
             }
+            if (vidas <= 5) {
+                this.vidas++;
+            }
+            vibrator.vibrate(100);
         }
     }
 
@@ -242,7 +254,7 @@ public class Game extends Escena implements Runnable {
                         c.drawBitmap(listaNumeros[2], proporcionAncho, 0, null);
                         break;
                     case 3:
-                        c.drawBitmap(listaNumeros[3], proporcionAncho + proporcionAncho / 2, 0, null);
+                        c.drawBitmap(listaNumeros[3], proporcionAncho, 0, null);
                         break;
                     case 4:
                         c.drawBitmap(listaNumeros[4], proporcionAncho, 0, null);
@@ -283,9 +295,9 @@ public class Game extends Escena implements Runnable {
 
                 strPuntuacion = String.valueOf(puntuacion);
                 paintTexto.setColor(Color.YELLOW);
-                paintTexto.setTextSize(80);
+                paintTexto.setTextSize(40);
                 paintTexto.setTypeface(faw);
-                c.drawText(strPuntuacion, proporcionAncho * 17 - proporcionAncho, 0, paintTexto);
+                c.drawText(strPuntos + ": " + strPuntuacion + "   " + strRonda + ": " + ronda, anchoPantalla / 2 - proporcionAncho * 2, proporcionAlto - proporcionAlto / 3, paintTexto);
 
                 if (vidas == 0) {
                     c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);

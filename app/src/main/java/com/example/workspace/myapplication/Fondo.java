@@ -30,7 +30,6 @@ public class Fondo {
      */
     public Fondo(Bitmap imagen, int anchoPantalla, int velocidad) {
         this(imagen, anchoPantalla - imagen.getWidth(), 0, velocidad);
-
     }
 
     /**

@@ -47,19 +47,24 @@ public class Menu extends Escena {
     String nombreJuego;
     String nombreVersion;
 
+    Utils utils;
+
     // Constructor de la escena MENÚ
 
     /**
      * Contructor que inicializa las propiedas de la clase
-     * @param context contexto de la applicación
-     * @param idEscena número asociado a una escena de la aplicación
+     *
+     * @param context       contexto de la applicación
+     * @param idEscena      número asociado a una escena de la aplicación
      * @param anchoPantalla ancho pantalla del dispositivo
-     * @param altoPantalla alto pantalla del dispositivo
+     * @param altoPantalla  alto pantalla del dispositivo
      */
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
+        utils = new Utils(context);
         // Fondo menú principal
+//        fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
         fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
         fondo0 = Bitmap.createScaledBitmap(fondo0, anchoPantalla, altoPantalla, false);
 

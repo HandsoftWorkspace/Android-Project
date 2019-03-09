@@ -1,10 +1,8 @@
 package com.example.workspace.myapplication;
 
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         Juego juego = new Juego(this);
         juego.setKeepScreenOn(true);
         setContentView(juego);
+
+        ConnectSQLiteOpenHelper connect = new ConnectSQLiteOpenHelper(this, "bd_puntuaciones", null, 1);
     }
 
     @Override

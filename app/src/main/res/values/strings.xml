@@ -15,4 +15,5 @@
     <string name="confirmarvaciado">Deseas borrar las puntuaciones?</string>
     <string name="nombreversion">La ciudad perdida</string>
     <string name="ronda">Ronda</string>
+    <string name="puntos">Puntos</string>
 </resources>

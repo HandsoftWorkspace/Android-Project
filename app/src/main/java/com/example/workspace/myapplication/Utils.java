@@ -15,6 +15,10 @@ public class Utils {
 
     Context context;
 
+    // Gestión bases de datos
+    public final static String crearTabla = "CREATE TABLE bdPuntuaciones (puntos INTEGER)";
+public final String tablaPuntuaciones="bdPuntuaciones";
+
     /**
      * Contructor de la clase Utils
      * @param context Contexto de la applicación
