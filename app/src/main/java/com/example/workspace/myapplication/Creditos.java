@@ -16,17 +16,15 @@ import static com.example.workspace.myapplication.Menu.mediaPlayer;
 public class Creditos extends Escena {
 
     Context context;
-    Paint p = new Paint();
 
     int anchoPantalla, altoPantalla;
     int proporcionAncho, proporcionAlto;
 
-    Bitmap fondo0, volverMenu;
+    Bitmap volverMenu;
 
     Rect rectVolverMenu;
 
     // Fuentes
-    Typeface faw;
     String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos;
 
     public Creditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
@@ -39,16 +37,14 @@ public class Creditos extends Escena {
         this.proporcionAlto = altoPantalla / 9;
 
         // Bitmaps
-        fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
-        fondo0 = Bitmap.createScaledBitmap(fondo0, anchoPantalla, altoPantalla, false);
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
+
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
 
         // Rects
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
-
-        // Fuentes TODO
-        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
 
         nombreProyecto = context.getString(R.string.projectname);
         proyecto = context.getString(R.string.proyecto);
@@ -59,11 +55,19 @@ public class Creditos extends Escena {
 //        fuentesRecursos;
     }
 
+    /**
+     * Actualizamos la física de los elementos en pantalla
+     */
+    public void actualizarFisica() {
+        fondoNubes.mover();
+    }
+
     @Override
     public void dibujar(Canvas c) {
         super.dibujar(c);
         // Bitmaps
-        c.drawBitmap(fondo0, 0, 0, null);
+        c.drawBitmap(bitmapFondo, 0, 0, null);
+        fondoNubes.dibujar(c);
         c.drawBitmap(volverMenu, 0, 0, null);
 
         // Textos

@@ -15,21 +15,15 @@ import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class ConfirmacionCierre extends Escena {
 
-    Bitmap btnVolverMenu, btnOk, btnCancel;
+    Bitmap btnOk, btnCancel;
 
-    Rect rectVolverMenu, rectBtnOk, rectBtnCancel;
+    Rect rectBtnOk, rectBtnCancel;
 
     boolean prueba;
 
     int proporcionAncho, proporcionAlto;
 
     int idUltimaEscena;
-
-    Typeface faw;
-
-    Paint paint;
-    Paint pTexto;
-    Utils utils;
 
     // TODO al crear el constructor no se ve nada en pantalla
     public ConfirmacionCierre(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
@@ -38,12 +32,8 @@ public class ConfirmacionCierre extends Escena {
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
 
-        utils = new Utils(context);
-        paint = new Paint();
-        pTexto = new Paint();
-
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
-        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
 
         btnOk = utils.getBitmapFromAssets("varios/ok.png");
         btnOk = btnOk = Bitmap.createScaledBitmap(btnOk, proporcionAncho * 2, proporcionAlto * 2, false);
@@ -54,8 +44,8 @@ public class ConfirmacionCierre extends Escena {
         rectBtnOk = new Rect(proporcionAncho * 5, proporcionAlto * 3, proporcionAncho * 7, proporcionAlto * 5);
         rectBtnCancel = new Rect(proporcionAncho * 11, proporcionAlto * 3, proporcionAncho * 13, proporcionAlto * 5);
 
-        // Fuentes
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+
     }
 
     @Override
@@ -83,6 +73,13 @@ public class ConfirmacionCierre extends Escena {
         return idEscena;
     }
 
+    /**
+     * Actualizamos la física de los elementos en pantalla
+     */
+    public void actualizarFisica() {
+        fondoNubes.mover();
+    }
+
     public void dibujar(Canvas c) {
         try {
 //            super.dibujar(c);
@@ -90,14 +87,14 @@ public class ConfirmacionCierre extends Escena {
 //            c.drawRect(rectBtnOk, paint);
 //            c.drawRect(rectBtnCancel, paint);
             // Bitmaps
-            c.drawBitmap(fondo, 0, 0, null);
+            c.drawBitmap(bitmapFondo, 0, 0, null);
             c.drawBitmap(btnOk, proporcionAncho * 5, proporcionAlto * 3, null);
             c.drawBitmap(btnCancel, proporcionAncho * 11, proporcionAlto * 3, null);
             // Text
             pTexto.setColor(Color.YELLOW);
             pTexto.setTextSize(80);
             pTexto.setTypeface(faw);
-            c.drawText(R.string.confirmarsalida + "", proporcionAncho * 6, proporcionAlto * 1, p);
+            c.drawText(R.string.confirmarsalida + "", proporcionAncho * 6, proporcionAlto * 1, pTexto);
         } catch (NullPointerException e) {
             Log.d("Error", "Dibujado canvas Opciones");
         }

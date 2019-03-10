@@ -6,41 +6,39 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 
 public class Escena {
+
+    Bitmap bitmapFondo, bitmapNubes;
+    Fondo fondoNubes;
+    Boolean esDeDia;
+
     Context context;
     int idEscena;
     static int anchoPantalla, altoPantalla;
-    Bitmap fondo;
-    //Bitmap capa,capa1,capa2,capa3,capa4,capa5,capa6,capa7,capa8,capa9,capa10;
-    public Paint p, pTexto2, pBoton;
+    public Paint p, pTexto, paintTexto;
+    Typeface faw;
+    Utils utils;
 
     public Escena(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         this.context = context;
         this.idEscena = idEscena;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
-
-//        pTexto = new Paint();
-//        pTexto2 = new Paint();
-//
-//        pTexto.setColor(Color.RED);
-//        pTexto.setTextAlign(Paint.Align.CENTER);
-//        pTexto.setTextSize(altoPantalla/5);
-//
-//        pTexto2.setColor(Color.RED);
-//        pTexto2.setTextAlign(Paint.Align.CENTER);
-//        pTexto2.setTextSize(altoPantalla/5);
-//
-//        pBoton = new Paint();
-//        pBoton.setColor(Color.GREEN);
+        utils = new Utils(context);
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        esDeDia = false;
+        p = new Paint();
+        pTexto = new Paint();
+        paintTexto = new Paint();
     }
 
     // Actualizamos la física de los elementos en pantalla
     public void actualizarFisica() {
-
+//        fondoNubes.mover();
     }
 
     // Rutina de dibujo en el lienzo. Se le llamará desde el hilo
@@ -120,10 +118,10 @@ public class Escena {
     }
 
     public Bitmap getFondo() {
-        return fondo;
+        return bitmapFondo;
     }
 
     public void setFondo(Bitmap fondo) {
-        this.fondo = fondo;
+        this.bitmapFondo = fondo;
     }
 }

@@ -22,7 +22,7 @@ public class Menu extends Escena {
 
     Bitmap juego, opciones, creditos, leader, ayuda, cierre, btnOk, btnCancel;
 
-    Bitmap fondo0, fondo1, fondo2, fondo3, fondo4, fondo5, down, up, downGrande, upGrande;
+    Bitmap down, up, downGrande, upGrande;
 
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
 
@@ -41,13 +41,8 @@ public class Menu extends Escena {
 
     public int volumen; // Volumen del menú
 
-    private Bitmap nubes;
-    Fondo parallaxMenu;
-
     String nombreJuego;
     String nombreVersion;
-
-    Utils utils;
 
     // Constructor de la escena MENÚ
 
@@ -62,16 +57,9 @@ public class Menu extends Escena {
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
-        utils = new Utils(context);
         // Fondo menú principal
-//        fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
-        fondo0 = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
-        fondo0 = Bitmap.createScaledBitmap(fondo0, anchoPantalla, altoPantalla, false);
-
-        nubes = BitmapFactory.decodeResource(context.getResources(), R.drawable.noche5);
-        nubes = Bitmap.createScaledBitmap(nubes, anchoPantalla, altoPantalla, false);
-
-        parallaxMenu = new Fondo(nubes, 0, 0, 8);
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
 
         // Proporciones pantalla, se divide el alto y ancho de la pantalla del dispositivo, para conseguir asi nuestras proporciones
         // para que se adapten asi a distintos dispositivos
@@ -128,9 +116,8 @@ public class Menu extends Escena {
         mediaPlayer.seekTo(2000); // Se adelanta para no causar un vacio
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
 
-        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
         paint.setColor(Color.TRANSPARENT);
-
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
         nombreJuego = context.getString(R.string.app_name);
         nombreVersion = context.getString(R.string.nombreversion);
     }
@@ -139,7 +126,7 @@ public class Menu extends Escena {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
-//        parallaxMenu.mover();
+        fondoNubes.mover();
     }
 
     /**
@@ -149,10 +136,12 @@ public class Menu extends Escena {
      */
     public void dibujar(Canvas c) {
         try {
-//            parallaxMenu.dibujar(c);
 
             //c.drawBitmap(fondo, 0, 0, brocha);
-            c.drawBitmap(fondo0, 0, 0, null);
+            c.drawBitmap(bitmapFondo, 0, 0, null);
+//            c.drawBitmap(nubes, 0, 0, null);
+            fondoNubes.dibujar(c);
+
 
             c.drawBitmap(down, proporcionAncho * 6, proporcionAlto * 1, null);
 //            c.drawText("DR YONES", proporcionAlto * 7, proporcionAlto * 1, p);

@@ -1,30 +1,32 @@
 package com.example.workspace.myapplication;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
+
+import java.util.ArrayList;
 
 public class Records extends Escena {
     int proporcionAncho, proporcionAlto;
-
     private Rect rectVolverMenu;
-
     private Bitmap volverMenu, one, two, three, table, star1, star2, star3;
-
-    Paint p = new Paint();
+    ArrayList<Integer> listado = new ArrayList<>();
 
     public Records(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
 
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
-        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
 
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
@@ -53,6 +55,10 @@ public class Records extends Escena {
         p.setColor(Color.TRANSPARENT);
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
 
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+
+
+//        cargarPuntuaciones();
     }
 
 //    @Override
@@ -81,20 +87,48 @@ public class Records extends Escena {
     public void dibujar(Canvas c) {
         super.dibujar(c);
         c.drawRect(rectVolverMenu, p);
-        c.drawBitmap(fondo, 0, 0, null);
-
+        c.drawBitmap(bitmapFondo, 0, 0, null);
+        fondoNubes.dibujar(c);
         c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
 
         c.drawBitmap(one, proporcionAncho * 4, proporcionAlto * 2, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 2, null);
+//        c.drawText(listado.get(0).toString(), proporcionAncho * 6, proporcionAlto * 2, pTexto);
         c.drawBitmap(star3, proporcionAncho * 11, proporcionAlto * 2, null);
 
         c.drawBitmap(two, proporcionAncho * 4, proporcionAlto * 4, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 4, null);
+//        c.drawText(listado.get(1).toString(), proporcionAncho * 6, proporcionAlto * 4, pTexto);
         c.drawBitmap(star2, proporcionAncho * 11, proporcionAlto * 4, null);
 
         c.drawBitmap(three, proporcionAncho * 4, proporcionAlto * 6, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 6, null);
+//        c.drawText(listado.get(2).toString(), proporcionAncho * 6, proporcionAlto * 6, pTexto);
         c.drawBitmap(star1, proporcionAncho * 11, proporcionAlto * 6, null);
+    }
+
+    private void cargarPuntuaciones() {
+        BaseDatos bd = null;
+        SQLiteDatabase bdSqlite = null;
+        try {
+            bd = new BaseDatos(context, "puntuaciones", null, 1);
+            bdSqlite = bd.getReadableDatabase();
+            String query = "SELECT puntos from puntuaciones order by puntos DESC LIMIT 3";
+            Cursor cursor = bdSqlite.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                int puntos;
+                do {
+                    puntos = cursor.getInt(0);
+                    listado.add(puntos);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (bd == null) {
+                bd.close();
+            }
+            if (bdSqlite == null) {
+                bdSqlite.close();
+            }
+        }
     }
 }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,6 +18,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder surfaceHolder;      // Interfaz abstracta para manejar la superficie de dibujado
     private Context context;                  // Contexto de la aplicación
 
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private float luz = -1;
+
     private int anchoPantalla = 1;              // Ancho de la pantalla, su valor se actualiza en el método surfaceChanged
     private int altoPantalla = 1;               // Alto de la pantalla, su valor se actualiza en el método surfaceChanged
     private Hilo hilo;                        // Hilo encargado de dibujar y actualizar la física
@@ -25,6 +31,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
     // Control temporal
     long tiempo = 0;
     int tiempoEspera = 1000;
+
+    boolean[] listaPreferencias;
 
     private Menu menu;
     private Game game;
@@ -45,9 +53,17 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
         this.surfaceHolder = getHolder();       // Se obtiene el holder
         this.surfaceHolder.addCallback(this);   // Se indica donde van las funciones callback
         this.context = context;                 // Obtenemos el contexto
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+//        if (sensor == null) {
+//
+//        }
         hilo = new Hilo();                      // Inicializamos el hilo
         setFocusable(true);                     // Aseguramos que reciba eventos de toque
-
+//        listaPreferencias = new boolean[1];
+//        listaPreferencias = opciones.cargarPreferencias();
+//        opciones.musicaActiva = listaPreferencias[0];
+//        opciones.vibracionActiva = listaPreferencias[1];
     }
 
     @Override

@@ -29,6 +29,8 @@ public class Opciones extends Escena {
     private float x;
     private Bitmap volverMenu, music, musicoff, vibrate, vibrateoff;
 
+    Fondo nubes;
+
     boolean musicaActiva = true; // Sirve para mostrar un btn de música activada
     boolean volumen = true; // Índice si hay música o no, se utilizará para las preferencias de ajustes
     boolean vibracionActiva = true; // Sirve para mostrar un btn de musica desactivada
@@ -52,8 +54,12 @@ public class Opciones extends Escena {
         proporcionAncho = anchoPantalla / 18;
         proporcionAlto = altoPantalla / 9;
 
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundmountains);
-        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
+        utils = new Utils(context);
+
+//        bitmapFondo = utils.getBitmapFromAssets("varios/bgmenunoche.png");
+//        bitmapFondo = Bitmap.createScaledBitmap(bitmapFondo, anchoPantalla, altoPantalla, false);
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
 
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
@@ -76,10 +82,10 @@ public class Opciones extends Escena {
         rectVibracion = new Rect(proporcionAncho * 6, proporcionAlto * 6, proporcionAncho * 8, proporcionAlto * 8);
 //        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 6, proporcionAncho * 11, proporcionAlto * 8);
 
+
         // Fuentes
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
 
-        utils = new Utils(context);
         nombreOpciones = context.getString(R.string.opciones);
 
     }
@@ -120,7 +126,7 @@ public class Opciones extends Escena {
                     break;
                 } else if (pulsa(rectVibracion, event)) {
                     if (vibracionActiva) {
-                        Game.vibrator.cancel();
+//                        Game.vibrator.cancel();
                         vibracionActiva = false;
                         vibracion = true;
                     } else {
@@ -207,7 +213,8 @@ public class Opciones extends Escena {
     public void dibujar(Canvas c) {
         try {
             super.dibujar(c);
-            c.drawBitmap(fondo, 0, 0, null);
+            c.drawBitmap(bitmapFondo, 0, 0, null);
+            fondoNubes.dibujar(c);
 
             c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
 //            c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
@@ -249,6 +256,13 @@ public class Opciones extends Escena {
         }
     }
 
+    /**
+     * Actualizamos la física de los elementos en pantalla
+     */
+    public void actualizarFisica() {
+        fondoNubes.mover();
+    }
+
     private void guardarPreferencias() {
         SharedPreferences preferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -265,5 +279,18 @@ public class Opciones extends Escena {
         }
 
         editor.commit();
+    }
+
+    /**
+     * Método que carga las preferencias de ajustes del juego, vibración y sonido
+     *
+     * @return
+     */
+    public boolean[] cargarPreferencias() {
+        boolean prefs[] = new boolean[2];
+        SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
+        prefs[0] = sharedPreferences.getBoolean("musica", true);
+        prefs[1] = sharedPreferences.getBoolean("vibracion", true);
+        return prefs;
     }
 }

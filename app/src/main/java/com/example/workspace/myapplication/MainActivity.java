@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         juego.setKeepScreenOn(true);
         setContentView(juego);
 
-        ConnectSQLiteOpenHelper connect = new ConnectSQLiteOpenHelper(this, "bd_puntuaciones", null, 1);
+        BaseDatos connect = new BaseDatos(this, "bd_puntuaciones", null, 1);
     }
 
     @Override

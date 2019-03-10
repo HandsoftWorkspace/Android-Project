@@ -24,19 +24,13 @@ public class Game extends Escena implements Runnable {
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
     private Paint p = new Paint();
     private Paint paintTexto = new Paint();
-    Utils utils;
-
-    Bitmap noche0;
 
     protected static Bitmap listaNumeros[] = new Bitmap[10];
     private Bitmap btnA, btnB, btnDisparo;
     private Bitmap heart, lose, win;
 
-    //    Enemigo[] arrayEnemigos;
     private ArrayList<Enemigo> listaEnemigos = new ArrayList<>();
     private ArrayList<Caliz> listaCaliz = new ArrayList<>();
-//    ArrayList<Personaje> personajes = new ArrayList<>();
-//    Bitmap enemigosBitmaps[] = new Enemigo[5];
 
     //Rect rectYones;
     Rect rectBtnA, rectBtnB, rectBtnDisparo;
@@ -44,15 +38,12 @@ public class Game extends Escena implements Runnable {
     private boolean dispara = false;
     public boolean gameOver = false;
 
-    private int posicion;
-
     private int volumen;
 
-    private int random;
     private int vidas = 5;
     private int puntuacion = 0;
-    private int puntosAux = 0;
     private int ronda = 1;
+    private String strVidas = "";
     private String strPuntuacion = "";
     private String strPuntos = "";
     String strRonda;
@@ -60,8 +51,6 @@ public class Game extends Escena implements Runnable {
     public static MediaPlayer mediaPlayer;
     public static AudioManager audioManager;
     public static Vibrator vibrator;
-
-    Typeface faw;
 
     DrYones drYones;
     Caballero caballero;
@@ -95,8 +84,10 @@ public class Game extends Escena implements Runnable {
         options.inSampleSize = 2;
 
         // Se asocia cada bitmap a una imagen png
-        fondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundnight);
-        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
+//        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        bitmapFondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundnight);
+        bitmapFondo = Bitmap.createScaledBitmap(bitmapFondo, anchoPantalla, altoPantalla, false);
+//        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
 
         // Botones
         btnA = BitmapFactory.decodeResource(context.getResources(), R.drawable.btn);
@@ -136,8 +127,6 @@ public class Game extends Escena implements Runnable {
             listaCaliz.add(caliz);
         }
 
-        utils = new Utils(context);
-
         heart = utils.getBitmapFromAssets("varios/heart.png");
         heart = Bitmap.createScaledBitmap(heart, proporcionAncho * 1, proporcionAlto * 1, false);
 
@@ -154,6 +143,7 @@ public class Game extends Escena implements Runnable {
         win = Bitmap.createScaledBitmap(win, proporcionAncho * 4, proporcionAlto * 2, false);
 
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+
         strPuntos = context.getString(R.string.puntos);
         strRonda = context.getString(R.string.ronda);
 
@@ -173,6 +163,7 @@ public class Game extends Escena implements Runnable {
     @Override
     public void actualizarFisica() {
         super.actualizarFisica();
+//        fondoNubes.mover();
         drYones.move();
         drYones.setRectangulo();
 
@@ -211,20 +202,20 @@ public class Game extends Escena implements Runnable {
         // Comprueba hitboxes
         for (Caliz c : listaCaliz) {
             if (drYones.rectDrYones.intersect(c.rectCaliz)) {
+                this.vidas++;
+                vibrator.vibrate(100);
                 puntuacion += 100;
-                if (puntuacion == 10000) {
-                    ronda++;
-                    puntosAux = puntuacion;
-                }
-//                   else if (puntosAux + puntuacion % 10000 == 0) {
-                else if (puntosAux + puntuacion % 10000 > 0) {
-                    ronda++;
-                }
+//                if (puntuacion > 15000) {
+//                    ronda++;
+//                } else if (puntuacion > 30000) {
+//                    ronda++;
+//                } else if (puntuacion > 60000) {
+//                    ronda++;
+//                }
             }
             if (vidas <= 5) {
                 this.vidas++;
             }
-            vibrator.vibrate(100);
         }
     }
 
@@ -240,29 +231,30 @@ public class Game extends Escena implements Runnable {
             } else {
                 // Prueba aceleración de hardware
 //            Log.d("hard", String.valueOf(c.isHardwareAccelerated()));
-                c.drawBitmap(fondo, 0, 0, null);
+                c.drawBitmap(bitmapFondo, 0, 0, null);
+//                fondoNubes.dibujar(c);
                 c.drawBitmap(heart, proporcionAncho / 2, 0, null);
 
-                switch (vidas) {
-                    case 0:
-                        c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
-                        break;
-                    case 1:
-                        c.drawBitmap(listaNumeros[1], proporcionAncho, 0, null);
-                        break;
-                    case 2:
-                        c.drawBitmap(listaNumeros[2], proporcionAncho, 0, null);
-                        break;
-                    case 3:
-                        c.drawBitmap(listaNumeros[3], proporcionAncho, 0, null);
-                        break;
-                    case 4:
-                        c.drawBitmap(listaNumeros[4], proporcionAncho, 0, null);
-                        break;
-                    case 5:
-                        c.drawBitmap(listaNumeros[5], proporcionAncho, 0, null);
-                        break;
-                }
+//                switch (vidas) {
+//                    case 0:
+//                        c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
+//                        break;
+//                    case 1:
+//                        c.drawBitmap(listaNumeros[1], proporcionAncho, 0, null);
+//                        break;
+//                    case 2:
+//                        c.drawBitmap(listaNumeros[2], proporcionAncho, 0, null);
+//                        break;
+//                    case 3:
+//                        c.drawBitmap(listaNumeros[3], proporcionAncho, 0, null);
+//                        break;
+//                    case 4:
+//                        c.drawBitmap(listaNumeros[4], proporcionAncho, 0, null);
+//                        break;
+//                    case 5:
+//                        c.drawBitmap(listaNumeros[5], proporcionAncho, 0, null);
+//                        break;
+//                }
 
                 p.setColor(Color.GREEN);
                 c.drawRect(rectBtnA, p);
@@ -298,6 +290,9 @@ public class Game extends Escena implements Runnable {
                 paintTexto.setTextSize(40);
                 paintTexto.setTypeface(faw);
                 c.drawText(strPuntos + ": " + strPuntuacion + "   " + strRonda + ": " + ronda, anchoPantalla / 2 - proporcionAncho * 2, proporcionAlto - proporcionAlto / 3, paintTexto);
+
+                strVidas = String.valueOf(vidas);
+                c.drawText(strVidas, proporcionAncho * 2, proporcionAlto - proporcionAncho / 3, paintTexto);
 
                 if (vidas == 0) {
                     c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);

@@ -16,11 +16,12 @@ public class Utils {
     Context context;
 
     // Gestión bases de datos
-    public final static String crearTabla = "CREATE TABLE bdPuntuaciones (puntos INTEGER)";
-public final String tablaPuntuaciones="bdPuntuaciones";
+    public final static String crearTabla = "CREATE TABLE puntuaciones (id INTEGER PRIMARY KEY AUTOINCREMENT,puntos INTEGER)";
+    public final String tablaPuntuaciones = "puntuaciones";
 
     /**
      * Contructor de la clase Utils
+     *
      * @param context Contexto de la applicación
      */
     public Utils(Context context) {
@@ -29,6 +30,7 @@ public final String tablaPuntuaciones="bdPuntuaciones";
 
     /**
      * Método que recibe una cadena que deberá ser un archivo, la asociará a un bitmap
+     *
      * @param fichero Cadena de texto que será el nombre del archivo, ubicado en la carpeta del proyecto, 'assets'
      * @return Devuelve un bitmap
      */
@@ -48,16 +50,22 @@ public final String tablaPuntuaciones="bdPuntuaciones";
 
     }
 
-    /**
-     * Método que carga las preferencias de ajustes del juego, vibración y sonido
-     * @return
-     */
-    public boolean[] cargarPreferencias() {
-        boolean prefs[] = new boolean[2];
-        SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
-        prefs[0] = sharedPreferences.getBoolean("musica", true);
-        prefs[1] = sharedPreferences.getBoolean("vibracion", true);
-        return prefs;
+    public Bitmap setFondo(int anchoPantalla, int altoPantalla, boolean dia) {
+        Bitmap fondo;
+        if (!dia) {
+            fondo = getBitmapFromAssets("varios/bgmenudia.png");
+        } else {
+            fondo = getBitmapFromAssets("varios/bgmenunoche.png");
+        }
+        fondo = Bitmap.createScaledBitmap(fondo, anchoPantalla, altoPantalla, false);
+        return fondo;
+    }
+
+    public Bitmap setNubes(int anchoPantalla, int altoPantalla) {
+        Bitmap nubes;
+        nubes = getBitmapFromAssets("varios/nubes.png");
+        nubes = Bitmap.createScaledBitmap(nubes, anchoPantalla, altoPantalla, false);
+        return nubes;
     }
 
     public Bitmap[] tiempo(int tiempo) {
