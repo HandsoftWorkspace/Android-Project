@@ -19,13 +19,12 @@ public class ConfirmacionCierre extends Escena {
 
     Rect rectBtnOk, rectBtnCancel;
 
-    boolean prueba;
-
     int proporcionAncho, proporcionAlto;
+
+    String strCierra;
 
     int idUltimaEscena;
 
-    // TODO al crear el constructor no se ve nada en pantalla
     public ConfirmacionCierre(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.idUltimaEscena = idEscena;
@@ -45,6 +44,7 @@ public class ConfirmacionCierre extends Escena {
         rectBtnCancel = new Rect(proporcionAncho * 11, proporcionAlto * 3, proporcionAncho * 13, proporcionAlto * 5);
 
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        strCierra = context.getString(R.string.confirmarsalida);
 
     }
 
@@ -88,13 +88,15 @@ public class ConfirmacionCierre extends Escena {
 //            c.drawRect(rectBtnCancel, paint);
             // Bitmaps
             c.drawBitmap(bitmapFondo, 0, 0, null);
+            fondoNubes.dibujar(c);
             c.drawBitmap(btnOk, proporcionAncho * 5, proporcionAlto * 3, null);
             c.drawBitmap(btnCancel, proporcionAncho * 11, proporcionAlto * 3, null);
             // Text
             pTexto.setColor(Color.YELLOW);
             pTexto.setTextSize(80);
             pTexto.setTypeface(faw);
-            c.drawText(R.string.confirmarsalida + "", proporcionAncho * 6, proporcionAlto * 1, pTexto);
+//            c.drawText(R.string.confirmarsalida + "", proporcionAncho * 6, proporcionAlto * 1, pTexto);
+            c.drawText(strCierra, proporcionAncho * 3, proporcionAlto * 2, pTexto);
         } catch (NullPointerException e) {
             Log.d("Error", "Dibujado canvas Opciones");
         }

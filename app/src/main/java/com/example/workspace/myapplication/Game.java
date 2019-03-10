@@ -37,6 +37,7 @@ public class Game extends Escena implements Runnable {
 
     private boolean dispara = false;
     public boolean gameOver = false;
+    private boolean caballeroHerido = false;
 
     private int volumen;
 
@@ -73,7 +74,7 @@ public class Game extends Escena implements Runnable {
         this.proporcionAlto = altoPantalla / 9;
 
         drYones = new DrYones(context, anchoPantalla / 2, altoPantalla, anchoPantalla, altoPantalla, 10); // le estas pone
-        caballero = new Caballero(context, anchoPantalla, proporcionAlto * 6, 4, anchoPantalla, altoPantalla);
+        caballero = new Caballero(context, anchoPantalla, altoPantalla / 2, 4, anchoPantalla, altoPantalla);
         latigo = new Latigo(context, drYones.getPosX(), drYones.getPosY() - drYones.getRun()[0].getHeight() / 2, anchoPantalla, altoPantalla);
 
         vibrator = (Vibrator) getContext().getSystemService(context.VIBRATOR_SERVICE);
@@ -155,6 +156,7 @@ public class Game extends Escena implements Runnable {
         mediaPlayer.start(); // Se arranca la secuencia musical
         mediaPlayer.seekTo(2000); // Se adelanta para no causar un vacio
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
+
     }
 
     /**
@@ -176,6 +178,14 @@ public class Game extends Escena implements Runnable {
             }
         }
 
+        // Caballero
+        caballero.mover();
+//        if (latigo.rectLatigo.intersect(caballero.rectPersonaje)) {
+//            caballeroHerido = true;
+//        } else {
+//            caballeroHerido = false;
+//        }
+
         // Rocas y serpientes
         for (Enemigo e : listaEnemigos) {
             e.move();
@@ -187,7 +197,9 @@ public class Game extends Escena implements Runnable {
 //            if (e.rectEnemigo.intersect(drYones.rectDrYones)) {
             if (drYones.rectDrYones.intersect(e.rectEnemigo)) {
                 this.vidas--;
-                vibrator.vibrate(300);
+                if (Opciones.vibracion) {
+                    vibrator.vibrate(300);
+                }
                 if (vidas < 1) {
                     gameOver = true;
                 }
@@ -203,7 +215,9 @@ public class Game extends Escena implements Runnable {
         for (Caliz c : listaCaliz) {
             if (drYones.rectDrYones.intersect(c.rectCaliz)) {
                 this.vidas++;
-                vibrator.vibrate(100);
+                if (Opciones.vibracion) {
+                    vibrator.vibrate(100);
+                }
                 puntuacion += 100;
 //                if (puntuacion > 15000) {
 //                    ronda++;
@@ -257,12 +271,12 @@ public class Game extends Escena implements Runnable {
 //                }
 
                 p.setColor(Color.GREEN);
-                c.drawRect(rectBtnA, p);
-                c.drawRect(rectBtnB, p);
+//                c.drawRect(rectBtnA, p);
+//                c.drawRect(rectBtnB, p);
 //            drYones.setRectangulo();
 //            c.drawRect(drYones.setRectangulo(), p);
-                c.drawRect(drYones.rectDrYones, p);
-                c.drawRect(rectBtnDisparo, p);
+//                c.drawRect(drYones.rectDrYones, p);
+//                c.drawRect(rectBtnDisparo, p);
 
                 // Botones
                 c.drawBitmap(btnA, 0, proporcionAlto * 6, null);
@@ -272,6 +286,9 @@ public class Game extends Escena implements Runnable {
                 // Personajes
                 drYones.cambiaFrame();
                 drYones.dibuja(c);
+//                if (!caballeroHerido) {
+                caballero.dibujar(c);
+//                }
 
                 for (Enemigo e : listaEnemigos) {
                     e.dibuja(c);
@@ -367,5 +384,19 @@ public class Game extends Escena implements Runnable {
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    /**
+     * Método que para la música
+     */
+    public void pararMusica() {
+        mediaPlayer.pause();
+    }
+
+    /**
+     * Método que reanuda la música
+     */
+    public void reanudarMusica() {
+        mediaPlayer.start();
     }
 }

@@ -56,9 +56,7 @@ public class Latigo {
      */
     public void dibuja(Canvas c) {
         c.drawBitmap(latigo, posX, posY, null);
-        /*javi */
-        c.drawRect(rectLatigo, paint);
-
+//        c.drawRect(rectLatigo, paint);
     }
 
     /**

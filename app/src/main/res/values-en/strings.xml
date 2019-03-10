@@ -17,4 +17,6 @@
     <string name="nombreversion">The lost city</string>
     <string name="ronda">Round</string>
     <string name="puntos">Points</string>
+    <string name="musica">Music</string>
+    <string name="vibracion">Vibration</string>
 </resources>

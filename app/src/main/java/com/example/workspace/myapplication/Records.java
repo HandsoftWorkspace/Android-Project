@@ -16,9 +16,10 @@ import java.util.ArrayList;
 
 public class Records extends Escena {
     int proporcionAncho, proporcionAlto;
-    private Rect rectVolverMenu;
-    private Bitmap volverMenu, one, two, three, table, star1, star2, star3;
-    ArrayList<Integer> listado = new ArrayList<>();
+    private Bitmap one, two, three, table, star1, star2, star3;
+    private ArrayList<Integer> listado = new ArrayList<>();
+    private String[] strPuntos;
+    private String strRecords;
 
     public Records(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -56,15 +57,10 @@ public class Records extends Escena {
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
 
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        strRecords = context.getString(R.string.logros);
 
-
-//        cargarPuntuaciones();
+        cargarPuntuaciones();
     }
-
-//    @Override
-//    public boolean pulsa(Rect boton, MotionEvent event) {
-//        return super.pulsa(boton, event);
-//    }
 
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -83,9 +79,20 @@ public class Records extends Escena {
         return super.onTouchEvent(event);
     }
 
+    /**
+     * Actualizamos la física de los elementos en pantalla
+     */
+    public void actualizarFisica() {
+        fondoNubes.mover();
+    }
+
     @Override
     public void dibujar(Canvas c) {
         super.dibujar(c);
+        paintTexto.setColor(Color.YELLOW);
+        paintTexto.setTextSize(50);
+        paintTexto.setTypeface(faw);
+
         c.drawRect(rectVolverMenu, p);
         c.drawBitmap(bitmapFondo, 0, 0, null);
         fondoNubes.dibujar(c);
@@ -93,18 +100,21 @@ public class Records extends Escena {
 
         c.drawBitmap(one, proporcionAncho * 4, proporcionAlto * 2, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 2, null);
-//        c.drawText(listado.get(0).toString(), proporcionAncho * 6, proporcionAlto * 2, pTexto);
         c.drawBitmap(star3, proporcionAncho * 11, proporcionAlto * 2, null);
 
         c.drawBitmap(two, proporcionAncho * 4, proporcionAlto * 4, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 4, null);
-//        c.drawText(listado.get(1).toString(), proporcionAncho * 6, proporcionAlto * 4, pTexto);
         c.drawBitmap(star2, proporcionAncho * 11, proporcionAlto * 4, null);
 
         c.drawBitmap(three, proporcionAncho * 4, proporcionAlto * 6, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 6, null);
-//        c.drawText(listado.get(2).toString(), proporcionAncho * 6, proporcionAlto * 6, pTexto);
         c.drawBitmap(star1, proporcionAncho * 11, proporcionAlto * 6, null);
+
+        c.drawText(strRecords, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, paintTexto);
+//        c.drawText(listado.get(0).toString(), proporcionAncho * 6, proporcionAlto * 2, pTexto);
+//        c.drawText(listado.get(1).toString(), proporcionAncho * 6, proporcionAlto * 4, pTexto);
+//        c.drawText(listado.get(2).toString(), proporcionAncho * 6, proporcionAlto * 6, pTexto);
+
     }
 
     private void cargarPuntuaciones() {

@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -14,12 +16,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-public class Juego extends SurfaceView implements SurfaceHolder.Callback {
+public class Juego extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
     private SurfaceHolder surfaceHolder;      // Interfaz abstracta para manejar la superficie de dibujado
     private Context context;                  // Contexto de la aplicación
 
     private SensorManager sensorManager;
     private Sensor sensor;
+
     private float luz = -1;
 
     private int anchoPantalla = 1;              // Ancho de la pantalla, su valor se actualiza en el método surfaceChanged
@@ -55,15 +58,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
         this.context = context;                 // Obtenemos el contexto
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-//        if (sensor == null) {
-//
-//        }
+        if (sensor == null) {
+            luz = (float) Math.random() * 4;
+        }
         hilo = new Hilo();                      // Inicializamos el hilo
         setFocusable(true);                     // Aseguramos que reciba eventos de toque
-//        listaPreferencias = new boolean[1];
-//        listaPreferencias = opciones.cargarPreferencias();
-//        opciones.musicaActiva = listaPreferencias[0];
-//        opciones.vibracionActiva = listaPreferencias[1];
     }
 
     @Override
@@ -104,18 +103,17 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-//        if (escenaActual == menu) {
-//            menu.reanudarMusica();
-//        }
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        hilo.setFuncionando(false);  // Se para el hilo
-//        if (escenaActual == menu) {
-//            menu.pararMusica();
+//        if (escenaActual == game) {
+//            game.pararMusica();
 //        }
+        opciones.guardarPreferencias(); // Guardo preferencias opciones
+        hilo.setFuncionando(false);  // Se para el hilo
         try {
+            menu.pararMusica(); // método que para la música del menú
             hilo.join();   // Se espera a que finalize
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -126,12 +124,15 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         anchoPantalla = width;               // se establece el nuevo ancho de pantalla
         altoPantalla = height;               // se establece el nuevo alto de pantalla
-
+        if (escenaActual != game) {
+            game.pararMusica();
+        }
         if (menu == null) {
             menu = new Menu(context, 0, anchoPantalla, altoPantalla);
         }
         if (game == null) {
             opciones = new Opciones(context, 2, anchoPantalla, altoPantalla);
+            opciones.cargarPreferencias();
         }
         if (records == null) {
             records = new Records(context, 3, anchoPantalla, altoPantalla);
@@ -159,8 +160,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
             hilo = new Hilo();
             hilo.start(); // se arranca el hilo
         }
-
+        if (escenaActual == menu) {
+            menu.reanudarMusica();
+        }
+        if (escenaActual != menu) {
+            menu.pararMusica();
+        }
     }
+
 
     // Clase Hilo en la cual implementamos el método de dibujo (y física) para que se haga en paralelo con la gestión de la interfaz de usuario
     class Hilo extends Thread {
@@ -207,7 +214,61 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback {
 
             }
         }
+
+
     }
+
+    /**
+     * Detecta cúando se produce un cambio de valor en el sensor de luz
+     *
+     * @param event devuelve los eventos del sensor de luz
+     */
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (luz == -1) {
+            luz = event.values[0];
+            this.setLuz(luz);
+            menu.setLuz(getLuz());
+            if (this.getLuz() < 2) {
+                menu.esDeDia = false;
+            } else {
+                menu.esDeDia = true;
+            }
+        }
+    }
+
+    /**
+     * @param sensor   objeto sensor de luz
+     * @param accuracy parámetro que se le pasa al sensor de luz
+     */
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    /**
+     * Establece el nivel de luz del dispositivo
+     *
+     * @param luz nivel de luz expresado en unidades de medida lux
+     */
+    public void setLuz(float luz) {
+        this.luz = luz;
+        if (luz < 2) {
+            menu.esDeDia = false;
+        } else {
+            menu.esDeDia = true;
+        }
+    }
+
+    /**
+     * Consigue el nivel de luz del dispositivo
+     *
+     * @return devuelve el nivel de luz
+     */
+    public float getLuz() {
+        return luz;
+    }
+
 }
 
 

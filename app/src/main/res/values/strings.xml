@@ -16,4 +16,6 @@
     <string name="nombreversion">La ciudad perdida</string>
     <string name="ronda">Ronda</string>
     <string name="puntos">Puntos</string>
+    <string name="musica">Música</string>
+    <string name="vibracion">Vibración</string>
 </resources>

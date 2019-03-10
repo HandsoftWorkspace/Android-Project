@@ -97,7 +97,7 @@ public class Caliz extends Personaje {
     public void dibuja(Canvas c) {
         int auxRand = 0;
         c.drawBitmap(bitmaps[0], posX, posY, null);
-        p.setColor(Color.GREEN);
-        c.drawRect(rectCaliz, p);
+//        p.setColor(Color.GREEN);
+//        c.drawRect(rectCaliz, p);
     }
 }

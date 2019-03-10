@@ -16,8 +16,8 @@ public class Utils {
     Context context;
 
     // Gestión bases de datos
-    public final static String crearTabla = "CREATE TABLE puntuaciones (id INTEGER PRIMARY KEY AUTOINCREMENT,puntos INTEGER)";
-    public final String tablaPuntuaciones = "puntuaciones";
+//    public final static String crearTabla = "CREATE TABLE puntuaciones (id INTEGER PRIMARY KEY AUTOINCREMENT,puntos INTEGER)";
+//    public final String tablaPuntuaciones = "puntuaciones";
 
     /**
      * Contructor de la clase Utils

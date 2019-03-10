@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.media.AudioManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.PopupMenu;
@@ -25,18 +26,16 @@ public class Opciones extends Escena {
     private int proporcionAlto, proporcionAncho; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
     private int anchoPantalla, altoPantalla;
 
-    private Rect rectMusic, rectMusicoff, rectVibracion, getRectVibracionoff, rectVolverMenu; // Rectangulos que nos serviran para detectar pulsaciones en la pantalla del dispositivo
+    private Rect rectMusic, rectMusicoff, rectVibracion, getRectVibracionoff; // Rectangulos que nos serviran para detectar pulsaciones en la pantalla del dispositivo
     private float x;
-    private Bitmap volverMenu, music, musicoff, vibrate, vibrateoff;
-
-    Fondo nubes;
+    private Bitmap music, musicoff, vibrate, vibrateoff;
 
     boolean musicaActiva = true; // Sirve para mostrar un btn de música activada
-    boolean volumen = true; // Índice si hay música o no, se utilizará para las preferencias de ajustes
+    public static boolean volumen = true; // Índice si hay música o no, se utilizará para las preferencias de ajustes
     boolean vibracionActiva = true; // Sirve para mostrar un btn de musica desactivada
-    boolean vibracion = true; // Índica si hay vibración o no, se utilizará para las preferencias de ajustes
+    public static boolean vibracion = true; // Índica si hay vibración o no, se utilizará para las preferencias de ajustes
 
-    String nombreOpciones;
+    String nombreOpciones, strMusica, strVibracion;
 
     /**
      * Contructor que inicializa las propiedas de la clase
@@ -56,8 +55,6 @@ public class Opciones extends Escena {
 
         utils = new Utils(context);
 
-//        bitmapFondo = utils.getBitmapFromAssets("varios/bgmenunoche.png");
-//        bitmapFondo = Bitmap.createScaledBitmap(bitmapFondo, anchoPantalla, altoPantalla, false);
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
 
@@ -77,9 +74,9 @@ public class Opciones extends Escena {
         vibrateoff = Bitmap.createScaledBitmap(vibrateoff, proporcionAncho * 2, proporcionAlto * 2, false);
 
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
-        rectMusic = new Rect(proporcionAncho * 6, proporcionAlto * 3, proporcionAncho * 8, proporcionAlto * 5);
+        rectMusic = new Rect(proporcionAncho * 8, proporcionAlto * 3, proporcionAncho * 10, proporcionAlto * 5);
 //        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 3, proporcionAncho * 11, proporcionAlto * 5);
-        rectVibracion = new Rect(proporcionAncho * 6, proporcionAlto * 6, proporcionAncho * 8, proporcionAlto * 8);
+        rectVibracion = new Rect(proporcionAncho * 8, proporcionAlto * 6, proporcionAncho * 12, proporcionAlto * 8);
 //        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 6, proporcionAncho * 11, proporcionAlto * 8);
 
 
@@ -87,13 +84,10 @@ public class Opciones extends Escena {
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
 
         nombreOpciones = context.getString(R.string.opciones);
+        strMusica = context.getString(R.string.musica);
+        strVibracion = context.getString(R.string.vibracion);
 
     }
-
-//    @Override
-//    public boolean pulsa(Rect boton, MotionEvent event) {
-//        return super.pulsa(boton, event);
-//    }
 
     /**
      * @param event
@@ -109,8 +103,6 @@ public class Opciones extends Escena {
         switch (accion) {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
-
-
                 if (pulsa(rectVolverMenu, event)) {
                     return 0;
                 } else if (pulsa(rectMusic, event)) {
@@ -126,7 +118,6 @@ public class Opciones extends Escena {
                     break;
                 } else if (pulsa(rectVibracion, event)) {
                     if (vibracionActiva) {
-//                        Game.vibrator.cancel();
                         vibracionActiva = false;
                         vibracion = true;
                     } else {
@@ -134,74 +125,6 @@ public class Opciones extends Escena {
                         vibracion = false;
                     }
                 }
-
-
-//                if (pulsa(rectVolverMenu, event)) {
-//                    return 0;
-//                } else if (pulsa(rectMusic, event)) {
-//                    if (!volumen) {
-//                        mediaPlayer.start();
-//                        volumen = true;
-//                    } else {
-//                        volumen = false;
-//                        mediaPlayer.pause();
-//                    }
-//                    break;
-//                }
-
-
-//                if (pulsa(rectVolverMenu, event)) {
-//                    return 0;
-//                } else if (pulsa(rectMusic, event)) {
-//                    Opciones.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-//                    mediaPlayer.start();
-//                    volumen = true;
-//                    break;
-//                } else if (pulsa(rectMusicoff, event)) {
-//                    volumen = !volumen;
-//                    mediaPlayer.stop();
-//                    break;
-//                }
-
-
-//                else if (pulsa(rectMusic, event)) {
-//                    if (musicaActiva) {
-//                        volumen = !volumen;
-//                        mediaPlayer.stop();
-//                        musicaActiva = false;
-//                        break;
-//                    } else if (!musicaActiva) {
-//                        volumen = true;
-//                        mediaPlayer.start();
-//                        musicaActiva = true;
-//                        break;
-//                    }
-//                    break;
-
-
-//                else if (pulsa(rectMusic, event)) {
-//                    if (musicaActiva) {
-//                    volumen = !volumen;
-//                    mediaPlayer.stop();
-//                    musicaActiva = false;
-//                    break;
-//                } else if (!musicaActiva) {
-//                    volumen = true;
-//                    mediaPlayer.start();
-//                    musicaActiva = true;
-//                    break;
-//                }
-//                break;
-
-
-//        } else if (pulsa(rectVibracion, event)) {
-//            vibracion = !vibracion;
-//        }
-//                else if (pulsa(rectMusicoff, event)) {
-//                    mediaPlayer.stop();
-//                    break;
-//                }
-//        break;
         }
         return idEscena;
     }
@@ -215,33 +138,25 @@ public class Opciones extends Escena {
             super.dibujar(c);
             c.drawBitmap(bitmapFondo, 0, 0, null);
             fondoNubes.dibujar(c);
-
             c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
-//            c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
-//            c.drawBitmap(musicoff, proporcionAncho * 9, proporcionAlto * 3, null);
-//            c.drawBitmap(vibracion, proporcionAncho * 6, proporcionAlto * 6, null);
-//            c.drawBitmap(musicoff, proporcionAncho * 9, proporcionAlto * 6, null);
-//            p.setColor(Color.GREEN);
-//            c.drawRect(rectVolverMenu, p);
-//            c.drawRect(rectMusic, p);
-//            c.drawRect(rectMusicoff, p);
 
             paintTexto.setColor(Color.YELLOW); //
-            paintTexto.setTextSize(100); //
+            paintTexto.setTextSize(50); //
             paintTexto.setTypeface(faw);//
-            c.drawText(nombreOpciones + "", proporcionAncho * 4, proporcionAlto * 2, paintTexto); //
-
+//            c.drawText(nombreOpciones + "", proporcionAncho * 4, proporcionAlto * 2, paintTexto); //
+            c.drawText(nombreOpciones, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, paintTexto);
+            c.drawText(strMusica, proporcionAncho * 3 + proporcionAncho / 2, proporcionAlto * 4, paintTexto);
+            c.drawText(strVibracion, proporcionAncho * 3 + proporcionAncho / 2, proporcionAlto * 7, paintTexto);
             if (volumen) {
-                c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
+                c.drawBitmap(music, proporcionAncho * 8, proporcionAlto * 3, null);
             } else {
-                c.drawBitmap(musicoff, proporcionAncho * 6, proporcionAlto * 3, null);
+                c.drawBitmap(musicoff, proporcionAncho * 8, proporcionAlto * 3, null);
             }
             if (vibracionActiva) {
-                c.drawBitmap(vibrate, proporcionAncho * 6, proporcionAlto * 6, null);
+                c.drawBitmap(vibrate, proporcionAncho * 8, proporcionAlto * 6, null);
             } else {
-                c.drawBitmap(vibrateoff, proporcionAncho * 6, proporcionAlto * 6, null);
+                c.drawBitmap(vibrateoff, proporcionAncho * 8, proporcionAlto * 6, null);
             }
-
 
 //            if (musicaActiva) {
 //            c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
@@ -263,22 +178,27 @@ public class Opciones extends Escena {
         fondoNubes.mover();
     }
 
-    private void guardarPreferencias() {
+    public void guardarPreferencias() {
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences preferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        if (musicaActiva) {
-            editor.putBoolean("musica", true);
-        } else {
-            editor.putBoolean("musica", false);
-        }
-        if (vibracionActiva) {
-            editor.putBoolean("vibracion", true);
-        } else {
-            editor.putBoolean("vibracion", false);
-        }
-
+//        if (volumen) {
+////            editor.putBoolean("musica", true);
+//            editor.putBoolean("musica", volumen);
+//        } else {
+////            editor.putBoolean("musica", false);
+//            editor.putBoolean("musica", volumen);
+//        }
+//        if (vibracion) {
+//            editor.putBoolean("vibracion", true);
+//        } else {
+//            editor.putBoolean("vibracion", false);
+//        }
+        editor.putBoolean("musica", volumen);
+        editor.putBoolean("vibracion", vibracion);
         editor.commit();
+//        editor.apply(); // Se ejecuta en el OnPause, tanto al ejecutarse por primera vez como cúando se pausa
     }
 
     /**
@@ -286,11 +206,9 @@ public class Opciones extends Escena {
      *
      * @return
      */
-    public boolean[] cargarPreferencias() {
-        boolean prefs[] = new boolean[2];
+    public void cargarPreferencias() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
-        prefs[0] = sharedPreferences.getBoolean("musica", true);
-        prefs[1] = sharedPreferences.getBoolean("vibracion", true);
-        return prefs;
+        musicaActiva = sharedPreferences.getBoolean("musica", true);
+        vibracionActiva = sharedPreferences.getBoolean("vibracion", true);
     }
 }

@@ -12,9 +12,11 @@ import android.view.MotionEvent;
 
 public class Escena {
 
-    Bitmap bitmapFondo, bitmapNubes;
+    Bitmap bitmapFondo, bitmapNubes, volverMenu;
     Fondo fondoNubes;
     Boolean esDeDia;
+
+    Rect rectVolverMenu;
 
     Context context;
     int idEscena;

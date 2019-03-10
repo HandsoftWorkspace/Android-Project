@@ -11,6 +11,8 @@ public class Personaje {
     Bitmap frame;
     Rect rectPersonaje;
 
+    Utils utils;
+
     private int velocidad;
     private int tiempoFrame = 100;
     private int tiempoMove = 50;

@@ -35,6 +35,7 @@ public class Menu extends Escena {
     public static MediaPlayer mediaPlayer;
     public static AudioManager audioManager;
     private SoundPool efectos;
+    float luz = -1;
     private int sonidoWoosh, sonidoPajaro, sonidoExplosion;
     private int maxSonidosSimul = 10;
     private SoundPool soundPool;
@@ -56,6 +57,12 @@ public class Menu extends Escena {
      */
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
+
+        if (luz < 2) {
+            esDeDia = false;
+        } else {
+            esDeDia = true;
+        }
 
         // Fondo menú principal
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
@@ -221,6 +228,29 @@ public class Menu extends Escena {
         }
 
         return idEscena;
+    }
+
+    /**
+     * Establece el nivel de luz del dispositivo
+     *
+     * @param luz nivel de luz expresado en unidades de medida lux
+     */
+    public void setLuz(float luz) {
+        this.luz = luz;
+        if (luz < 2) {
+            esDeDia = false;
+        } else {
+            esDeDia = true;
+        }
+    }
+
+    /**
+     * Consigue el nivel de luz del dispositivo
+     *
+     * @return devuelve el nivel de luz
+     */
+    public float getLuz() {
+        return luz;
     }
 
     /**

@@ -90,8 +90,8 @@ public class Enemigo extends Personaje {
     public void dibuja(Canvas c) {
         int auxRand = 0;
         c.drawBitmap(bitmaps[0], posX, posY, null);
-        p.setColor(Color.RED);
-        c.drawRect(rectEnemigo, p);
+//        p.setColor(Color.RED);
+//        c.drawRect(rectEnemigo, p);
 
     }
 

@@ -20,12 +20,8 @@ public class Creditos extends Escena {
     int anchoPantalla, altoPantalla;
     int proporcionAncho, proporcionAlto;
 
-    Bitmap volverMenu;
-
-    Rect rectVolverMenu;
-
     // Fuentes
-    String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos;
+    String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos, strCreditos, strMusica;
 
     public Creditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -52,6 +48,8 @@ public class Creditos extends Escena {
         hechoPor = context.getString(R.string.hechopor);
         nombreJuego = context.getString(R.string.app_name);
         fuentesRecursos = context.getString(R.string.fuentes);
+        strCreditos = context.getString(R.string.creditos);
+        strMusica = context.getString(R.string.musica);
 //        fuentesRecursos;
     }
 
@@ -72,15 +70,17 @@ public class Creditos extends Escena {
 
         // Textos
 
-
 //        p.setColor(Color.WHITE);
         p.setColor(Color.YELLOW);
         p.setTextSize(50);
         p.setTypeface(faw);
-        c.drawText(nombreProyecto + ": " + proyecto + " final Android", proporcionAncho * 2, proporcionAlto * 2, p);
-        c.drawText(nombre + ": " + nombreJuego, proporcionAncho * 2, proporcionAlto * 4, p);
-        c.drawText(hechoPor + ": Daniel Vázquez Rodríguez", proporcionAncho * 2, proporcionAlto * 6, p);
-        c.drawText(fuentesRecursos + ": Icons Icons, game2Art, craftFix", proporcionAncho * 2, proporcionAlto * 8, p);
+        c.drawText(strCreditos, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, p);
+        p.setTextSize(30);
+        c.drawText(nombreProyecto + ": " + proyecto + " final Android", proporcionAncho * 2, proporcionAlto * 2 + proporcionAlto / 2, p);
+        c.drawText(nombre + ": " + nombreJuego, proporcionAncho * 2, proporcionAlto * 3 + proporcionAlto / 2, p);
+        c.drawText(hechoPor + ": Daniel Vázquez Rodríguez", proporcionAncho * 2, proporcionAlto * 4 + proporcionAlto / 2, p);
+        c.drawText(fuentesRecursos + ": Icons Icons, game2Art, craftFix", proporcionAncho * 2, proporcionAlto * 5 + proporcionAlto / 2, p);
+        c.drawText(strMusica + ": ", proporcionAncho * 2, proporcionAlto * 6 + proporcionAlto / 2, p);
 
     }
 
