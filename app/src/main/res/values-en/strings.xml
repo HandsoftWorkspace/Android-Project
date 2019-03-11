@@ -19,4 +19,14 @@
     <string name="puntos">Points</string>
     <string name="musica">Music</string>
     <string name="vibracion">Vibration</string>
+    <string name="fuente">Font</string>
+    <string name="ayudaizq">Move to left</string>
+    <string name="ayudader">Move to right</string>
+    <string name="ayudalatigo">Keep press button for launch whip</string>
+    <string name="ayudavidastotales">Total lifes</string>
+    <string name="ayudapuntos">Current points</string>
+    <string name="ayudavidas">Caliz and arcas get lifes</string>
+    <string name="ayudapierdevidas">Rock and snakes remove lifes</string>
+    <string name="ayudaronda">Current round</string>
+    <string name="latigo">Whip</string>
 </resources>

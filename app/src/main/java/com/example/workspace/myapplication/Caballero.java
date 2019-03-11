@@ -54,9 +54,15 @@ public class Caballero extends Personaje {
     }
 
     public void dibujar(Canvas c) {
-        if (posX > 0 - frame.getWidth()) {
+        while (posX > 0 - frame.getWidth()) {
             c.drawBitmap(this.frame, posX, altoPantalla - proporcionY * 5, null);
         }
+        if (posX < 0 - frame.getWidth()) {
+            posX = anchoPantalla + frame.getWidth();
+        }
+//        if (posX > 0 - frame.getWidth()) {
+//            c.drawBitmap(this.frame, posX, altoPantalla - proporcionY * 5, null);
+//        }
     }
 
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {

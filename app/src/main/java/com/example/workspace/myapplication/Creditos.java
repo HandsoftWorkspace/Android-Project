@@ -21,7 +21,7 @@ public class Creditos extends Escena {
     int proporcionAncho, proporcionAlto;
 
     // Fuentes
-    String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos, strCreditos, strMusica;
+    String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos, strCreditos, strMusica, strFuente, strCreadoPor;
 
     public Creditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -50,6 +50,8 @@ public class Creditos extends Escena {
         fuentesRecursos = context.getString(R.string.fuentes);
         strCreditos = context.getString(R.string.creditos);
         strMusica = context.getString(R.string.musica);
+        strFuente = context.getString(R.string.fuente);
+        strCreadoPor = context.getString(R.string.hechopor);
 //        fuentesRecursos;
     }
 
@@ -80,7 +82,8 @@ public class Creditos extends Escena {
         c.drawText(nombre + ": " + nombreJuego, proporcionAncho * 2, proporcionAlto * 3 + proporcionAlto / 2, p);
         c.drawText(hechoPor + ": Daniel Vázquez Rodríguez", proporcionAncho * 2, proporcionAlto * 4 + proporcionAlto / 2, p);
         c.drawText(fuentesRecursos + ": Icons Icons, game2Art, craftFix", proporcionAncho * 2, proporcionAlto * 5 + proporcionAlto / 2, p);
-        c.drawText(strMusica + ": ", proporcionAncho * 2, proporcionAlto * 6 + proporcionAlto / 2, p);
+        c.drawText(strMusica + ": SoundBible", proporcionAncho * 2, proporcionAlto * 6 + proporcionAlto / 2, p);
+        c.drawText(strFuente + " " + strCreadoPor + ": Darrell Flood", proporcionAncho * 2, proporcionAlto * 7 + proporcionAlto / 2, p);
 
     }
 

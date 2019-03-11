@@ -18,4 +18,14 @@
     <string name="puntos">Puntos</string>
     <string name="musica">Música</string>
     <string name="vibracion">Vibración</string>
+    <string name="fuente">Fuente</string>
+    <string name="ayudaizq">Mover a la izquierda</string>
+    <string name="ayudader">Mover a la derecha</string>
+    <string name="ayudalatigo">Mantener pulsado para lanzar el látigo</string>
+    <string name="ayudavidastotales">Vidas totales</string>
+    <string name="ayudapuntos">Puntos actuales</string>
+    <string name="ayudavidas">Caliz  y  arcas proporcionan vidas</string>
+    <string name="ayudapierdevidas">Rocas y serpientes quitan vidas</string>
+    <string name="ayudaronda">Ronda actual</string>
+    <string name="latigo">Látigo</string>
 </resources>

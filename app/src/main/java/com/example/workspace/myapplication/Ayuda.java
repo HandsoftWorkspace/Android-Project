@@ -15,12 +15,17 @@ public class Ayuda extends Escena {
 
     Context context;
 
-    int anchoPantalla, altoPantalla;
-    int proporcionAncho, proporcionAlto;
+    private int anchoPantalla, altoPantalla;
+    private int proporcionAncho, proporcionAlto;
+    private int contador = 0;
 
-    Bitmap fondoTutorial;
+    Bitmap fondoTutorial, btnNext, btnBack;
 
     String strAyuda;
+
+    Rect rectNext, rectBack;
+
+    String ayudaIzq, ayudaDer, ayudaLatigo, ayudaPuntos, ayudaVidasTotales, ayudaRondaActual, ayudaVidas, ayudaPierdeVidas, strLatigo;
 
     public Ayuda(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -42,10 +47,28 @@ public class Ayuda extends Escena {
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
 
+        btnNext = utils.getBitmapFromAssets("varios/next.png");
+        btnNext = Bitmap.createScaledBitmap(btnNext, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        btnBack = utils.getBitmapFromAssets("varios/back.png");
+        btnBack = Bitmap.createScaledBitmap(btnBack, proporcionAncho * 2, proporcionAlto * 2, false);
         // Rects
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
-
+        rectNext = new Rect(anchoPantalla - proporcionAncho * 2, 0, anchoPantalla, proporcionAlto * 2);
+        rectBack = new Rect(proporcionAncho * 13, 0, proporcionAncho * 15, proporcionAlto * 2);
         strAyuda = context.getString(R.string.ayuda);
+
+//        ayudaIzq, ayudaDer, ayudaLatigo, ayudaVidasTotales, ayudaRondaActual, ayudaVidas, ayudaPierdeVidas;
+        ayudaIzq = context.getString(R.string.ayudaizq);
+        ayudaDer = context.getString(R.string.ayudader);
+        ayudaLatigo = context.getString(R.string.ayudalatigo);
+        ayudaVidasTotales = context.getString(R.string.ayudavidastotales);
+        ayudaRondaActual = context.getString(R.string.ayudaronda);
+        ayudaVidas = context.getString(R.string.ayudavidas);
+        ayudaPierdeVidas = context.getString(R.string.ayudapierdevidas);
+        ayudaPuntos = context.getString(R.string.ayudapuntos);
+        strLatigo = context.getString(R.string.latigo);
+
     }
 
     /**
@@ -64,14 +87,37 @@ public class Ayuda extends Escena {
             super.dibujar(c);
             c.drawBitmap(bitmapFondo, 0, 0, null);
             fondoNubes.dibujar(c);
-            c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
             c.drawBitmap(fondoTutorial, proporcionAncho * 2, proporcionAlto * 2, null);
+            c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
+            c.drawBitmap(btnNext, anchoPantalla - proporcionAncho * 2, proporcionAlto * 0, null);
+            c.drawBitmap(btnBack, proporcionAncho * 13, 0, null);
 
             paintTexto.setColor(Color.YELLOW); //
-            paintTexto.setTextSize(50); //
             paintTexto.setTypeface(faw);//
-//            c.drawText(nombreOpciones + "", proporcionAncho * 4, proporcionAlto * 2, paintTexto); //
-            c.drawText(strAyuda, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, paintTexto);
+
+            paintTexto.setTextSize(50); //
+            c.drawText(strAyuda, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto + proporcionAlto / 2, paintTexto);
+            paintTexto.setTextSize(30); //
+            if (contador == 0) {
+                c.drawText(ayudaVidasTotales, proporcionAncho * 2, proporcionAlto * 3, paintTexto);
+            } else if (contador == 1) {
+                c.drawText(ayudaIzq, proporcionAncho * 3 + proporcionAncho / 2, proporcionAlto * 7, paintTexto);
+            } else if (contador == 2) {
+                c.drawText(ayudaDer, proporcionAncho * 12, proporcionAlto * 7, paintTexto);
+            } else if (contador == 3) {
+                c.drawText(ayudaPuntos, proporcionAncho * 8, proporcionAlto * 3, paintTexto);
+            } else if (contador == 4) {
+                c.drawText(ayudaRondaActual, proporcionAncho * 12, proporcionAlto * 3, paintTexto);
+            } else if (contador == 5) {
+                c.drawText(ayudaLatigo, proporcionAncho * 8 + proporcionAncho / 2, altoPantalla / 2 + proporcionAlto, paintTexto);
+            } else if (contador == 6) {
+                c.drawText(strLatigo, anchoPantalla / 2, proporcionAlto * 8, paintTexto);
+            } else if (contador == 7) {
+                c.drawText(ayudaVidas, proporcionAncho * 5 + proporcionAncho / 2, proporcionAlto * 6, paintTexto);
+            } else if (contador == 8) {
+                c.drawText(ayudaPierdeVidas, proporcionAncho * 8, proporcionAlto * 6, paintTexto);
+            }
+
 
         } catch (NullPointerException e) {
             Log.d("Error", "Dibujado canvas Opciones");
@@ -94,6 +140,17 @@ public class Ayuda extends Escena {
             case MotionEvent.ACTION_POINTER_UP:
                 if (pulsa(rectVolverMenu, event)) {
                     return 0;
+                }
+                if (pulsa(rectNext, event)) {
+                    contador++;
+                    if (contador == 8) {
+                        contador = 0;
+                    }
+                }
+                if (pulsa(rectBack, event)) {
+                    if (contador != 0) {
+                        contador--;
+                    }
                 }
         }
         return idEscena;

@@ -74,7 +74,7 @@ public class Game extends Escena implements Runnable {
         this.proporcionAlto = altoPantalla / 9;
 
         drYones = new DrYones(context, anchoPantalla / 2, altoPantalla, anchoPantalla, altoPantalla, 10); // le estas pone
-        caballero = new Caballero(context, anchoPantalla, altoPantalla / 2, 4, anchoPantalla, altoPantalla);
+//        caballero = new Caballero(context, anchoPantalla, altoPantalla - proporcionAlto * 3, 4, anchoPantalla, altoPantalla);
         latigo = new Latigo(context, drYones.getPosX(), drYones.getPosY() - drYones.getRun()[0].getHeight() / 2, anchoPantalla, altoPantalla);
 
         vibrator = (Vibrator) getContext().getSystemService(context.VIBRATOR_SERVICE);
@@ -179,7 +179,7 @@ public class Game extends Escena implements Runnable {
         }
 
         // Caballero
-        caballero.mover();
+//        caballero.mover();
 //        if (latigo.rectLatigo.intersect(caballero.rectPersonaje)) {
 //            caballeroHerido = true;
 //        } else {
@@ -249,27 +249,6 @@ public class Game extends Escena implements Runnable {
 //                fondoNubes.dibujar(c);
                 c.drawBitmap(heart, proporcionAncho / 2, 0, null);
 
-//                switch (vidas) {
-//                    case 0:
-//                        c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
-//                        break;
-//                    case 1:
-//                        c.drawBitmap(listaNumeros[1], proporcionAncho, 0, null);
-//                        break;
-//                    case 2:
-//                        c.drawBitmap(listaNumeros[2], proporcionAncho, 0, null);
-//                        break;
-//                    case 3:
-//                        c.drawBitmap(listaNumeros[3], proporcionAncho, 0, null);
-//                        break;
-//                    case 4:
-//                        c.drawBitmap(listaNumeros[4], proporcionAncho, 0, null);
-//                        break;
-//                    case 5:
-//                        c.drawBitmap(listaNumeros[5], proporcionAncho, 0, null);
-//                        break;
-//                }
-
                 p.setColor(Color.GREEN);
 //                c.drawRect(rectBtnA, p);
 //                c.drawRect(rectBtnB, p);
@@ -287,7 +266,7 @@ public class Game extends Escena implements Runnable {
                 drYones.cambiaFrame();
                 drYones.dibuja(c);
 //                if (!caballeroHerido) {
-                caballero.dibujar(c);
+//                caballero.dibujar(c);
 //                }
 
                 for (Enemigo e : listaEnemigos) {
