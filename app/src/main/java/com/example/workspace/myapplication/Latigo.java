@@ -10,17 +10,16 @@ import android.util.Log;
 
 public class Latigo {
 
-    Context context;
+    Context context; // contexto de la aplicación
     private Utils utils;
-    private Bitmap latigo, latigoEspejo;
-    private int posX;
-    private int posY;
-    private int velocidadLatigo = 13;
-    private int anchoPantalla, altoPantalla;
-    int proporcionAncho, proporcionAlto;
-    public Rect rectLatigo;
-
-    Paint paint = new Paint();
+    private Bitmap latigo;
+    private int posX; // posición eje X del personaje
+    private int posY; // posición eje Y del personaje
+    private int velocidadLatigo = 13; // velocidad de movimiento del látigo
+    private int anchoPantalla, altoPantalla; // tamaños de pantalla del dispositivo
+    int proporcionAncho, proporcionAlto; // proporciones para el dibujado adaptativo
+    public Rect rectLatigo; // hitbox del látigo
+    Paint paint;
 
     /**
      * Contructor que inicializa las propiedas de la clase 'Latigo'
@@ -37,15 +36,11 @@ public class Latigo {
         Log.i("latigo", "posy " + posY);
         this.altoPantalla = altoPantalla;
         utils = new Utils(context);
-
         proporcionAncho = anchoPantalla / 9;
         proporcionAlto = altoPantalla / 18;
-
         latigo = utils.getBitmapFromAssets("varios/latigo.png");
         latigo = Bitmap.createScaledBitmap(latigo, proporcionAncho / 2, proporcionAlto / 2, false);
-        /*javi */
         paint = new Paint();
-        /*javi */
         paint.setColor(Color.RED);
     }
 
@@ -56,7 +51,6 @@ public class Latigo {
      */
     public void dibuja(Canvas c) {
         c.drawBitmap(latigo, posX, posY, null);
-//        c.drawRect(rectLatigo, paint);
     }
 
     /**
@@ -72,7 +66,7 @@ public class Latigo {
     }
 
     /**
-     *
+     * Comprueba mediante booleanas, si se está moviendo o parado, además de la dirección en la que se muestra
      */
     public void setRectangulo() {
         paint.setColor(Color.GREEN);
@@ -83,11 +77,8 @@ public class Latigo {
         return posX;
     }
 
-    /*javi */
     public void setPosX(int posX) {
-        /*javi */
         this.posX = posX;
-        /*javi */
     }
 
     public int getY() {

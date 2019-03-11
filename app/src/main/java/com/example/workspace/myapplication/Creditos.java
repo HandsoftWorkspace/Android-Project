@@ -20,10 +20,11 @@ public class Creditos extends Escena {
     int anchoPantalla, altoPantalla; // Alto y ancho de la pantalla del dispositivo
     int proporcionAncho, proporcionAlto; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
 
-    // Fuentes
+    // Fuentes que se utilizan para gestionar diferentes idiomas en la aplicación
     String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos, strCreditos, strMusica, strFuente, strCreadoPor;
 
     /**
+     * Método contructor que inicializa las propiedades de la clase crétidos
      *
      * @param context
      * @param idEscena
@@ -33,22 +34,21 @@ public class Creditos extends Escena {
     public Creditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.context = context;
+        // tamaños de pantalla
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
-
+        // proporciones de pantalla
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
-
         // Bitmaps
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
-        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
-
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6); // objeto de tipo 'Fondo' que será un scroll
+        // btn para volver al menú de la aplicación
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
-
         // Rects
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
-
+        // string para idiomas
         nombreProyecto = context.getString(R.string.projectname);
         proyecto = context.getString(R.string.proyecto);
         nombre = context.getString(R.string.name);
@@ -60,31 +60,35 @@ public class Creditos extends Escena {
         strFuente = context.getString(R.string.fuente);
         strCreadoPor = context.getString(R.string.hechopor);
 //        fuentesRecursos;
+        // gestión de los ajustes de pintado de texto
+        p.setColor(Color.YELLOW);
+        p.setTypeface(faw);
     }
 
     /**
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
-        fondoNubes.mover();
+        fondoNubes.mover(); // mueve el scroll
     }
 
+    /**
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     *
+     * @param c canvas de la aplicación
+     */
     @Override
     public void dibujar(Canvas c) {
         super.dibujar(c);
         // Bitmaps
-        c.drawBitmap(bitmapFondo, 0, 0, null);
-        fondoNubes.dibujar(c);
-        c.drawBitmap(volverMenu, 0, 0, null);
-
+        c.drawBitmap(bitmapFondo, 0, 0, null); // fondo
+        fondoNubes.dibujar(c); // objeto tipo 'Fondo'
+        c.drawBitmap(volverMenu, 0, 0, null); // botón para volver al menú
         // Textos
-
-//        p.setColor(Color.WHITE);
-        p.setColor(Color.YELLOW);
         p.setTextSize(50);
-        p.setTypeface(faw);
         c.drawText(strCreditos, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, p);
         p.setTextSize(30);
+        // textos
         c.drawText(nombreProyecto + ": " + proyecto + " final Android", proporcionAncho * 2, proporcionAlto * 2 + proporcionAlto / 2, p);
         c.drawText(nombre + ": " + nombreJuego, proporcionAncho * 2, proporcionAlto * 3 + proporcionAlto / 2, p);
         c.drawText(hechoPor + ": Daniel Vázquez Rodríguez", proporcionAncho * 2, proporcionAlto * 4 + proporcionAlto / 2, p);
@@ -94,6 +98,12 @@ public class Creditos extends Escena {
 
     }
 
+    /**
+     * Controla y gestiona las pulsaciones y gestos en la pantalla
+     *
+     * @param event Tipo de evento táctil que sucede
+     * @return Devuelve un entero que índice el número de escena
+     */
     @Override
     public int onTouchEvent(MotionEvent event) {
 //        return super.onTouchEvent(event);

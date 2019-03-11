@@ -14,19 +14,25 @@ import android.view.MotionEvent;
 
 public class Escena {
 
-    Bitmap bitmapFondo, bitmapNubes, volverMenu;
-    Fondo fondoNubes;
-    Boolean esDeDia;
+    Bitmap bitmapFondo, volverMenu; // fondo y botones
+    Fondo fondoNubes; // objeto 'fondo' que hará efecto de scroll
+    Boolean esDeDia; // booleana que índice si es día o de noche, para escoger un fondo u otro
+    Rect rectVolverMenu; // sirve para detectar la pulsaciones para volver al menú
+    Context context; // contexto de la aplicación
+    int idEscena; // número que identifica a las distintas escenas escenas
+    static int anchoPantalla, altoPantalla; // tamaños de pantalla del dispositivo
+    public Paint p, pTexto, paintTexto; // pinceles para gestionar los distintos ajustes a la hora de pintar, recs, textos, bitmaps...
+    Typeface faw; // tipología de fuente para los textos
+    Utils utils; // objeto de la clase 'utils'
 
-    Rect rectVolverMenu;
-
-    Context context;
-    int idEscena;
-    static int anchoPantalla, altoPantalla;
-    public Paint p, pTexto, paintTexto;
-    Typeface faw;
-    Utils utils;
-
+    /**
+     * Método contructor que inicializa las propiedades de la clase 'escena'
+     *
+     * @param context
+     * @param idEscena
+     * @param anchoPantalla
+     * @param altoPantalla
+     */
     public Escena(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         this.context = context;
         this.idEscena = idEscena;
@@ -40,12 +46,18 @@ public class Escena {
         paintTexto = new Paint();
     }
 
-    // Actualizamos la física de los elementos en pantalla
+    /**
+     * Actualizamos la física de los elementos en pantalla
+     */
     public void actualizarFisica() {
 //        fondoNubes.mover();
     }
 
-    // Rutina de dibujo en el lienzo. Se le llamará desde el hilo
+    /**
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     *
+     * @param c canvas de la aplicación
+     */
     public void dibujar(Canvas c) {
         try {
             //if(idEscena!=0 &&)
@@ -61,11 +73,12 @@ public class Escena {
         return false;
     }
 
-//    public boolean pulsa(int x, int y, MotionEvent event){
-//
-//        return false;
-//    }
-
+    /**
+     * Controla y gestiona las pulsaciones y gestos en la pantalla
+     *
+     * @param event Tipo de evento táctil que sucede
+     * @return Devuelve un entero que índice el número de escena
+     */
     public int onTouchEvent(MotionEvent event) {
         //synchronized (surfaceHolder) {
         int pointerIndex = event.getActionIndex();        //Obtenemos el índice de la acción

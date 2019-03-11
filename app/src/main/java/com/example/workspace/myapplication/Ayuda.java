@@ -19,14 +19,21 @@ public class Ayuda extends Escena {
     private int proporcionAncho, proporcionAlto;
     private int contador = 0;
 
-    Bitmap fondoTutorial, btnNext, btnBack;
+    Bitmap fondoTutorial, btnNext, btnBack; // fondo y botones
 
-    String strAyuda;
+    Rect rectNext, rectBack; // rect para los respectivos botones
 
-    Rect rectNext, rectBack;
 
-    String ayudaIzq, ayudaDer, ayudaLatigo, ayudaPuntos, ayudaVidasTotales, ayudaRondaActual, ayudaVidas, ayudaPierdeVidas, strLatigo;
+    String ayudaIzq, ayudaDer, ayudaLatigo, ayudaPuntos, ayudaVidasTotales, ayudaRondaActual, ayudaVidas, ayudaPierdeVidas, strLatigo, strAyuda; // direcursos de texto para distintos idiomas
 
+    /**
+     * Método contructor que inicializa las propiedades de la clase 'ayuda'
+     *
+     * @param context
+     * @param idEscena
+     * @param anchoPantalla
+     * @param altoPantalla
+     */
     public Ayuda(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
@@ -79,7 +86,9 @@ public class Ayuda extends Escena {
     }
 
     /**
-     * @param c
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     *
+     * @param c canvas de la aplicación
      */
     @Override
     public void dibujar(Canvas c) {
@@ -125,8 +134,10 @@ public class Ayuda extends Escena {
     }
 
     /**
-     * @param event
-     * @return
+     * Controla y gestiona las pulsaciones y gestos en la pantalla
+     *
+     * @param event Tipo de evento táctil que sucede
+     * @return Devuelve un entero que índice el número de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {

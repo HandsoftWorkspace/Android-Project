@@ -23,39 +23,20 @@ import java.util.ArrayList;
 //public class Menu extends Escena implements SensorEventListener {
 public class Menu extends Escena {
 
-    Rect rectJuego, rectOpciones, rectLogros, rectAyuda, rectCreditos, rectCierre, rectBtnOk, rectBtnCancel;
-
-    Bitmap juego, opciones, creditos, leader, ayuda, cierre, btnOk, btnCancel;
-
-    Bitmap down, up, downGrande, upGrande;
-
-    private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
-
-    private SensorManager sensorManager;
-    private Sensor sensor;
-
-    private int proporcionAlto, proporcionAncho;
-    private Paint paint = new Paint();
-    private Paint paintTexto = new Paint();
-    Typeface faw;
-
-    public static MediaPlayer mediaPlayer;
-    public static AudioManager audioManager;
-    private SoundPool efectos;
-    float luz = -1;
-    private int sonidoWoosh, sonidoPajaro, sonidoExplosion;
-    private int maxSonidosSimul = 10;
-    private SoundPool soundPool;
-
+    Rect rectJuego, rectOpciones, rectLogros, rectAyuda, rectCreditos, rectCierre; // rects asociados a los botones
+    Bitmap juego, opciones, creditos, leader, ayuda, cierre, down, up, downGrande, upGrande; // bitmaps y recursos gráficos
+    private int proporcionAlto, proporcionAncho; // proporciones para el dibujado en la clase menú
+    private Paint paint = new Paint(); // Pincel para la clase menú
+    Typeface faw; // tipología de fuente
+    public static MediaPlayer mediaPlayer; // gestión de música
+    public static AudioManager audioManager; // gestión de música
+    private SoundPool efectos; // efectos cortos de audio
+    float luz = -1; // muestra la cantidad de luz expresada en lux (lúmenes)
     public int volumen; // Volumen del menú
-
-    String nombreJuego;
-    String nombreVersion;
-
-    // Constructor de la escena MENÚ
+    String nombreJuego, nombreVersion, strOpciones, strRecords, strAyuda, strCreditos; // recursos de texto para distintos idiomas
 
     /**
-     * Contructor que inicializa las propiedas de la clase
+     * Contructor que inicializa las propiedas de la clase menú
      *
      * @param context       contexto de la applicación
      * @param idEscena      número asociado a una escena de la aplicación
@@ -64,20 +45,13 @@ public class Menu extends Escena {
      */
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
-
-        // Sensor luz
-//        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-//        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-
         // Fondo menú principal
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
-
         // Proporciones pantalla, se divide el alto y ancho de la pantalla del dispositivo, para conseguir asi nuestras proporciones
         // para que se adapten asi a distintos dispositivos
         proporcionAncho = anchoPantalla / 18;
         proporcionAlto = altoPantalla / 9;
-
         // Se dibujan unos rectangulos, que será donde posiciones nuestros iconos de menú,
         // para asi poder detectar la pulsación de cada uno de ellos
         rectJuego = new Rect(proporcionAncho * 8, proporcionAlto * 3, proporcionAncho * 10, proporcionAlto * 5);
@@ -86,39 +60,28 @@ public class Menu extends Escena {
         rectCreditos = new Rect(0, proporcionAlto * 6, proporcionAncho * 2, proporcionAlto * 8);
         rectAyuda = new Rect(proporcionAncho * 16, 6, proporcionAncho * 18, proporcionAlto * 8);
         rectCierre = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
-
         // Bitmaps de iconos del menú, se asocia la imagen PNG y se le da el tamaño, en este caso usaremos proporciones
         // Iconos
         juego = BitmapFactory.decodeResource(context.getResources(), R.drawable.play);
         juego = Bitmap.createScaledBitmap(juego, proporcionAncho * 2, proporcionAlto * 2, false);
-
         opciones = BitmapFactory.decodeResource(context.getResources(), R.drawable.options);
         opciones = Bitmap.createScaledBitmap(opciones, proporcionAncho * 2, proporcionAlto * 2, false);
-
         ayuda = BitmapFactory.decodeResource(context.getResources(), R.drawable.help2);
         ayuda = Bitmap.createScaledBitmap(ayuda, proporcionAncho * 2, proporcionAlto * 2, false);
-
         leader = BitmapFactory.decodeResource(context.getResources(), R.drawable.logros);
         leader = Bitmap.createScaledBitmap(leader, proporcionAncho * 2, proporcionAlto * 2, false);
-
         creditos = BitmapFactory.decodeResource(context.getResources(), R.drawable.info);
         creditos = Bitmap.createScaledBitmap(creditos, proporcionAncho * 2, proporcionAlto * 2, false);
-
         down = BitmapFactory.decodeResource(context.getResources(), R.drawable.down);
         down = Bitmap.createScaledBitmap(down, proporcionAncho * 6, proporcionAlto * 1, false);
-
         up = BitmapFactory.decodeResource(context.getResources(), R.drawable.up);
         up = Bitmap.createScaledBitmap(up, proporcionAncho * 6, proporcionAlto * 1, false);
-
         downGrande = BitmapFactory.decodeResource(context.getResources(), R.drawable.down);
         downGrande = Bitmap.createScaledBitmap(downGrande, proporcionAncho * 8, proporcionAlto * 1, false);
-
         upGrande = BitmapFactory.decodeResource(context.getResources(), R.drawable.up);
         upGrande = Bitmap.createScaledBitmap(upGrande, proporcionAncho * 8, proporcionAlto * 1, false);
-
         cierre = BitmapFactory.decodeResource(context.getResources(), R.drawable.cancel);
         cierre = Bitmap.createScaledBitmap(cierre, proporcionAncho * 2, proporcionAlto * 2, false);
-
         // Controles de audio y musica
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mediaPlayer = MediaPlayer.create(context, R.raw.laciudadperdida);
@@ -127,15 +90,17 @@ public class Menu extends Escena {
         mediaPlayer.start(); // Se arranca la secuencia musical
         mediaPlayer.seekTo(2000); // Se adelanta para no causar un vacio
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
-
+        // ajustes de texto y recursos de texto para distintos idiomas
         paint.setColor(Color.TRANSPARENT);
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        paintTexto.setColor(Color.YELLOW);
+        paintTexto.setTypeface(faw);
         nombreJuego = context.getString(R.string.app_name);
         nombreVersion = context.getString(R.string.nombreversion);
-
-//        if (sensor != null) {
-//            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-//        }
+        strOpciones = context.getString(R.string.opciones);
+        strRecords = context.getString(R.string.logros);
+        strAyuda = context.getString(R.string.ayuda);
+        strCreditos = context.getString(R.string.creditos);
     }
 
     /**
@@ -152,41 +117,30 @@ public class Menu extends Escena {
      */
     public void dibujar(Canvas c) {
         try {
-
-            //c.drawBitmap(fondo, 0, 0, brocha);
+            // fondo escena
             c.drawBitmap(bitmapFondo, 0, 0, null);
-//            c.drawBitmap(nubes, 0, 0, null);
+            // scroll
             fondoNubes.dibujar(c);
-
-
+            // bitmaps
             c.drawBitmap(down, proporcionAncho * 6, proporcionAlto * 1, null);
-//            c.drawText("DR YONES", proporcionAlto * 7, proporcionAlto * 1, p);
             c.drawBitmap(up, proporcionAncho * 6, proporcionAlto * 2, null);
             c.drawBitmap(downGrande, proporcionAncho * 5, proporcionAlto * 5, null);
             c.drawBitmap(upGrande, proporcionAncho * 5, proporcionAlto * 6, null);
-
+            // bitsmaps con sus respectivos rects
             c.drawRect(rectJuego, paint);
             c.drawBitmap(juego, proporcionAncho * 8, proporcionAlto * 3, null);
-
             c.drawRect(rectOpciones, paint);
             c.drawBitmap(opciones, proporcionAncho * 3, proporcionAlto * 3, null);
-
             c.drawRect(rectLogros, paint);
             c.drawBitmap(leader, proporcionAncho * 13, proporcionAlto * 3, null);
-
             c.drawRect(rectAyuda, paint);
             c.drawBitmap(ayuda, proporcionAncho * 16, proporcionAlto * 6, null);
-
             c.drawRect(rectCreditos, paint);
             c.drawBitmap(creditos, proporcionAncho * 0, proporcionAlto * 6, null);
-
             c.drawRect(rectCierre, paint);
             c.drawBitmap(cierre, proporcionAncho * 0, proporcionAlto * 0, null);
-//            paint.setColor(Color.GREEN);
-
-            paintTexto.setColor(Color.YELLOW);
+            // ajuste de texto
             paintTexto.setTextSize(80);
-            paintTexto.setTypeface(faw);
             c.drawText(nombreJuego, proporcionAncho * 6 + proporcionAncho / 3, proporcionAlto * 2 + proporcionAlto / 3, paintTexto);
             paintTexto.setTextSize(65);
             c.drawText(nombreVersion, proporcionAncho * 5 + proporcionAncho / 3, proporcionAlto * 6 + proporcionAlto / 3, paintTexto);
@@ -218,7 +172,7 @@ public class Menu extends Escena {
                     mediaPlayer.stop();
                     return 1;
                 } else if (pulsa(rectOpciones, event)) {
-                    // efecto pulsación
+                    // efecto pulsación TODO
                     return 2;
                 } else if (pulsa(rectLogros, event)) {
                     return 3;
@@ -227,7 +181,7 @@ public class Menu extends Escena {
                 } else if (pulsa(rectCreditos, event)) {
                     return 5;
                 } else if (pulsa(rectCierre, event)) {
-                    return 6;  // TODO al crear el constructor no se ve nada en pantalla
+                    return 6;
                 }
                 break;
             case MotionEvent.ACTION_MOVE: // Se mueve alguno de los dedos
@@ -235,10 +189,8 @@ public class Menu extends Escena {
             default:
                 Log.i("Otra acción", "Acción no definida: " + accion);
         }
-
         return idEscena;
     }
-
 
     /**
      * Método que para la música
@@ -275,26 +227,6 @@ public class Menu extends Escena {
         } else {
             esDeDia = true;
         }
-        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia); // cada vez que asigna una valor de lúmenes, se comprueba que fondo escoger entre dia/noche
     }
-
-//    /**
-//     * Detecta cúando se produce un cambio de valor en el sensor de luz
-//     *
-//     * @param event devuelve los eventos del sensor de luz
-//     */
-//    @Override
-//    public void onSensorChanged(SensorEvent event) {
-//        luz = event.values[0];
-//        setLuz(luz);
-//        Log.i("gggg", "" + luz);
-//        if (sensor == null) {
-//            luz = (float) Math.random() * 4;
-//        }
-//    }
-//
-//    @Override
-//    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-//
-//    }
 }

@@ -7,11 +7,10 @@ import android.graphics.PointF;
 
 public class Fondo {
 
-    public PointF posicion, posicion2;
-    public Bitmap imagen;
-    Paint p;
-
+    public PointF posicion, posicion2; //posiciones de la imagen bitmap
+    public Bitmap imagen; // imagen a la que se le asocia un bitmap
     int velocidad = 0;
+
     /**
      * @param imagen
      * @param x
@@ -33,7 +32,7 @@ public class Fondo {
     }
 
     /**
-     *
+     * Mueve en el eje X la imagen, la reinicia cuando traspasa los límites de la pantalla, creando un efecto de scroll
      */
     public void mover() {
         posicion.x -= velocidad;
@@ -47,6 +46,8 @@ public class Fondo {
     }
 
     /**
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     *
      * @param c
      */
     public void dibujar(Canvas c) {

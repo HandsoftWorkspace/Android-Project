@@ -89,6 +89,9 @@ public class Caliz extends Personaje {
         return null;
     }
 
+    /**
+     * Actualiza física de los personajes y objetos en pantalla
+     */
     public void actualizarFisica() {
     }
 
@@ -98,16 +101,23 @@ public class Caliz extends Personaje {
      * @param c canvas asociado a la aplicación
      */
     public void dibuja(Canvas c) {
-        int auxRand = 0;
         c.drawBitmap(bitmaps[0], posX, posY, null);
-//        p.setColor(Color.GREEN);
-//        c.drawRect(rectCaliz, p);
     }
 
+    /**
+     * Índica si el enemigo ha colisionado
+     *
+     * @return devuelve el valor de la booleana
+     */
     public boolean isColision() {
         return colision;
     }
 
+    /**
+     * Hace un set a la booleana colision
+     *
+     * @param colision muestra el valor de si el enemigo está en colisión o no
+     */
     public void setColision(boolean colision) {
         this.colision = colision;
     }

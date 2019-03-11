@@ -51,12 +51,13 @@ public class Game extends Escena implements Runnable {
     private String strVidas = "";
     private String strPuntuacion = "";
     private String strPuntos = "";
-    String strRonda;
+    private String strRonda;
 
     public static MediaPlayer mediaPlayer;
     public static AudioManager audioManager;
     public static Vibrator vibrator;
 
+    // Personajes
     DrYones drYones;
     Caballero caballero;
     Enemigo enemigo;
@@ -153,9 +154,9 @@ public class Game extends Escena implements Runnable {
 
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
 
+        // recursos de texto
         strPuntos = context.getString(R.string.puntos);
         strRonda = context.getString(R.string.ronda);
-
         // Controles de audio y musica
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mediaPlayer = MediaPlayer.create(context, R.raw.ambienteselva);

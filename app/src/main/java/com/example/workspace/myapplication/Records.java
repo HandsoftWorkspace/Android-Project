@@ -16,15 +16,14 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 public class Records extends Escena {
-    int proporcionAncho, proporcionAlto;
-    private Bitmap one, two, three, table, star1, star2, star3, btnBorrado;
-    private static ArrayList<Integer> listado = new ArrayList<>();
-    private String[] strPuntos;
-    private String strRecords;
-
-    Rect rectBorrado;
+    int proporcionAncho, proporcionAlto; // proporciones que se utilizarán para el pintado en diferentes tamaños de pantalla
+    private Bitmap one, two, three, table, star1, star2, star3, btnBorrado; // dinstintos bitmaps de la clae records
+    private static ArrayList<Integer> listado = new ArrayList<>(); // colección donde se guardan las puntuaciones obtenida de la base de datos 'puntuaciones'
+    private String strRecords; // recurso string para distintos idiomas
+    Rect rectBorrado; // rect para detecar un evento en una zona de pantalla
 
     /**
+     * Método contructor que inicializa las propiedades de la clase crétidos
      *
      * @param context
      * @param idEscena
@@ -33,48 +32,50 @@ public class Records extends Escena {
      */
     public Records(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
+        // proporciones de pantalla
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
-
+        // fondo escena records
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        // objetos de tipo fondo, hace efecto scroll
         fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
-
+        // bitmaps de botones
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
-
         btnBorrado = utils.getBitmapFromAssets("varios/borrado.png");
         btnBorrado = Bitmap.createScaledBitmap(btnBorrado, proporcionAncho * 2, proporcionAlto * 2, false);
-
+        // bitmaps para interfaz de usuario
         one = BitmapFactory.decodeResource(context.getResources(), R.drawable.one);
         one = Bitmap.createScaledBitmap(one, proporcionAncho, proporcionAlto, false);
-
         two = BitmapFactory.decodeResource(context.getResources(), R.drawable.two);
         two = Bitmap.createScaledBitmap(two, proporcionAncho, proporcionAlto, false);
-
         three = BitmapFactory.decodeResource(context.getResources(), R.drawable.three);
         three = Bitmap.createScaledBitmap(three, proporcionAncho, proporcionAlto, false);
-
         table = BitmapFactory.decodeResource(context.getResources(), R.drawable.table);
         table = Bitmap.createScaledBitmap(table, proporcionAncho * 4, proporcionAlto, false);
-
         star1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.star1);
         star1 = Bitmap.createScaledBitmap(star1, proporcionAncho, proporcionAlto, false);
-
         star2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.star2);
         star2 = Bitmap.createScaledBitmap(star2, proporcionAncho * 2, proporcionAlto, false);
-
         star3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.star3);
         star3 = Bitmap.createScaledBitmap(star3, proporcionAncho * 3, proporcionAlto, false);
-
         p.setColor(Color.TRANSPARENT);
+        // rect de botones
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
         rectBorrado = new Rect(anchoPantalla - proporcionAncho * 2, 0, anchoPantalla, proporcionAlto * 2);
-
+        // tipo de fuentes
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        // recurso para multiples idiomas
         strRecords = context.getString(R.string.logros);
 
     }
 
+    /**
+     * Controla y gestiona las pulsaciones y gestos en la pantalla
+     *
+     * @param event Tipo de evento táctil que sucede
+     * @return Devuelve un entero que índice el número de escena
+     */
     @Override
     public int onTouchEvent(MotionEvent event) {
         int pointerIndex = event.getActionIndex();        //Obtenemos el índice de la acción
@@ -101,6 +102,11 @@ public class Records extends Escena {
         fondoNubes.mover();
     }
 
+    /**
+     * Se encargará de pintar dentro de la clase records
+     *
+     * @param c canvas de la aplicación
+     */
     @Override
     public void dibujar(Canvas c) {
         super.dibujar(c);
@@ -144,6 +150,9 @@ public class Records extends Escena {
 
     }
 
+    /**
+     * Carga las puntuaciones obtenidas en la base de datos Sqlite, las almacena en una colección para su posterior gestión
+     */
     public void cargarPuntuaciones() {
         BaseDatos bd = null;
         SQLiteDatabase bdSqlite = null;
@@ -151,20 +160,13 @@ public class Records extends Escena {
             bd = new BaseDatos(context, "puntuaciones", null, 1);
             bdSqlite = bd.getReadableDatabase();
             String query = "SELECT puntos from puntuaciones order by puntos DESC LIMIT 3";
-            Log.d("puntps", "kkk " + query);
             Cursor cursor = bdSqlite.rawQuery(query, null);
-            Log.d("puntps", "qqqq " + query + " " + cursor.moveToFirst());
-
             if (cursor.moveToFirst()) {
                 int puntos;
                 do {
-                    Log.d("puntps", "fff " + query);
                     puntos = cursor.getInt(0);
-                    Log.d("puntps", "" + puntos);
                     listado.add(puntos);
-                    Log.d("puntps", "lis 1 " + listado.size());
                 } while (cursor.moveToNext());
-                Log.d("puntps", "lis 2 " + listado.size());
             }
         } catch (Exception ee) {
             ee.printStackTrace();

@@ -15,37 +15,36 @@ import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class ConfirmacionCierre extends Escena {
 
-    Bitmap btnOk, btnCancel;
-
-    Rect rectBtnOk, rectBtnCancel;
-
-    int proporcionAncho, proporcionAlto;
-
-    String strCierra;
-
-    int idUltimaEscena;
+    Bitmap btnOk, btnCancel; // botones
+    Rect rectBtnOk, rectBtnCancel; // recs para detección de pulsaciones
+    int proporcionAncho, proporcionAlto; // proporciones para el dibujado de pantalla
+    String strCierra; // recurso de texto para usar distintos idiomas
+    int idUltimaEscena; // entero que nos dará id que índica la última escena
 
     public ConfirmacionCierre(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
-        this.idUltimaEscena = idEscena;
+        this.idUltimaEscena = idEscena; // se asigna a ultimas escena el id de la escena actual
+        // proporciones de pantalla para adaptar los recursos a distintos dispositivos
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
-
+        // fondo escena
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        // objeto fondo para el scroll
         fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
-
+        // botones
         btnOk = utils.getBitmapFromAssets("varios/ok.png");
         btnOk = btnOk = Bitmap.createScaledBitmap(btnOk, proporcionAncho * 2, proporcionAlto * 2, false);
-
         btnCancel = utils.getBitmapFromAssets("varios/cancel.png");
         btnCancel = Bitmap.createScaledBitmap(btnCancel, proporcionAncho * 2, proporcionAlto * 2, false);
-
+        // rect para detección de pulsaciones de los botones
         rectBtnOk = new Rect(proporcionAncho * 5, proporcionAlto * 3, proporcionAncho * 7, proporcionAlto * 5);
         rectBtnCancel = new Rect(proporcionAncho * 11, proporcionAlto * 3, proporcionAncho * 13, proporcionAlto * 5);
-
+        // Text y ajustes de texto
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        pTexto.setColor(Color.YELLOW);
+        pTexto.setTextSize(80);
+        pTexto.setTypeface(faw);
         strCierra = context.getString(R.string.confirmarsalida);
-
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
     }
 
@@ -54,6 +53,12 @@ public class ConfirmacionCierre extends Escena {
         return super.pulsa(boton, event);
     }
 
+    /**
+     * Controla y gestiona las pulsaciones y gestos en la pantalla
+     *
+     * @param event Tipo de evento táctil que sucede
+     * @return Devuelve un entero que índice el número de escena
+     */
     @Override
     public int onTouchEvent(MotionEvent event) {
         int pointerIndex = event.getActionIndex();        //Obtenemos el índice de la acción
@@ -70,7 +75,6 @@ public class ConfirmacionCierre extends Escena {
                     return 0;
                 }
         }
-//        return super.onTouchEvent(event);
         return idEscena;
     }
 
@@ -80,26 +84,21 @@ public class ConfirmacionCierre extends Escena {
     public void actualizarFisica() {
         fondoNubes.mover();
         float aux = fondoNubes.posicion.x;
-        Log.d("posX", " " + aux + " velocidad" + fondoNubes.posicion2.x+" " +
+        Log.d("posX", " " + aux + " velocidad" + fondoNubes.posicion2.x + " " +
                 fondoNubes.velocidad);
     }
 
+    /**
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     *
+     * @param c canvas de la aplicación
+     */
     public void dibujar(Canvas c) {
         try {
-//            super.dibujar(c);
-            // Rects
-//            c.drawRect(rectBtnOk, paint);
-//            c.drawRect(rectBtnCancel, paint);
-            // Bitmaps
             c.drawBitmap(bitmapFondo, 0, 0, null);
             fondoNubes.dibujar(c);
             c.drawBitmap(btnOk, proporcionAncho * 5, proporcionAlto * 3, null);
             c.drawBitmap(btnCancel, proporcionAncho * 11, proporcionAlto * 3, null);
-            // Text
-            pTexto.setColor(Color.YELLOW);
-            pTexto.setTextSize(80);
-            pTexto.setTypeface(faw);
-//            c.drawText(R.string.confirmarsalida + "", proporcionAncho * 6, proporcionAlto * 1, pTexto);
             c.drawText(strCierra, proporcionAncho * 3, proporcionAlto * 2, pTexto);
         } catch (NullPointerException e) {
             Log.d("Error", "Dibujado canvas Opciones");

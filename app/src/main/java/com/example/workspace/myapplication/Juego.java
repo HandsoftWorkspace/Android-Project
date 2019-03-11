@@ -19,26 +19,20 @@ import android.view.WindowManager;
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
     private SurfaceHolder surfaceHolder;      // Interfaz abstracta para manejar la superficie de dibujado
     private Context context;                  // Contexto de la aplicación
-
-    private SensorManager sensorManager;
-    private Sensor sensor;
-    boolean escenaArrancada = false;
+    private SensorManager sensorManager;    // Gestión del sensor de luz
+    private Sensor sensor;  // Sensor de luz
+    boolean escenaArrancada = false; // Índica si la escena ha sido arrancada
     Utils utils;
-
-    private float luz = -1;
-
+    private float luz = -1; // cantidad de luz expresadas en lúmenes
     private int anchoPantalla = 1;              // Ancho de la pantalla, su valor se actualiza en el método surfaceChanged
     private int altoPantalla = 1;               // Alto de la pantalla, su valor se actualiza en el método surfaceChanged
     private Hilo hilo;                        // Hilo encargado de dibujar y actualizar la física
     private boolean funcionando = false;      // Control del hilo
     public Escena escenaActual;
-
     // Control temporal
     long tiempo = 0;
     int tiempoEspera = 1000;
-
-    boolean[] listaPreferencias;
-
+    // Objetos escenas
     private Menu menu;
     private Game game;
     private Opciones opciones;
@@ -58,16 +52,14 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         this.surfaceHolder = getHolder();       // Se obtiene el holder
         this.surfaceHolder.addCallback(this);   // Se indica donde van las funciones callback
         this.context = context;                 // Obtenemos el contexto
-
         hilo = new Hilo();                      // Inicializamos el hilo
         setFocusable(true);                     // Aseguramos que reciba eventos de toque
-
         utils = new Utils(context);
 
         // Sensor luz
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-
+        // si es nulo, se registra
         if (sensor != null) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
@@ -209,7 +201,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
             while (funcionando) {
                 Canvas c = null; //Necesario repintar todo el lienzo
                 try {
-
                     if (!surfaceHolder.getSurface().isValid())
                         continue; // si la superficie no está preparada repetimos
                     c = surfaceHolder.lockCanvas(); // Obtenemos el lienzo.  La sincronización es necesaria por ser recurso común
@@ -279,11 +270,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
             }
             escenaActual.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, luz>4);
         }
-//        menu.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
-//        opciones.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
-//        records.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
-//        ayuda.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
-//        creditos.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
     }
 
     /**

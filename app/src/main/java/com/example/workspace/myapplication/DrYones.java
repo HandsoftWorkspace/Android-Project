@@ -11,38 +11,34 @@ import android.graphics.Rect;
 import android.util.Log;
 
 public class DrYones extends Personaje {
-    //    private Bitmap[] framesc, framesic, framesp, framesip;
-    Bitmap frame;
-    private int posX, posY;
-    private int anchoPantalla, altoPantalla;
-    private int proporcionAncho, proporcionAlto;
+    private int posX, posY; // posiciones en eje X y eje Y de personajes
+    private int anchoPantalla, altoPantalla; // tamaño de pantalla del dispositivo
+    private int proporcionAncho, proporcionAlto; // proporciones de pantalla
 
-    int vidas;
+    int vidas; // cantidad de vidas
 
-    private int velocidad;
-    private int tiempoFrame = 100;
-    private int tiempoMove = 50;
+    private int velocidad; // velocidad de salto en el eje X
+    private int tiempoFrame = 100; // cada cuanto cambia el frame
+    private int tiempoMove = 50; //
     private long tFrameAuxm = 0, tMoveAux = 0;
-    private int indice = 0;
-    private int alfa = 230;
-
-    private Paint p;
-
+    private int indice = 0; // índice para recorrer los array de bitmaps
+    private int alfa = 230; // transparencia
+    private Paint p; // pincel para objetos de la clase
+    // gestion de moviento del personaje principal
     public boolean seMueve = true;
     boolean animado = true;
     boolean avanza = true;
-    boolean pulsado = false;
+    boolean pulsado = false; // futuras implementaciones
     public static boolean enAvance = false;
     public static boolean enRetroceso = false;
-
-    private Bitmap[] idle;
-    private Bitmap[] idleEspejo;
-    private Bitmap[] run;
-    private Bitmap[] runEspejo;
-
-    public Rect rectDrYones;
-
-    Context context;
+    // Arrays de bitmaps para gestionar el movimiento del personaje principal
+    private Bitmap[] idle;  // en descanso, posición este
+    private Bitmap[] idleEspejo; // en descanso posición oeste
+    private Bitmap[] run;   // en carrera posición este
+    private Bitmap[] runEspejo; // en carrera en posición oeste
+    // rect hitbox
+    public Rect rectDrYones; // hitbox del personajes principal
+    Context context; // contexto de la aplicación
     Utils utils = new Utils(context);
 
     /**
@@ -63,22 +59,16 @@ public class DrYones extends Personaje {
         this.velocidad = velocidad;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
-
         utils = new Utils(context);
-
         proporcionAncho = anchoPantalla / 9;
         proporcionAlto = altoPantalla / 18;
-
         idle = new Bitmap[10];
         idleEspejo = new Bitmap[10];
         run = new Bitmap[10];
         runEspejo = new Bitmap[10];
-
         this.p = new Paint();
         p.setAlpha(alfa);
-
         vidas = 3;
-
         // bitmaps idle
         for (int i = 0; i < 10; i++) {
             idle[i] = utils.getBitmapFromAssets("idle/" + "idle" + i + ".png");
@@ -89,7 +79,6 @@ public class DrYones extends Personaje {
             idleEspejo[j] = espejo(idle[j], true);
             idleEspejo[j] = Bitmap.createScaledBitmap(idleEspejo[j], anchoPantalla / 18, altoPantalla / 9 * 2, false);
         }
-
         // bitmaps run
         for (int k = 0; k < 10; k++) {
             run[k] = utils.getBitmapFromAssets("run/" + "run" + k + ".png");
@@ -100,18 +89,16 @@ public class DrYones extends Personaje {
             runEspejo[l] = espejo(run[l], true);
             runEspejo[l] = Bitmap.createScaledBitmap(runEspejo[l], anchoPantalla / 18, altoPantalla / 9 * 2, false);
         }
-
         // HitBox
         rectDrYones = new Rect(posX, posY, run[0].getWidth(), run[0].getWidth());
-
     }
 
     /**
      * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     *
      * @param c canvas asociado a la aplicación
      */
     public void dibuja(Canvas c) {
-        Log.d("Dibuja", "Dibuja a DrYones");
         if (enAvance) {
             if (seMueve) {
                 c.drawBitmap(run[indice], posX, altoPantalla - proporcionAlto * 5, p);
@@ -126,11 +113,9 @@ public class DrYones extends Personaje {
                 c.drawBitmap(idleEspejo[indice], posX, altoPantalla - proporcionAlto * 5, p);
             }
         }
-        p.setColor(Color.GREEN);
+//        p.setColor(Color.GREEN);
         p.setStyle(Paint.Style.STROKE);
-        c.drawRect(rectDrYones, p);
-//        c.drawBitmap(run[indice], posX, proporcionAlto * 8, p);
-//        c.drawBitmap(frame, anchoPantalla / 2, altoPantalla / 2, p);
+//        c.drawRect(rectDrYones, p);
     }
 
     /**
@@ -163,7 +148,6 @@ public class DrYones extends Personaje {
         }
         if (seMueve && enRetroceso) {
             posX -= velocidad;
-//                posX = Math.max(posX, 0);
             if (posX < 0) {
                 posX = 0;
                 seMueve = false;
@@ -177,11 +161,7 @@ public class DrYones extends Personaje {
      * Se crea y se asocia una rect, que será el hitbox de nuestro de personaje
      */
     public void setRectangulo() {
-//        rectDrYones = new Rect((int) (x + 0.2 * run[0].getWidth()), (int) (y + 0.2 * run[0].getHeight()), (int) (x + 0.8 * run[0].getWidth()), (int) (y + 0.8 * run[0].getHeight()));
-//        rectDrYones = new Rect((int) x, (int) y, (int) x + run[0].getWidth(), (int) y + run[0].getWidth());
-//        rectDrYones = new Rect(posX, posY, posX + run[0].getWidth(), altoPantalla - proporcionAlto * 5);
         rectDrYones = new Rect((int) (posX + 0.2 * run[0].getWidth()), (int) (posY + 0.2 * run[0].getHeight()), (int) (posX + 0.8 * run[0].getWidth()), (int) (posY + 0.8 * run[0].getHeight()));
-
     }
 
     /**

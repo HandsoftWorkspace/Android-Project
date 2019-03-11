@@ -18,10 +18,10 @@ import android.widget.PopupMenu;
 import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class Opciones extends Escena {
-    Canvas c;
-    Typeface faw;
+    Canvas c; // canvas de la app
+    Typeface faw; // tipología de fuente
     Utils utils;
-    Paint paintTexto = new Paint();
+    Paint paintTexto = new Paint(); // pincel para gestionar los distintos efectos del texto
 
     private int proporcionAlto, proporcionAncho; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
     private int anchoPantalla, altoPantalla;
@@ -50,48 +50,46 @@ public class Opciones extends Escena {
         this.altoPantalla = altoPantalla;
         this.anchoPantalla = anchoPantalla;
 
+        // detalla las proporciones de la pantalla, para pintar dentro de la clase opciones
         proporcionAncho = anchoPantalla / 18;
         proporcionAlto = altoPantalla / 9;
-
+        // instancia de objeto para acceder a los métodos de la clase utils
         utils = new Utils(context);
-
+        // fondo y objeto scroll
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
-
+        // bitmps de botones de la clase opciones
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
-
         music = BitmapFactory.decodeResource(context.getResources(), R.drawable.music);
         music = Bitmap.createScaledBitmap(music, proporcionAncho * 2, proporcionAlto * 2, false);
-
         musicoff = BitmapFactory.decodeResource(context.getResources(), R.drawable.musicoff);
         musicoff = Bitmap.createScaledBitmap(musicoff, proporcionAncho * 2, proporcionAlto * 2, false);
-
         vibrate = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibracion);
         vibrate = Bitmap.createScaledBitmap(vibrate, proporcionAncho * 2, proporcionAlto * 2, false);
-
         vibrateoff = BitmapFactory.decodeResource(context.getResources(), R.drawable.sinvibracion);
         vibrateoff = Bitmap.createScaledBitmap(vibrateoff, proporcionAncho * 2, proporcionAlto * 2, false);
-
+        // rects para detectar eventos en pantalla
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
         rectMusic = new Rect(proporcionAncho * 8, proporcionAlto * 3, proporcionAncho * 10, proporcionAlto * 5);
-//        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 3, proporcionAncho * 11, proporcionAlto * 5);
         rectVibracion = new Rect(proporcionAncho * 8, proporcionAlto * 6, proporcionAncho * 12, proporcionAlto * 8);
-//        rectMusicoff = new Rect(proporcionAncho * 9, proporcionAlto * 6, proporcionAncho * 11, proporcionAlto * 8);
-
-
         // Fuentes
-        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
-
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf"); // fuente personalizada
+        // string para distintos idiomas
         nombreOpciones = context.getString(R.string.opciones);
         strMusica = context.getString(R.string.musica);
         strVibracion = context.getString(R.string.vibracion);
-
+        // ajuste para el pintado de texto
+        paintTexto.setColor(Color.YELLOW); //
+        paintTexto.setTextSize(50); //
+        paintTexto.setTypeface(faw);//
     }
 
     /**
-     * @param event
-     * @return
+     * Controla y gestiona las pulsaciones y gestos en la pantalla
+     *
+     * @param event Tipo de evento táctil que sucede
+     * @return Devuelve un entero que índice el número de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -132,7 +130,7 @@ public class Opciones extends Escena {
     }
 
     /**
-     * Método que dibuja los objetos de la clase opciones
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
      *
      * @param c canvas de la aplicación
      */
@@ -143,11 +141,6 @@ public class Opciones extends Escena {
             c.drawBitmap(bitmapFondo, 0, 0, null);
             fondoNubes.dibujar(c);
             c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
-
-            paintTexto.setColor(Color.YELLOW); //
-            paintTexto.setTextSize(50); //
-            paintTexto.setTypeface(faw);//
-//            c.drawText(nombreOpciones + "", proporcionAncho * 4, proporcionAlto * 2, paintTexto); //
             c.drawText(nombreOpciones, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, paintTexto);
             c.drawText(strMusica, proporcionAncho * 3 + proporcionAncho / 2, proporcionAlto * 4, paintTexto);
             c.drawText(strVibracion, proporcionAncho * 3 + proporcionAncho / 2, proporcionAlto * 7, paintTexto);

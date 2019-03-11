@@ -13,35 +13,28 @@ import java.util.Random;
 
 public class Enemigo extends Personaje {
 
-    public PointF posicion;
-    public Bitmap imagen;
-    private Random g;
-
-    private int posX, posY;
+    private int posX, posY; // posiciones en eje X y eje Y
     private int anchoPantalla, altoPantalla;
     private int proporcionAncho, proporcionAlto;
-
-    private boolean colision = false;
-    int vidas;
-
+    private boolean colision = false; // detecta si ha colisionado
     private int velocidad;
-
     private Paint p;
-
-    public boolean seMueve = true;
-    boolean avanza = true;
-    public boolean enAvance = false;
-    public boolean enRetroceso = false;
-    private boolean seDibuja = true;
-
     public Bitmap frameRoca, frameSerpiente;
-    Bitmap bitmaps[];
-
-    public Rect rectEnemigo;
-
-    Context context;
+    Bitmap bitmaps[]; // array de bitmaps enemigos
+    public Rect rectEnemigo;    // hitbox enemigos
+    Context context; // contexto de la aplicación
     Utils utils;
 
+    /**
+     * Contructor que inicializa las propiedas de la clase 'enemigo'
+     *
+     * @param context       contexto de la aplicación
+     * @param posX          posición en el eje X
+     * @param posY          posición en el eje Y
+     * @param anchoPantalla ancho pantalla del dispositivo
+     * @param altoPantalla  alto pantalla del dispositivo
+     * @param velocidad     velocidad de movimiento en el eje Y del personaje
+     */
     public Enemigo(Context context, int posX, int posY, int anchoPantalla, int altoPantalla, int velocidad) {
         super(context, posX, posY, anchoPantalla, altoPantalla, velocidad);
         this.context = context;
@@ -50,12 +43,10 @@ public class Enemigo extends Personaje {
         this.velocidad = velocidad;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
-
         utils = new Utils(context);
         p = new Paint();
-
         bitmaps = new Bitmap[4];
-
+        // crea una aleatoriedad a la hora de escoger un enemigo u otro
         if (Math.random() < 0.5f) {
             frameRoca = utils.getBitmapFromAssets("varios/rock.png");
             frameRoca = Bitmap.createScaledBitmap(frameRoca, anchoPantalla / 18, altoPantalla / 9, false);
@@ -67,11 +58,18 @@ public class Enemigo extends Personaje {
         }
     }
 
+    /**
+     * Se crea y se asocia una rect, que será el hitbox de nuestro de personaje
+     */
     public void setRectangulo() {
-//        rectEnemigo = new Rect(posX, posY, posX + bitmaps[0].getWidth(), posY + bitmaps[0].getHeight());
         rectEnemigo = new Rect((int) (posX + 0.2 * bitmaps[0].getWidth()), (int) (posY + 0.2 * bitmaps[0].getHeight()), (int) (posX + 0.8 * bitmaps[0].getWidth()), (int) (posY + 0.8 * bitmaps[0].getHeight()));
     }
 
+    /**
+     * Comprueba mediante booleanas, si se está moviendo o parado, además de la dirección en la que se muestra
+     *
+     * @return
+     */
     public Bitmap move() {
         posY += velocidad;
         if (posY > altoPantalla + bitmaps[0].getHeight()) {
@@ -83,25 +81,37 @@ public class Enemigo extends Personaje {
         return null;
     }
 
+    /**
+     * Actualizamos la física de los elementos en pantalla
+     */
     public void actualizarFisica() {
 
     }
 
     /**
+     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     *
      * @param c
      */
     public void dibuja(Canvas c) {
-        int auxRand = 0;
         c.drawBitmap(bitmaps[0], posX, posY, null);
-//        p.setColor(Color.RED);
-//        c.drawRect(rectEnemigo, p);
 
     }
 
+    /**
+     * Índica si el enemigo ha colisionado
+     *
+     * @return devuelve el valor de la booleana
+     */
     public boolean isColision() {
         return colision;
     }
 
+    /**
+     * Hace un set a la booleana colision
+     *
+     * @param colision muestra el valor de si el enemigo está en colisión o no
+     */
     public void setColision(boolean colision) {
         this.colision = colision;
     }
