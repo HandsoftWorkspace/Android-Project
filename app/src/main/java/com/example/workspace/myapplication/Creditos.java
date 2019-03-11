@@ -17,12 +17,19 @@ public class Creditos extends Escena {
 
     Context context;
 
-    int anchoPantalla, altoPantalla;
-    int proporcionAncho, proporcionAlto;
+    int anchoPantalla, altoPantalla; // Alto y ancho de la pantalla del dispositivo
+    int proporcionAncho, proporcionAlto; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
 
     // Fuentes
     String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos, strCreditos, strMusica, strFuente, strCreadoPor;
 
+    /**
+     *
+     * @param context
+     * @param idEscena
+     * @param anchoPantalla
+     * @param altoPantalla
+     */
     public Creditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.context = context;
@@ -59,7 +66,6 @@ public class Creditos extends Escena {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
-        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes.mover();
     }
 

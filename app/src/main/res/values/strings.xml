@@ -12,7 +12,7 @@
     <string name="projectname">Nombre proyecto</string>
     <string name="proyecto">Proyecto</string>
     <string name="confirmarsalida">Deseas salir del juego?</string>
-    <string name="confirmarvaciado">Deseas borrar las puntuaciones?</string>
+    <string name="confirmarvaciado">Borrar puntuaciones ?</string>
     <string name="nombreversion">La ciudad perdida</string>
     <string name="ronda">Ronda</string>
     <string name="puntos">Puntos</string>

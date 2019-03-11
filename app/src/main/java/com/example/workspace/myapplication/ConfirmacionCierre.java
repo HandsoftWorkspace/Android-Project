@@ -46,6 +46,7 @@ public class ConfirmacionCierre extends Escena {
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
         strCierra = context.getString(R.string.confirmarsalida);
 
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
     }
 
     @Override
@@ -78,6 +79,9 @@ public class ConfirmacionCierre extends Escena {
      */
     public void actualizarFisica() {
         fondoNubes.mover();
+        float aux = fondoNubes.posicion.x;
+        Log.d("posX", " " + aux + " velocidad" + fondoNubes.posicion2.x+" " +
+                fondoNubes.velocidad);
     }
 
     public void dibujar(Canvas c) {

@@ -28,7 +28,7 @@ public class Opciones extends Escena {
 
     private Rect rectMusic, rectMusicoff, rectVibracion, getRectVibracionoff; // Rectangulos que nos serviran para detectar pulsaciones en la pantalla del dispositivo
     private float x;
-    private Bitmap music, musicoff, vibrate, vibrateoff;
+    private Bitmap music, musicoff, vibrate, vibrateoff; // bitmaps para los botones de la escena opciones
 
     boolean musicaActiva = true; // Sirve para mostrar un btn de música activada
     public static boolean volumen = true; // Índice si hay música o no, se utilizará para las preferencias de ajustes
@@ -104,17 +104,19 @@ public class Opciones extends Escena {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 if (pulsa(rectVolverMenu, event)) {
+                    guardarPreferencias();
                     return 0;
                 } else if (pulsa(rectMusic, event)) {
                     if (musicaActiva) {
+                        // Se para reanuda la música
                         mediaPlayer.start();
-                        musicaActiva = false;
-                        volumen = true;
                     } else {
+                        // Se pausa la música
                         mediaPlayer.pause();
-                        musicaActiva = true;
-                        volumen = false;
                     }
+                    // Invierte los valores de las booleanas cada vez que pasa por aquí
+                    musicaActiva = !musicaActiva;
+                    volumen = !musicaActiva;
                     break;
                 } else if (pulsa(rectVibracion, event)) {
                     if (vibracionActiva) {
@@ -130,7 +132,9 @@ public class Opciones extends Escena {
     }
 
     /**
-     * @param c
+     * Método que dibuja los objetos de la clase opciones
+     *
+     * @param c canvas de la aplicación
      */
     @Override
     public void dibujar(Canvas c) {
@@ -152,20 +156,12 @@ public class Opciones extends Escena {
             } else {
                 c.drawBitmap(musicoff, proporcionAncho * 8, proporcionAlto * 3, null);
             }
-            if (vibracionActiva) {
+            if (vibracion) {
                 c.drawBitmap(vibrate, proporcionAncho * 8, proporcionAlto * 6, null);
             } else {
                 c.drawBitmap(vibrateoff, proporcionAncho * 8, proporcionAlto * 6, null);
             }
 
-//            if (musicaActiva) {
-//            c.drawBitmap(music, proporcionAncho * 6, proporcionAlto * 3, null);
-//            c.drawText("ACTIVA", proporcionAncho * 9, proporcionAncho * 17, proporcionAncho * 5, proporcionAlto * 1, p);
-//            }
-//            if (!musicaActiva) {
-//                c.drawBitmap(musicoff, proporcionAncho * 6, proporcionAlto * 3, null);
-//                c.drawText("DESACTIVA", proporcionAncho * 9, proporcionAncho * 17, proporcionAncho * 5, proporcionAlto * 1, p);
-//            }
         } catch (NullPointerException e) {
             Log.d("Error", "Dibujado canvas Opciones");
         }
@@ -175,31 +171,18 @@ public class Opciones extends Escena {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
-        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes.mover();
     }
 
+    /**
+     * Método que guardar los ajustes de la escena opciones, mediante shared preferences
+     */
     public void guardarPreferencias() {
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences preferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-
-//        if (volumen) {
-////            editor.putBoolean("musica", true);
-//            editor.putBoolean("musica", volumen);
-//        } else {
-////            editor.putBoolean("musica", false);
-//            editor.putBoolean("musica", volumen);
-//        }
-//        if (vibracion) {
-//            editor.putBoolean("vibracion", true);
-//        } else {
-//            editor.putBoolean("vibracion", false);
-//        }
         editor.putBoolean("musica", volumen);
         editor.putBoolean("vibracion", vibracion);
         editor.commit();
-        editor.apply(); // Se ejecuta en el OnPause, tanto al ejecutarse por primera vez como cúando se pausa
     }
 
     /**
@@ -209,7 +192,7 @@ public class Opciones extends Escena {
      */
     public void cargarPreferencias() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);
-        musicaActiva = sharedPreferences.getBoolean("musica", true);
-        vibracionActiva = sharedPreferences.getBoolean("vibracion", true);
+        volumen = sharedPreferences.getBoolean("musica", true);
+        vibracion = sharedPreferences.getBoolean("vibracion", true);
     }
 }

@@ -13,7 +13,7 @@
     <string name="projectname">Project name</string>
     <string name="proyecto">Project</string>
     <string name="confirmarsalida">Do you want exit this game?</string>
-    <string name="confirmarvaciado">Do you want to delete the scores?</string>
+    <string name="confirmarvaciado">Delete points?</string>
     <string name="nombreversion">The lost city</string>
     <string name="ronda">Round</string>
     <string name="puntos">Points</string>

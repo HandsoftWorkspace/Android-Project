@@ -1,6 +1,8 @@
 package com.example.workspace.myapplication;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -32,7 +34,7 @@ public class Escena {
         this.altoPantalla = altoPantalla;
         utils = new Utils(context);
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
-        esDeDia = false;
+        esDeDia = true;
         p = new Paint();
         pTexto = new Paint();
         paintTexto = new Paint();

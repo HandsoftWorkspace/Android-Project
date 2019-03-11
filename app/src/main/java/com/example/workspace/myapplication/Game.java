@@ -1,6 +1,8 @@
 package com.example.workspace.myapplication;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -37,11 +39,13 @@ public class Game extends Escena implements Runnable {
 
     private boolean dispara = false;
     public boolean gameOver = false;
+    public boolean gameWin = false;
     private boolean caballeroHerido = false;
+    boolean pusaldo = false;
 
     private int volumen;
 
-    private int vidas = 3;
+    private int vidas = 1;
     private int puntuacion = 0;
     private int ronda = 1;
     private String strVidas = "";
@@ -101,10 +105,14 @@ public class Game extends Escena implements Runnable {
         btnDisparo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mira);
         btnDisparo = Bitmap.createScaledBitmap(btnDisparo, proporcionAncho * 1, proporcionAlto * 1, false);
 
+        volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
+        volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
+
         // Rect botones
         rectBtnA = new Rect(0, proporcionAlto * 6, proporcionAncho + proporcionAncho / 2, proporcionAlto * 7 + proporcionAlto / 2);
         rectBtnB = new Rect(proporcionAncho * 17 - proporcionAncho / 2, proporcionAlto * 6, proporcionAncho * 18, proporcionAlto * 7 + proporcionAlto / 2);
         rectBtnDisparo = new Rect(proporcionAncho * 17, proporcionAlto * 4, proporcionAncho * 18, proporcionAlto * 5);
+        rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
 
         // PERSONAJES
         p.setColor(ContextCompat.getColor(context, R.color.colorBackGr));
@@ -227,13 +235,14 @@ public class Game extends Escena implements Runnable {
                     vibrator.vibrate(100);
                 }
                 puntuacion += 100;
-//                if (puntuacion > 15000) {
-//                    ronda++;
-//                } else if (puntuacion > 30000) {
-//                    ronda++;
-//                } else if (puntuacion > 60000) {
-//                    ronda++;
-//                }
+                if (puntuacion > 15000) {
+                    ronda++;
+                } else if (puntuacion > 30000) {
+                    ronda++;
+                } else if (puntuacion > 60000) {
+                    ronda++;
+                    gameWin = true;
+                }
             }
         }
     }
@@ -246,8 +255,23 @@ public class Game extends Escena implements Runnable {
     public void dibujar(Canvas c) {
         try {
             if (gameOver) {
+                pararMusica();
+                p.setColor(Color.GREEN);
                 c.drawBitmap(bitmapFondo, 0, 0, null);
                 c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth() / 2, altoPantalla / 2 - lose.getHeight() / 2, null);
+                c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
+                if (pusaldo) c.drawRect(rectVolverMenu, p);
+                listaEnemigos.clear();
+                listaCaliz.clear();
+            } else if (gameWin) {
+                pararMusica();
+                p.setColor(Color.GREEN);
+                c.drawBitmap(bitmapFondo, 0, 0, null);
+                c.drawBitmap(win, anchoPantalla / 2 - lose.getWidth() / 2, altoPantalla / 2 - lose.getHeight() / 2, null);
+                c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
+                if (pusaldo) c.drawRect(rectVolverMenu, p);
+                listaEnemigos.clear();
+                listaCaliz.clear();
             } else {
                 // Prueba aceleración de hardware
 //            Log.d("hard", String.valueOf(c.isHardwareAccelerated()));
@@ -350,11 +374,23 @@ public class Game extends Escena implements Runnable {
                     mediaPlayer.start(); // Se arranca la secuencia musical
                     dispara = true;
                 }
+                if (pulsa(rectVolverMenu, event) && gameOver) {
+                    guardarPuntos(puntuacion);
+
+                    pusaldo = true;
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (pulsa(rectVolverMenu, event) && gameOver) {
+                    guardarPuntos(puntuacion);
+                    pusaldo = true;
+                }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
+                pusaldo = false;
                 if (pulsa(rectBtnA, event)) {
                     drYones.seMueve = false;
                 }
@@ -366,6 +402,10 @@ public class Game extends Escena implements Runnable {
                 }
                 dispara = false;
                 latigo.setPosX(drYones.getRectDrYones().centerX());
+                if (pulsa(rectVolverMenu, event) && gameOver) {
+                    return 0;
+
+                }
                 break;
         }
         return super.onTouchEvent(event);
@@ -383,5 +423,28 @@ public class Game extends Escena implements Runnable {
      */
     public void reanudarMusica() {
         mediaPlayer.start();
+    }
+
+    public void guardarPuntos(int puntos) {
+        BaseDatos bd = null;
+        SQLiteDatabase bdSqlite = null;
+        try {
+            bd = new BaseDatos(context, "puntuaciones", null, 1);
+            bdSqlite = bd.getWritableDatabase();
+            String query = "insert into puntuaciones values(null," + puntos + ")";
+//            String query = "insert into puntuaciones values(1,234)";
+            Log.d("guarda puntos", " " + query);
+            bdSqlite.execSQL(query);
+            Log.d("guarda puntos", " " + puntos);
+        } catch (Exception ee) {
+            ee.printStackTrace();
+        } finally {
+            if (bd == null) {
+                bd.close();
+            }
+            if (bdSqlite == null) {
+                bdSqlite.close();
+            }
+        }
     }
 }

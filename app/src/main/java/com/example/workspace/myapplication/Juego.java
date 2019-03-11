@@ -22,7 +22,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
 
     private SensorManager sensorManager;
     private Sensor sensor;
-
+    boolean escenaArrancada = false;
     Utils utils;
 
     private float luz = -1;
@@ -42,7 +42,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
     private Menu menu;
     private Game game;
     private Opciones opciones;
-    private Records records;
+    public Records records;
     private Ayuda ayuda;
     private Creditos creditos;
     private ConfirmacionCierre cierre;
@@ -92,9 +92,11 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
                         break;
                     case 2:
                         escenaActual = opciones;
+                        opciones.cargarPreferencias();
                         break;
                     case 3:
                         escenaActual = records;
+                        records.cargarPuntuaciones();
                         break;
                     case 4:
                         escenaActual = ayuda;
@@ -105,9 +107,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
                     case 6:
                         escenaActual = cierre;
                         break;
-//                    case 7:
-//                        escenaActual = borrado;
-//                        break;
+                    case 7:
+                        escenaActual = borrado;
+                        break;
                 }
             }
         }
@@ -150,7 +152,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         anchoPantalla = width;               // se establece el nuevo ancho de pantalla
         altoPantalla = height;               // se establece el nuevo alto de pantalla
 
-        if (escenaActual != game) {
+        if (escenaActual == game && game != null) {
             game.pararMusica();
         }
         if (menu == null) {
@@ -158,7 +160,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         }
         if (game == null) {
             opciones = new Opciones(context, 2, anchoPantalla, altoPantalla);
-            opciones.cargarPreferencias();
         }
         if (records == null) {
             records = new Records(context, 3, anchoPantalla, altoPantalla);
@@ -172,10 +173,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         if (cierre == null) {
             cierre = new ConfirmacionCierre(context, 6, anchoPantalla, altoPantalla);
         }
-        // TODO
-//        if (borrado == null) {
-//            borrado = new ConfirmacionBorrado(context, 7, anchoPantalla, altoPantalla);
-//        }
+        if (borrado == null) {
+            borrado = new ConfirmacionBorrado(context, 7, anchoPantalla, altoPantalla);
+        }
 
         escenaActual = menu;
         hilo.setSurfaceSize(width, height);   // se establece el nuevo ancho y alto de pantalla en el hilo
@@ -192,6 +192,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         if (escenaActual != menu) {
             menu.pararMusica();
         }
+        escenaArrancada = true;
     }
 
     /**
@@ -214,7 +215,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
                     c = surfaceHolder.lockCanvas(); // Obtenemos el lienzo.  La sincronización es necesaria por ser recurso común
                     synchronized (surfaceHolder) {
                         escenaActual.actualizarFisica();
-                        escenaActual.dibujar(c);
+                        if (c != null) escenaActual.dibujar(c);
                     }
                     tiempo = System.currentTimeMillis();
 
@@ -260,20 +261,23 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
      */
     public void setLuz(float luz) {
         this.luz = luz;
-        if (luz < 4) {
-            menu.esDeDia = false;
-            opciones.esDeDia = false;
-            records.esDeDia = false;
-            ayuda.esDeDia = false;
-            creditos.esDeDia = false;
-            cierre.esDeDia = false;
-        } else {
-            menu.esDeDia = true;
-            opciones.esDeDia = true;
-            records.esDeDia = true;
-            ayuda.esDeDia = true;
-            creditos.esDeDia = true;
-            cierre.esDeDia = true;
+        if (escenaArrancada) {
+            if (luz < 4) {
+                menu.esDeDia = false;
+                opciones.esDeDia = false;
+                records.esDeDia = false;
+                ayuda.esDeDia = false;
+                creditos.esDeDia = false;
+                cierre.esDeDia = false;
+            } else {
+                menu.esDeDia = true;
+                opciones.esDeDia = true;
+                records.esDeDia = true;
+                ayuda.esDeDia = true;
+                creditos.esDeDia = true;
+                cierre.esDeDia = true;
+            }
+            escenaActual.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, luz>4);
         }
 //        menu.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
 //        opciones.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);

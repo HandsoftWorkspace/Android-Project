@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 
-//import static com.example.workspace.myapplication.Utils.crearTabla;
 
 public class BaseDatos extends android.database.sqlite.SQLiteOpenHelper {
     // Querys

@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import static com.example.workspace.myapplication.Menu.mediaPlayer;
@@ -17,25 +19,33 @@ public class ConfirmacionBorrado extends Escena {
 
     Rect rectBtnOk, rectBtnCancel;
 
-    int idUltimaEscena;
     int proporcionAncho, proporcionAlto;
 
-    Utils utils;
+    String strBorra;
+
+    int idUltimaEscena;
 
     public ConfirmacionBorrado(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.idUltimaEscena = idEscena;
-
-        this.proporcionAncho = altoPantalla / 18;
+        this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
 
-        utils = new Utils(context);
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
 
-        btnOk = utils.getBitmapFromAssets("varios/ok");
+        btnOk = utils.getBitmapFromAssets("varios/ok.png");
         btnOk = btnOk = Bitmap.createScaledBitmap(btnOk, proporcionAncho * 2, proporcionAlto * 2, false);
 
-        btnCancel = utils.getBitmapFromAssets("varios/cancel");
+        btnCancel = utils.getBitmapFromAssets("varios/cancel.png");
         btnCancel = Bitmap.createScaledBitmap(btnCancel, proporcionAncho * 2, proporcionAlto * 2, false);
+
+        rectBtnOk = new Rect(proporcionAncho * 5, proporcionAlto * 3, proporcionAncho * 7, proporcionAlto * 5);
+        rectBtnCancel = new Rect(proporcionAncho * 11, proporcionAlto * 3, proporcionAncho * 13, proporcionAlto * 5);
+
+        faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
+        strBorra = context.getString(R.string.confirmarvaciado);
+
     }
 
     @Override
@@ -52,23 +62,45 @@ public class ConfirmacionBorrado extends Escena {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 if (pulsa(rectBtnOk, event)) {
-                    return 0;
-                } else if (pulsa(rectBtnOk, event)) {
-
-                    break;
+                    context.deleteDatabase("puntuaciones");
+                    return 3;
                 } else if (pulsa(rectBtnCancel, event)) {
-                    return idUltimaEscena;
+//                    return idUltimaEscena;
+                    return 3;
                 }
         }
-        return super.onTouchEvent(event);
+//        return super.onTouchEvent(event);
+        return idEscena;
     }
 
-    @Override
+    /**
+     * Actualizamos la física de los elementos en pantalla
+     */
+    public void actualizarFisica() {
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        fondoNubes.mover();
+    }
+
     public void dibujar(Canvas c) {
-        super.dibujar(c);
-        // Bitmaps
-        c.drawBitmap(btnOk, proporcionAncho * 3, altoPantalla / 2 - btnOk.getHeight(), null);
-        c.drawBitmap(btnCancel, proporcionAncho * 11, altoPantalla / 2 - btnCancel.getHeight(), null);
+        try {
+//            super.dibujar(c);
+            // Rects
+//            c.drawRect(rectBtnOk, paint);
+//            c.drawRect(rectBtnCancel, paint);
+            // Bitmaps
+            c.drawBitmap(bitmapFondo, 0, 0, null);
+            fondoNubes.dibujar(c);
+            c.drawBitmap(btnOk, proporcionAncho * 5, proporcionAlto * 3, null);
+            c.drawBitmap(btnCancel, proporcionAncho * 11, proporcionAlto * 3, null);
+            // Text
+            pTexto.setColor(Color.YELLOW);
+            pTexto.setTextSize(80);
+            pTexto.setTypeface(faw);
+//            c.drawText(R.string.confirmarsalida + "", proporcionAncho * 6, proporcionAlto * 1, pTexto);
+            c.drawText(strBorra, proporcionAncho * 3, proporcionAlto * 2, pTexto);
+        } catch (NullPointerException e) {
+            Log.d("Error", "Dibujado canvas Opciones");
+        }
     }
 
 }
