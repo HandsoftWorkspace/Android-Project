@@ -23,7 +23,7 @@ public class BaseDatos extends android.database.sqlite.SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int versionAntigua, int versionNueva) {
-        db.execSQL("DROP TABLE IF EXISTS duntuaciones");
+        db.execSQL("DROP TABLE IF EXISTS puntuaciones");
 //        db.execSQL(Utils.crearTabla);
         db.execSQL(this.crearTabla);
     }

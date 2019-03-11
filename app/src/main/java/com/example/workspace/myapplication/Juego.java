@@ -23,6 +23,8 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
     private SensorManager sensorManager;
     private Sensor sensor;
 
+    Utils utils;
+
     private float luz = -1;
 
     private int anchoPantalla = 1;              // Ancho de la pantalla, su valor se actualiza en el método surfaceChanged
@@ -56,18 +58,29 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         this.surfaceHolder = getHolder();       // Se obtiene el holder
         this.surfaceHolder.addCallback(this);   // Se indica donde van las funciones callback
         this.context = context;                 // Obtenemos el contexto
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        if (sensor == null) {
-            luz = (float) Math.random() * 4;
-        }
+
         hilo = new Hilo();                      // Inicializamos el hilo
         setFocusable(true);                     // Aseguramos que reciba eventos de toque
+
+        utils = new Utils(context);
+
+        // Sensor luz
+        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+
+        if (sensor != null) {
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
+    /**
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         synchronized (surfaceHolder) {
+            // Control de escenas
             int nuevaEscena = escenaActual.onTouchEvent(event);
             if (nuevaEscena != escenaActual.idEscena) {
                 switch (nuevaEscena) {
@@ -101,10 +114,16 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         return true;
     }
 
+    /**
+     * @param surfaceHolder
+     */
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
     }
 
+    /**
+     * @param surfaceHolder
+     */
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 //        if (escenaActual == game) {
@@ -120,10 +139,17 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         }
     }
 
+    /**
+     * @param holder
+     * @param format
+     * @param width
+     * @param height
+     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         anchoPantalla = width;               // se establece el nuevo ancho de pantalla
         altoPantalla = height;               // se establece el nuevo alto de pantalla
+
         if (escenaActual != game) {
             game.pararMusica();
         }
@@ -168,7 +194,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         }
     }
 
-
+    /**
+     * Hilo en la cual implementamos el método de dibujo (y física) para que se haga en paralelo con la gestión de la interfaz de usuario
+     */
     // Clase Hilo en la cual implementamos el método de dibujo (y física) para que se haga en paralelo con la gestión de la interfaz de usuario
     class Hilo extends Thread {
         public Hilo() {
@@ -214,50 +242,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
 
             }
         }
-
-
-    }
-
-    /**
-     * Detecta cúando se produce un cambio de valor en el sensor de luz
-     *
-     * @param event devuelve los eventos del sensor de luz
-     */
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (luz == -1) {
-            luz = event.values[0];
-            this.setLuz(luz);
-            menu.setLuz(getLuz());
-            if (this.getLuz() < 2) {
-                menu.esDeDia = false;
-            } else {
-                menu.esDeDia = true;
-            }
-        }
-    }
-
-    /**
-     * @param sensor   objeto sensor de luz
-     * @param accuracy parámetro que se le pasa al sensor de luz
-     */
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
-    /**
-     * Establece el nivel de luz del dispositivo
-     *
-     * @param luz nivel de luz expresado en unidades de medida lux
-     */
-    public void setLuz(float luz) {
-        this.luz = luz;
-        if (luz < 2) {
-            menu.esDeDia = false;
-        } else {
-            menu.esDeDia = true;
-        }
     }
 
     /**
@@ -267,6 +251,55 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
      */
     public float getLuz() {
         return luz;
+    }
+
+    /**
+     * Establece el nivel de luz del dispositivo
+     *
+     * @param luz nivel de luz expresado en unidades de medida lux
+     */
+    public void setLuz(float luz) {
+        this.luz = luz;
+        if (luz < 4) {
+            menu.esDeDia = false;
+            opciones.esDeDia = false;
+            records.esDeDia = false;
+            ayuda.esDeDia = false;
+            creditos.esDeDia = false;
+            cierre.esDeDia = false;
+        } else {
+            menu.esDeDia = true;
+            opciones.esDeDia = true;
+            records.esDeDia = true;
+            ayuda.esDeDia = true;
+            creditos.esDeDia = true;
+            cierre.esDeDia = true;
+        }
+//        menu.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
+//        opciones.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
+//        records.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
+//        ayuda.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
+//        creditos.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, menu.esDeDia);
+    }
+
+    /**
+     * Detecta cúando se produce un cambio de valor en el sensor de luz
+     *
+     * @param event devuelve los eventos del sensor de luz
+     */
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        luz = event.values[0];
+        setLuz(luz);
+        Log.i("LUX JUEGO", "" + luz);
+        if (sensor == null) {
+            luz = (float) Math.random() * 4;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
 }

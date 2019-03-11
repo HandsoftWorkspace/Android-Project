@@ -52,7 +52,7 @@ public class Utils {
 
     public Bitmap setFondo(int anchoPantalla, int altoPantalla, boolean dia) {
         Bitmap fondo;
-        if (!dia) {
+        if (dia) {
             fondo = getBitmapFromAssets("varios/bgmenudia.png");
         } else {
             fondo = getBitmapFromAssets("varios/bgmenunoche.png");

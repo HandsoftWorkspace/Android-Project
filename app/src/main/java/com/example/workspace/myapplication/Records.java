@@ -83,6 +83,7 @@ public class Records extends Escena {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes.mover();
     }
 

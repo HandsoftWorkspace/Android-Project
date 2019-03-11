@@ -47,14 +47,16 @@ public class Caballero extends Personaje {
         if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
             indice++;
             this.posX -= velocidad;
-            if (indice >= framesCaballero.length) indice = 0;
+            if (indice >= framesCaballero.length) {
+                indice = 0;
+            }
             tFrameAuxm = System.currentTimeMillis();
         }
         this.frame = framesCaballero[indice];
     }
 
     public void dibujar(Canvas c) {
-        while (posX > 0 - frame.getWidth()) {
+        if (posX > 0 - frame.getWidth()) {
             c.drawBitmap(this.frame, posX, altoPantalla - proporcionY * 5, null);
         }
         if (posX < 0 - frame.getWidth()) {

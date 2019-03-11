@@ -8,6 +8,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -16,6 +20,7 @@ import android.view.MotionEvent;
 
 import java.util.ArrayList;
 
+//public class Menu extends Escena implements SensorEventListener {
 public class Menu extends Escena {
 
     Rect rectJuego, rectOpciones, rectLogros, rectAyuda, rectCreditos, rectCierre, rectBtnOk, rectBtnCancel;
@@ -26,6 +31,8 @@ public class Menu extends Escena {
 
     private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
 
+    private SensorManager sensorManager;
+    private Sensor sensor;
 
     private int proporcionAlto, proporcionAncho;
     private Paint paint = new Paint();
@@ -58,11 +65,9 @@ public class Menu extends Escena {
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
 
-        if (luz < 2) {
-            esDeDia = false;
-        } else {
-            esDeDia = true;
-        }
+        // Sensor luz
+//        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+//        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
         // Fondo menú principal
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
@@ -127,12 +132,17 @@ public class Menu extends Escena {
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
         nombreJuego = context.getString(R.string.app_name);
         nombreVersion = context.getString(R.string.nombreversion);
+
+//        if (sensor != null) {
+//            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+//        }
     }
 
     /**
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes.mover();
     }
 
@@ -230,28 +240,6 @@ public class Menu extends Escena {
         return idEscena;
     }
 
-    /**
-     * Establece el nivel de luz del dispositivo
-     *
-     * @param luz nivel de luz expresado en unidades de medida lux
-     */
-    public void setLuz(float luz) {
-        this.luz = luz;
-        if (luz < 2) {
-            esDeDia = false;
-        } else {
-            esDeDia = true;
-        }
-    }
-
-    /**
-     * Consigue el nivel de luz del dispositivo
-     *
-     * @return devuelve el nivel de luz
-     */
-    public float getLuz() {
-        return luz;
-    }
 
     /**
      * Método que para la música
@@ -267,4 +255,47 @@ public class Menu extends Escena {
         mediaPlayer.start();
     }
 
+    /**
+     * Consigue el nivel de luz del dispositivo
+     *
+     * @return devuelve el nivel de luz
+     */
+    public float getLuz() {
+        return luz;
+    }
+
+    /**
+     * Establece el nivel de luz del dispositivo
+     *
+     * @param luz nivel de luz expresado en unidades de medida lux
+     */
+    public void setLuz(float luz) {
+        this.luz = luz;
+        if (luz < 4) {
+            esDeDia = false;
+        } else {
+            esDeDia = true;
+        }
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+    }
+
+//    /**
+//     * Detecta cúando se produce un cambio de valor en el sensor de luz
+//     *
+//     * @param event devuelve los eventos del sensor de luz
+//     */
+//    @Override
+//    public void onSensorChanged(SensorEvent event) {
+//        luz = event.values[0];
+//        setLuz(luz);
+//        Log.i("gggg", "" + luz);
+//        if (sensor == null) {
+//            luz = (float) Math.random() * 4;
+//        }
+//    }
+//
+//    @Override
+//    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//
+//    }
 }

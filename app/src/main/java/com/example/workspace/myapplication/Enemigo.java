@@ -21,6 +21,7 @@ public class Enemigo extends Personaje {
     private int anchoPantalla, altoPantalla;
     private int proporcionAncho, proporcionAlto;
 
+    private boolean colision = false;
     int vidas;
 
     private int velocidad;
@@ -76,12 +77,14 @@ public class Enemigo extends Personaje {
         if (posY > altoPantalla + bitmaps[0].getHeight()) {
             posY = (int) (Math.random() * -150);
             posX = (int) (anchoPantalla / 18 * Math.random() * 18 + 1);
+            colision = false;
         }
         this.setRectangulo();
         return null;
     }
 
     public void actualizarFisica() {
+
     }
 
     /**
@@ -95,5 +98,12 @@ public class Enemigo extends Personaje {
 
     }
 
+    public boolean isColision() {
+        return colision;
+    }
+
+    public void setColision(boolean colision) {
+        this.colision = colision;
+    }
 
 }

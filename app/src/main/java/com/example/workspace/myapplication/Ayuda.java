@@ -75,6 +75,7 @@ public class Ayuda extends Escena {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes.mover();
     }
 
@@ -150,6 +151,9 @@ public class Ayuda extends Escena {
                 if (pulsa(rectBack, event)) {
                     if (contador != 0) {
                         contador--;
+                    }
+                    if (contador == 0) {
+                        contador = 8;
                     }
                 }
         }

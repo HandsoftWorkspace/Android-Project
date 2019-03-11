@@ -41,7 +41,7 @@ public class Game extends Escena implements Runnable {
 
     private int volumen;
 
-    private int vidas = 5;
+    private int vidas = 3;
     private int puntuacion = 0;
     private int ronda = 1;
     private String strVidas = "";
@@ -115,7 +115,7 @@ public class Game extends Escena implements Runnable {
         // Creación de 10 objetos tipo enemigo, con parámetros aleatorios
         for (int i = 0; i < 5; i++) {
             int auxPosX = (int) (proporcionAncho * Math.random() * 18 + 1);
-            int auxVelocidad = (int) Math.random() * 40 + 15;
+            int auxVelocidad = (int) Math.random() * 30 + 15;
             enemigo = new Enemigo(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
             listaEnemigos.add(enemigo);
         }
@@ -123,7 +123,7 @@ public class Game extends Escena implements Runnable {
         // Creación de calizez
         for (int i = 0; i < 3; i++) {
             int auxPosX = (int) (proporcionAncho * Math.random() * 18 + 1);
-            int auxVelocidad = (int) Math.random() * 40 + 15;
+            int auxVelocidad = (int) Math.random() * 30 + 15;
             caliz = new Caliz(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
             listaCaliz.add(caliz);
         }
@@ -138,7 +138,7 @@ public class Game extends Escena implements Runnable {
         }
 
         lose = utils.getBitmapFromAssets("varios/lose.png");
-        lose = Bitmap.createScaledBitmap(lose, proporcionAncho * 4, proporcionAlto * 2, false);
+        lose = Bitmap.createScaledBitmap(lose, proporcionAncho * 8, proporcionAlto * 4, false);
 
         win = utils.getBitmapFromAssets("varios/win.png");
         win = Bitmap.createScaledBitmap(win, proporcionAncho * 4, proporcionAlto * 2, false);
@@ -152,7 +152,11 @@ public class Game extends Escena implements Runnable {
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mediaPlayer = MediaPlayer.create(context, R.raw.ambienteselva);
         volumen = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setVolume(volumen / 2, volumen / 2);
+        if (!Opciones.volumen) {
+            mediaPlayer.setVolume(0, 0);
+        } else {
+            mediaPlayer.setVolume(volumen / 2, volumen / 2);
+        }
         mediaPlayer.start(); // Se arranca la secuencia musical
         mediaPlayer.seekTo(2000); // Se adelanta para no causar un vacio
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
@@ -195,7 +199,8 @@ public class Game extends Escena implements Runnable {
         // Comprueba hitboxes
         for (Enemigo e : listaEnemigos) {
 //            if (e.rectEnemigo.intersect(drYones.rectDrYones)) {
-            if (drYones.rectDrYones.intersect(e.rectEnemigo)) {
+            if (drYones.rectDrYones.intersect(e.rectEnemigo) && !e.isColision()) {
+                e.setColision(true);
                 this.vidas--;
                 if (Opciones.vibracion) {
                     vibrator.vibrate(300);
@@ -213,8 +218,11 @@ public class Game extends Escena implements Runnable {
 
         // Comprueba hitboxes
         for (Caliz c : listaCaliz) {
-            if (drYones.rectDrYones.intersect(c.rectCaliz)) {
-                this.vidas++;
+            if (drYones.rectDrYones.intersect(c.rectCaliz) && !c.isColision()) {
+                c.setColision(true);
+                if (vidas <= 3) {
+                    this.vidas++;
+                }
                 if (Opciones.vibracion) {
                     vibrator.vibrate(100);
                 }
@@ -227,9 +235,6 @@ public class Game extends Escena implements Runnable {
 //                    ronda++;
 //                }
             }
-            if (vidas <= 5) {
-                this.vidas++;
-            }
         }
     }
 
@@ -241,7 +246,8 @@ public class Game extends Escena implements Runnable {
     public void dibujar(Canvas c) {
         try {
             if (gameOver) {
-                c.drawBitmap(lose, anchoPantalla / 2, altoPantalla / 2, null);
+                c.drawBitmap(bitmapFondo, 0, 0, null);
+                c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth() / 2, altoPantalla / 2 - lose.getHeight() / 2, null);
             } else {
                 // Prueba aceleración de hardware
 //            Log.d("hard", String.valueOf(c.isHardwareAccelerated()));

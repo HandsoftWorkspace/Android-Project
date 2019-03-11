@@ -47,7 +47,7 @@ public class Opciones extends Escena {
      */
     public Opciones(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
-        this.anchoPantalla = altoPantalla;
+        this.altoPantalla = altoPantalla;
         this.anchoPantalla = anchoPantalla;
 
         proporcionAncho = anchoPantalla / 18;
@@ -67,10 +67,10 @@ public class Opciones extends Escena {
         musicoff = BitmapFactory.decodeResource(context.getResources(), R.drawable.musicoff);
         musicoff = Bitmap.createScaledBitmap(musicoff, proporcionAncho * 2, proporcionAlto * 2, false);
 
-        vibrate = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibrate);
+        vibrate = BitmapFactory.decodeResource(context.getResources(), R.drawable.vibracion);
         vibrate = Bitmap.createScaledBitmap(vibrate, proporcionAncho * 2, proporcionAlto * 2, false);
 
-        vibrateoff = BitmapFactory.decodeResource(context.getResources(), R.drawable.cancel);
+        vibrateoff = BitmapFactory.decodeResource(context.getResources(), R.drawable.sinvibracion);
         vibrateoff = Bitmap.createScaledBitmap(vibrateoff, proporcionAncho * 2, proporcionAlto * 2, false);
 
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
@@ -175,6 +175,7 @@ public class Opciones extends Escena {
      * Actualizamos la física de los elementos en pantalla
      */
     public void actualizarFisica() {
+        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes.mover();
     }
 
@@ -198,7 +199,7 @@ public class Opciones extends Escena {
         editor.putBoolean("musica", volumen);
         editor.putBoolean("vibracion", vibracion);
         editor.commit();
-//        editor.apply(); // Se ejecuta en el OnPause, tanto al ejecutarse por primera vez como cúando se pausa
+        editor.apply(); // Se ejecuta en el OnPause, tanto al ejecutarse por primera vez como cúando se pausa
     }
 
     /**

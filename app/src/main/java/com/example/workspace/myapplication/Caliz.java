@@ -18,6 +18,8 @@ public class Caliz extends Personaje {
 
     private int velocidad;
 
+    private boolean colision = false;
+
     private Paint p;
 
     public Bitmap frameArca, frameCaliz;
@@ -81,6 +83,7 @@ public class Caliz extends Personaje {
         if (posY > altoPantalla + bitmaps[0].getHeight()) {
             posY = (int) (Math.random() * -150);
             posX = (int) (anchoPantalla / 18 * Math.random() * 18 + 1);
+            colision = false;
         }
         this.setRectangulo();
         return null;
@@ -100,4 +103,13 @@ public class Caliz extends Personaje {
 //        p.setColor(Color.GREEN);
 //        c.drawRect(rectCaliz, p);
     }
+
+    public boolean isColision() {
+        return colision;
+    }
+
+    public void setColision(boolean colision) {
+        this.colision = colision;
+    }
+
 }
