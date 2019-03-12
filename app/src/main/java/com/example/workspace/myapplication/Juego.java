@@ -143,7 +143,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         anchoPantalla = width;               // se establece el nuevo ancho de pantalla
         altoPantalla = height;               // se establece el nuevo alto de pantalla
-
         if (escenaActual == game && game != null) {
             game.pararMusica();
         }
@@ -268,7 +267,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
                 creditos.esDeDia = true;
                 cierre.esDeDia = true;
             }
-            escenaActual.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, luz>4);
+            escenaActual.bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, luz > 4);
         }
     }
 

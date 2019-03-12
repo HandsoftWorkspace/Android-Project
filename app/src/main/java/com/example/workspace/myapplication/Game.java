@@ -60,6 +60,7 @@ public class Game extends Escena implements Runnable {
     // Personajes
     DrYones drYones;
     Caballero caballero;
+    CaballeroDos caballeroDos;
     Enemigo enemigo;
     Latigo latigo;
     Caliz caliz;
@@ -80,6 +81,7 @@ public class Game extends Escena implements Runnable {
 
         drYones = new DrYones(context, anchoPantalla / 2, altoPantalla, anchoPantalla, altoPantalla, 10); // le estas pone
 //        caballero = new Caballero(context, anchoPantalla, altoPantalla - proporcionAlto * 3, 4, anchoPantalla, altoPantalla);
+        caballeroDos = new CaballeroDos(context, anchoPantalla, proporcionAlto / 9 * 2, anchoPantalla, altoPantalla, 3);
         latigo = new Latigo(context, drYones.getPosX(), drYones.getPosY() - drYones.getRun()[0].getHeight() / 2, anchoPantalla, altoPantalla);
 
         vibrator = (Vibrator) getContext().getSystemService(context.VIBRATOR_SERVICE);
@@ -181,6 +183,8 @@ public class Game extends Escena implements Runnable {
 //        fondoNubes.mover();
         drYones.move();
         drYones.setRectangulo();
+        caballeroDos.move();
+        caballeroDos.setRectangulo();
 
         // Control de látigo
         if (dispara) {
@@ -296,6 +300,8 @@ public class Game extends Escena implements Runnable {
                 // Personajes
                 drYones.cambiaFrame();
                 drYones.dibuja(c);
+                caballeroDos.cambiaFrame();
+                caballeroDos.dibuja(c);
 //                if (!caballeroHerido) {
 //                caballero.dibujar(c);
 //                }

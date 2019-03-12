@@ -34,6 +34,8 @@ public class Menu extends Escena {
     float luz = -1; // muestra la cantidad de luz expresada en lux (lúmenes)
     public int volumen; // Volumen del menú
     String nombreJuego, nombreVersion, strOpciones, strRecords, strAyuda, strCreditos; // recursos de texto para distintos idiomas
+    private boolean boolJuego, boolOpciones, boolRecords, boolCreditos, boolAyuda;
+    public boolean[] arrayBooleanas;
 
     /**
      * Contructor que inicializa las propiedas de la clase menú
@@ -101,6 +103,13 @@ public class Menu extends Escena {
         strRecords = context.getString(R.string.logros);
         strAyuda = context.getString(R.string.ayuda);
         strCreditos = context.getString(R.string.creditos);
+        // booleanas para detección de pulsación y pintar texto
+        boolJuego = false;
+        boolOpciones = false;
+        boolRecords = false;
+        boolCreditos = false;
+        boolAyuda = false;
+        arrayBooleanas = new boolean[]{boolJuego = false, boolOpciones = false, boolRecords = false, boolCreditos = false, boolAyuda = false};
     }
 
     /**
@@ -144,7 +153,18 @@ public class Menu extends Escena {
             c.drawText(nombreJuego, proporcionAncho * 6 + proporcionAncho / 3, proporcionAlto * 2 + proporcionAlto / 3, paintTexto);
             paintTexto.setTextSize(65);
             c.drawText(nombreVersion, proporcionAncho * 5 + proporcionAncho / 3, proporcionAlto * 6 + proporcionAlto / 3, paintTexto);
-
+            paintTexto.setTextSize((35));
+            if (boolJuego) {
+                c.drawText(nombreJuego, anchoPantalla / 2 + proporcionAncho, 0 + proporcionAlto / 2, paintTexto);
+            } else if (boolOpciones) {
+                c.drawText(strOpciones, anchoPantalla / 2 + proporcionAncho, 0 + proporcionAlto / 2, paintTexto);
+            } else if (boolRecords) {
+                c.drawText(strRecords, anchoPantalla / 2 + proporcionAncho, 0 + proporcionAlto / 2, paintTexto);
+            } else if (boolCreditos) {
+                c.drawText(strCreditos, anchoPantalla / 2 + proporcionAncho, 0 + proporcionAlto / 2, paintTexto);
+            } else if (boolAyuda) {
+                c.drawText(strAyuda, anchoPantalla / 2 + proporcionAncho, 0 + proporcionAlto / 2, paintTexto);
+            }
         } catch (NullPointerException e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
@@ -164,7 +184,22 @@ public class Menu extends Escena {
         int accion = event.getActionMasked();             //Obtenemos el tipo de pulsación
         switch (accion) {
             case MotionEvent.ACTION_DOWN:           // Primer dedo toca
+                refreshBooleanasTexto();
+                if (pulsa(rectJuego, event)) {
+                    boolJuego = true;
+                } else if (pulsa(rectOpciones, event)) {
+                    boolOpciones = true;
+                } else if (pulsa(rectLogros, event)) {
+                    boolRecords = true;
+                } else if (pulsa(rectAyuda, event)) {
+                    boolAyuda = true;
+                } else if (pulsa(rectCreditos, event)) {
+                    boolCreditos = true;
+                } else if (pulsa(rectCierre, event)) {
+                }
+                break;
             case MotionEvent.ACTION_POINTER_DOWN:  // Segundo y siguientes tocan
+                refreshBooleanasTexto();
                 break;
             case MotionEvent.ACTION_UP:                     // Al levantar el último dedo
             case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es el último
@@ -172,7 +207,6 @@ public class Menu extends Escena {
                     mediaPlayer.stop();
                     return 1;
                 } else if (pulsa(rectOpciones, event)) {
-                    // efecto pulsación TODO
                     return 2;
                 } else if (pulsa(rectLogros, event)) {
                     return 3;
@@ -228,5 +262,31 @@ public class Menu extends Escena {
             esDeDia = true;
         }
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia); // cada vez que asigna una valor de lúmenes, se comprueba que fondo escoger entre dia/noche
+    }
+
+    public void refreshBooleanasTexto() {
+        for (int i = 0; i < arrayBooleanas.length; i++) {
+            arrayBooleanas[i] = false;
+        }
+    }
+
+    public void setBoolJuego(boolean boolJuego) {
+        this.boolJuego = boolJuego;
+    }
+
+    public void setBoolOpciones(boolean boolOpciones) {
+        this.boolOpciones = boolOpciones;
+    }
+
+    public void setBoolRecords(boolean boolRecords) {
+        this.boolRecords = boolRecords;
+    }
+
+    public void setBoolCreditos(boolean boolCreditos) {
+        this.boolCreditos = boolCreditos;
+    }
+
+    public void setBoolAyuda(boolean boolAyuda) {
+        this.boolAyuda = boolAyuda;
     }
 }
