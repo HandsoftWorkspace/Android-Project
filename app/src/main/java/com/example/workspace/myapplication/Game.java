@@ -1,7 +1,6 @@
 package com.example.workspace.myapplication;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
-import java.util.MissingResourceException;
 
 public class Game extends Escena implements Runnable {
 
@@ -37,29 +35,26 @@ public class Game extends Escena implements Runnable {
     //Rect rectYones;
     Rect rectBtnA, rectBtnB, rectBtnDisparo;
 
-    private boolean dispara = false;
-    public boolean gameOver = false;
-    public boolean gameWin = false;
-    private boolean caballeroHerido = false;
+    private boolean dispara = false; // índica si se está disparando el látigo
+    public boolean gameOver = false; // índica si se ha perdido la partida
+    public boolean gameWin = false; // índica si se ha ganado la partida
+    private boolean caballeroHerido = false; // índica si el caballero ha sido impactado por el látigo
     boolean pusaldo = false;
-
     private int volumen;
-
-    private int vidas = 1;
-    private int puntuacion = 0;
-    private int ronda = 1;
+    private int vidas = 1; // vidas de la partida en un estado inicial
+    private int puntuacion = 0; // puntos con los que se inicia
+    private int ronda = 1; // ronda desde la que se empieza
+    // Recursos de texto
     private String strVidas = "";
     private String strPuntuacion = "";
     private String strPuntos = "";
     private String strRonda;
-
-    public static MediaPlayer mediaPlayer;
+    // Control de audio
+    public MediaPlayer mediaPlayer;
     public static AudioManager audioManager;
     public static Vibrator vibrator;
-
     // Personajes
     DrYones drYones;
-    Caballero caballero;
     CaballeroDos caballeroDos;
     Enemigo enemigo;
     Latigo latigo;
@@ -75,62 +70,45 @@ public class Game extends Escena implements Runnable {
      */
     public Game(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
-
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
-
+        // Inicialización de los personajes
         drYones = new DrYones(context, anchoPantalla / 2, altoPantalla, anchoPantalla, altoPantalla, 10); // le estas pone
-//        caballero = new Caballero(context, anchoPantalla, altoPantalla - proporcionAlto * 3, 4, anchoPantalla, altoPantalla);
-        caballeroDos = new CaballeroDos(context, anchoPantalla, proporcionAlto / 9 * 2, anchoPantalla, altoPantalla, 3);
         latigo = new Latigo(context, drYones.getPosX(), drYones.getPosY() - drYones.getRun()[0].getHeight() / 2, anchoPantalla, altoPantalla);
-
+//        caballeroDos = new CaballeroDos(context, anchoPantalla, proporcionAlto / 9 * 2, anchoPantalla, altoPantalla, 3);
+        // se establece el objeto vibrador
         vibrator = (Vibrator) getContext().getSystemService(context.VIBRATOR_SERVICE);
-
-        // segundo parallax
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        options.inSampleSize = 2;
-
         // Se asocia cada bitmap a una imagen png
-//        bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        // Fondo
         bitmapFondo = BitmapFactory.decodeResource(context.getResources(), R.drawable.backgroundnight);
         bitmapFondo = Bitmap.createScaledBitmap(bitmapFondo, anchoPantalla, altoPantalla, false);
-//        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
-
+        // scroll
+        fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6); // desactivado, ralentiza
         // Botones
         btnA = BitmapFactory.decodeResource(context.getResources(), R.drawable.btn);
         btnA = Bitmap.createScaledBitmap(btnA, proporcionAncho * 1 + proporcionAlto / 2, proporcionAlto * 1 + proporcionAlto / 2, false);
-
         btnB = BitmapFactory.decodeResource(context.getResources(), R.drawable.btn);
         btnB = Bitmap.createScaledBitmap(btnB, proporcionAncho * 1 + proporcionAlto / 2, proporcionAlto * 1 + proporcionAlto / 2, false);
-
-//        btnDisparo = utils.getBitmapFromAssets("varios/rock.png");
         btnDisparo = BitmapFactory.decodeResource(context.getResources(), R.drawable.mira);
         btnDisparo = Bitmap.createScaledBitmap(btnDisparo, proporcionAncho * 1, proporcionAlto * 1, false);
-
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
-
         // Rect botones
         rectBtnA = new Rect(0, proporcionAlto * 6, proporcionAncho + proporcionAncho / 2, proporcionAlto * 7 + proporcionAlto / 2);
         rectBtnB = new Rect(proporcionAncho * 17 - proporcionAncho / 2, proporcionAlto * 6, proporcionAncho * 18, proporcionAlto * 7 + proporcionAlto / 2);
         rectBtnDisparo = new Rect(proporcionAncho * 17, proporcionAlto * 4, proporcionAncho * 18, proporcionAlto * 5);
         rectVolverMenu = new Rect(0, 0, proporcionAncho * 2, proporcionAlto * 2);
-
         // PERSONAJES
         p.setColor(ContextCompat.getColor(context, R.color.colorBackGr));
         drYones.enAvance = true;
         drYones.seMueve = false;
-//        personajes.add(caballero);
-
         // Creación de 10 objetos tipo enemigo, con parámetros aleatorios
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 7; i++) {
             int auxPosX = (int) (proporcionAncho * Math.random() * 18 + 1);
             int auxVelocidad = (int) Math.random() * 30 + 15;
             enemigo = new Enemigo(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
             listaEnemigos.add(enemigo);
         }
-
         // Creación de calizez
         for (int i = 0; i < 3; i++) {
             int auxPosX = (int) (proporcionAncho * Math.random() * 18 + 1);
@@ -138,24 +116,18 @@ public class Game extends Escena implements Runnable {
             caliz = new Caliz(context, auxPosX, (int) (Math.random() * -150), anchoPantalla, altoPantalla, auxVelocidad);
             listaCaliz.add(caliz);
         }
-
         heart = utils.getBitmapFromAssets("varios/heart.png");
         heart = Bitmap.createScaledBitmap(heart, proporcionAncho * 1, proporcionAlto * 1, false);
-
         // Bitmaps de números
         for (int i = 0; i < 10; i++) {
             listaNumeros[i] = utils.getBitmapFromAssets("varios/" + i + ".png");
             listaNumeros[i] = Bitmap.createScaledBitmap(listaNumeros[i], proporcionAncho * 1, proporcionAlto * 1, false);
         }
-
         lose = utils.getBitmapFromAssets("varios/lose.png");
         lose = Bitmap.createScaledBitmap(lose, proporcionAncho * 8, proporcionAlto * 4, false);
-
         win = utils.getBitmapFromAssets("varios/win.png");
         win = Bitmap.createScaledBitmap(win, proporcionAncho * 4, proporcionAlto * 2, false);
-
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
-
         // recursos de texto
         strPuntos = context.getString(R.string.puntos);
         strRonda = context.getString(R.string.ronda);
@@ -171,21 +143,19 @@ public class Game extends Escena implements Runnable {
         mediaPlayer.start(); // Se arranca la secuencia musical
         mediaPlayer.seekTo(2000); // Se adelanta para no causar un vacio
         mediaPlayer.setLooping(true); // Se fuerza a que se repita la secuencia musical
-
     }
 
     /**
-     * Actualiza física de los personajes y objetos en pantalla
+     * Actualiza fisica de los personajes y objetos en pantalla
      */
     @Override
     public void actualizarFisica() {
         super.actualizarFisica();
-//        fondoNubes.mover();
+        fondoNubes.mover();
         drYones.move();
         drYones.setRectangulo();
-        caballeroDos.move();
-        caballeroDos.setRectangulo();
-
+//        caballeroDos.move();
+//        caballeroDos.setRectangulo();
         // Control de látigo
         if (dispara) {
             latigo.move();
@@ -194,24 +164,13 @@ public class Game extends Escena implements Runnable {
                 latigo.setPosX(drYones.getRectDrYones().centerX());
             }
         }
-
-        // Caballero
-//        caballero.mover();
-//        if (latigo.rectLatigo.intersect(caballero.rectPersonaje)) {
-//            caballeroHerido = true;
-//        } else {
-//            caballeroHerido = false;
-//        }
-
-        // Rocas y serpientes
+        // Mueve la colección de rocas y serpientes
         for (Enemigo e : listaEnemigos) {
             e.move();
             e.setRectangulo();
         }
-
-        // Comprueba hitboxes
+        // Comprueba hitboxes entre el personaje principal y rocas/serpientes
         for (Enemigo e : listaEnemigos) {
-//            if (e.rectEnemigo.intersect(drYones.rectDrYones)) {
             if (drYones.rectDrYones.intersect(e.rectEnemigo) && !e.isColision()) {
                 e.setColision(true);
                 this.vidas--;
@@ -223,17 +182,15 @@ public class Game extends Escena implements Runnable {
                 }
             }
         }
-
-        // Calices
+        // Mueve la lista de caliz
         for (Caliz c : listaCaliz) {
             c.move();
         }
-
-        // Comprueba hitboxes
+        // Comprueba hitboxes entre personaje y los caliz
         for (Caliz c : listaCaliz) {
             if (drYones.rectDrYones.intersect(c.rectCaliz) && !c.isColision()) {
                 c.setColision(true);
-                if (vidas <= 3) {
+                if (vidas < 3) {
                     this.vidas++;
                 }
                 if (Opciones.vibracion) {
@@ -253,9 +210,9 @@ public class Game extends Escena implements Runnable {
     }
 
     /**
-     * Método que dibuja los elementos necesarios, asociados al juego
+     * Rutina de dibujo, se llamara desde el hilo de juego
      *
-     * @param c canvas this application
+     * @param c Canvas de la aplicacion
      */
     public void dibujar(Canvas c) {
         try {
@@ -279,45 +236,30 @@ public class Game extends Escena implements Runnable {
                 listaCaliz.clear();
             } else {
                 // Prueba aceleración de hardware
-//            Log.d("hard", String.valueOf(c.isHardwareAccelerated()));
                 c.drawBitmap(bitmapFondo, 0, 0, null);
 //                fondoNubes.dibujar(c);
                 c.drawBitmap(heart, proporcionAncho / 2, 0, null);
-
                 p.setColor(Color.GREEN);
-//                c.drawRect(rectBtnA, p);
-//                c.drawRect(rectBtnB, p);
-//            drYones.setRectangulo();
-//            c.drawRect(drYones.setRectangulo(), p);
-//                c.drawRect(drYones.rectDrYones, p);
-//                c.drawRect(rectBtnDisparo, p);
-
                 // Botones
                 c.drawBitmap(btnA, 0, proporcionAlto * 6, null);
                 c.drawBitmap(btnB, anchoPantalla - proporcionAncho - proporcionAncho / 2, proporcionAlto * 6, null);
                 c.drawBitmap(btnDisparo, anchoPantalla - proporcionAncho, proporcionAlto * 4, null);
-
                 // Personajes
                 drYones.cambiaFrame();
                 drYones.dibuja(c);
-                caballeroDos.cambiaFrame();
-                caballeroDos.dibuja(c);
-//                if (!caballeroHerido) {
-//                caballero.dibujar(c);
-//                }
-
+                if (!caballeroHerido) {
+//                    caballeroDos.cambiaFrame();
+//                    caballeroDos.dibuja(c);
+                }
                 for (Enemigo e : listaEnemigos) {
                     e.dibuja(c);
                 }
-
                 for (Caliz caliz : listaCaliz) {
                     caliz.dibuja(c);
                 }
-
                 if (dispara) {
                     latigo.dibuja(c);
                 }
-
                 strPuntuacion = String.valueOf(puntuacion);
                 paintTexto.setColor(Color.YELLOW);
                 paintTexto.setTextSize(40);
@@ -329,14 +271,7 @@ public class Game extends Escena implements Runnable {
 
                 if (vidas == 0) {
                     c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth(), altoPantalla / 2 - lose.getHeight(), null);
-                } else if (puntuacion == 100 && ronda == 1) {
-                    ronda++;
-
-                    c.drawBitmap(win, anchoPantalla / 2 - win.getWidth(), altoPantalla / 2 - win.getHeight(), null);
-                    c.drawText(strRonda + " " + ronda, proporcionAncho * 17 - proporcionAncho, 0, paintTexto);
-                } else if (puntuacion == 200) {
-                    c.drawBitmap(win, anchoPantalla / 2 - win.getWidth(), altoPantalla / 2 - win.getHeight(), null);
-                    c.drawText(strRonda + " " + ronda, proporcionAncho * 17 - proporcionAncho, 0, paintTexto);
+                    c.drawText(strRonda + " " + ronda + "Puntos: " + strPuntos, proporcionAncho * 6, 0, paintTexto);
                 }
             }
         } catch (NullPointerException e) {
@@ -383,7 +318,6 @@ public class Game extends Escena implements Runnable {
                 }
                 if (pulsa(rectVolverMenu, event) && gameOver) {
                     guardarPuntos(puntuacion);
-
                     pusaldo = true;
                 }
                 break;
@@ -410,8 +344,8 @@ public class Game extends Escena implements Runnable {
                 dispara = false;
                 latigo.setPosX(drYones.getRectDrYones().centerX());
                 if (pulsa(rectVolverMenu, event) && gameOver) {
+                    mediaPlayer.stop();
                     return 0;
-
                 }
                 break;
         }
@@ -419,19 +353,24 @@ public class Game extends Escena implements Runnable {
     }
 
     /**
-     * Método que para la música
+     * Funcion para detener la musica
      */
     public void pararMusica() {
         mediaPlayer.pause();
     }
 
     /**
-     * Método que reanuda la música
+     * Funcion que reanuda la musica
      */
     public void reanudarMusica() {
         mediaPlayer.start();
     }
 
+    /**
+     * Metodo que se encarga de guardar puntos en la base de datos Sqlite
+     *
+     * @param puntos
+     */
     public void guardarPuntos(int puntos) {
         BaseDatos bd = null;
         SQLiteDatabase bdSqlite = null;

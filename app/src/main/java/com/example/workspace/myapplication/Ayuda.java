@@ -9,8 +9,6 @@ import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import static com.example.workspace.myapplication.Menu.mediaPlayer;
-
 public class Ayuda extends Escena {
 
     Context context;
@@ -27,7 +25,7 @@ public class Ayuda extends Escena {
     String ayudaIzq, ayudaDer, ayudaLatigo, ayudaPuntos, ayudaVidasTotales, ayudaRondaActual, ayudaVidas, ayudaPierdeVidas, strLatigo, strAyuda; // direcursos de texto para distintos idiomas
 
     /**
-     * Método contructor que inicializa las propiedades de la clase 'ayuda'
+     * Metodo contructor que inicializa las propiedades de la clase 'ayuda'
      *
      * @param context
      * @param idEscena
@@ -79,16 +77,16 @@ public class Ayuda extends Escena {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
         fondoNubes.mover();
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c canvas de la aplicación
+     * @param c canvas de la aplicacion
      */
     @Override
     public void dibujar(Canvas c) {
@@ -136,8 +134,8 @@ public class Ayuda extends Escena {
     /**
      * Controla y gestiona las pulsaciones y gestos en la pantalla
      *
-     * @param event Tipo de evento táctil que sucede
-     * @return Devuelve un entero que índice el número de escena
+     * @param event Tipo de evento tactil que sucede
+     * @return Devuelve un entero que indice el numero de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -159,7 +157,7 @@ public class Ayuda extends Escena {
                     }
                 }
                 if (pulsa(rectBack, event)) {
-                    if (contador != 0) {
+                    if (contador != -1) {
                         contador--;
                     }
                     if (contador == 0) {

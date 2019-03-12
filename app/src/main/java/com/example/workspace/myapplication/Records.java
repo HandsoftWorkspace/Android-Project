@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -19,7 +18,7 @@ public class Records extends Escena {
     int proporcionAncho, proporcionAlto; // proporciones que se utilizarán para el pintado en diferentes tamaños de pantalla
     private Bitmap one, two, three, table, star1, star2, star3, btnBorrado; // dinstintos bitmaps de la clae records
     private static ArrayList<Integer> listado = new ArrayList<>(); // colección donde se guardan las puntuaciones obtenida de la base de datos 'puntuaciones'
-    private String strRecords; // recurso string para distintos idiomas
+    private String strRecords, strBorraRecords; // recurso string para distintos idiomas
     Rect rectBorrado; // rect para detecar un evento en una zona de pantalla
 
     /**
@@ -67,21 +66,22 @@ public class Records extends Escena {
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
         // recurso para multiples idiomas
         strRecords = context.getString(R.string.logros);
-
+        strBorraRecords = context.getString(R.string.borrapuntos);
+        paintTexto.setColor(Color.YELLOW);
+        paintTexto.setTypeface(faw);
     }
 
     /**
      * Controla y gestiona las pulsaciones y gestos en la pantalla
      *
      * @param event Tipo de evento táctil que sucede
-     * @return Devuelve un entero que índice el número de escena
+     * @return Devuelve un entero que índice el numero de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
-        int pointerIndex = event.getActionIndex();        //Obtenemos el índice de la acción
-        int pointerID = event.getPointerId(pointerIndex); //Obtenemos el Id del pointer asociado a la acción
+        int pointerIndex = event.getActionIndex();        //Obtenemos el indice de la accion
+        int pointerID = event.getPointerId(pointerIndex); //Obtenemos el Id del pointer asociado a la accion
         int accion = event.getActionMasked();
-
         switch (accion) {
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:  // Al levantar un dedo que no es
@@ -96,23 +96,21 @@ public class Records extends Escena {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
         fondoNubes.mover();
     }
 
     /**
-     * Se encargará de pintar dentro de la clase records
+     * Rutina que se encarga de pintar, de llamara desde el hilo
      *
-     * @param c canvas de la aplicación
+     * @param c Canvas de la aplicación
      */
     @Override
     public void dibujar(Canvas c) {
         super.dibujar(c);
-        paintTexto.setColor(Color.YELLOW);
         paintTexto.setTextSize(50);
-        paintTexto.setTypeface(faw);
         Log.d("debug", (c == null) + " " + (p == null) + " " + (rectVolverMenu == null));
         c.drawRect(rectVolverMenu, p);
         c.drawBitmap(bitmapFondo, 0, 0, null);
@@ -133,9 +131,10 @@ public class Records extends Escena {
         c.drawBitmap(star1, proporcionAncho * 11, proporcionAlto * 6, null);
 
         c.drawText(strRecords, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, paintTexto);
+        paintTexto.setTextSize(30);
+        c.drawText(strBorraRecords, proporcionAncho * 12 + proporcionAncho / 3, (proporcionAlto * 2) / 2, paintTexto);
 
         for (int i = 0; i < 3 && i < listado.size(); i++) {
-            Log.d("listado", "listame " + listado.size() + " " + listado.get(i) + "");
             if (i == 0) {
                 c.drawText(listado.get(i) + "", proporcionAncho * 6, proporcionAlto * 2 + proporcionAncho / 2, paintTexto);
             } else if (i == 1) {
@@ -143,15 +142,11 @@ public class Records extends Escena {
             } else if (i == 2) {
                 c.drawText(listado.get(i) + "", proporcionAncho * 6, proporcionAlto * 6 + proporcionAncho / 2, paintTexto);
             }
-//            c.drawText(listado.get(i) + "", proporcionAncho * 6, (proporcionAlto * 2) * (i + 1) * 2, paintTexto);
-//        c.drawText(listado.get(1).toString(), proporcionAncho * 6, proporcionAlto * 4, pTexto);
-//        c.drawText(listado.get(2).toString(), proporcionAncho * 6, proporcionAlto * 6, pTexto);
         }
-
     }
 
     /**
-     * Carga las puntuaciones obtenidas en la base de datos Sqlite, las almacena en una colección para su posterior gestión
+     * Carga las puntuaciones obtenidas en la base de datos Sqlite, las almacena en una coleccion para su posterior gestion
      */
     public void cargarPuntuaciones() {
         BaseDatos bd = null;

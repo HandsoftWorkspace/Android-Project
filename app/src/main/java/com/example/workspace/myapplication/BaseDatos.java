@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.Nullable;
 
+import com.example.workspace.myapplication.Juego;
+
 
 public class BaseDatos extends android.database.sqlite.SQLiteOpenHelper {
     // Querys

@@ -2,16 +2,13 @@ package com.example.workspace.myapplication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class ConfirmacionCierre extends Escena {
 
@@ -21,6 +18,13 @@ public class ConfirmacionCierre extends Escena {
     String strCierra; // recurso de texto para usar distintos idiomas
     int idUltimaEscena; // entero que nos dará id que índica la última escena
 
+    /**
+     * Contructor que inicializa las propiedades de la clase
+     * @param context Contexto de la aplicacion
+     * @param idEscena Numero asociado a la escena
+     * @param anchoPantalla Ancho de pantalla del dispositivo
+     * @param altoPantalla Alto de pantalla del dispositivo
+     */
     public ConfirmacionCierre(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.idUltimaEscena = idEscena; // se asigna a ultimas escena el id de la escena actual
@@ -56,8 +60,8 @@ public class ConfirmacionCierre extends Escena {
     /**
      * Controla y gestiona las pulsaciones y gestos en la pantalla
      *
-     * @param event Tipo de evento táctil que sucede
-     * @return Devuelve un entero que índice el número de escena
+     * @param event Tipo de evento tactil que sucede
+     * @return Devuelve un entero que indice el número de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -79,7 +83,7 @@ public class ConfirmacionCierre extends Escena {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
         fondoNubes.mover();
@@ -89,9 +93,9 @@ public class ConfirmacionCierre extends Escena {
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c canvas de la aplicación
+     * @param c Canvas de la aplicación
      */
     public void dibujar(Canvas c) {
         try {

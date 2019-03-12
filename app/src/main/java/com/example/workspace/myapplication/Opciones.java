@@ -9,13 +9,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.media.AudioManager;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.PopupMenu;
 
-import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class Opciones extends Escena {
     Canvas c; // canvas de la app
@@ -31,9 +27,9 @@ public class Opciones extends Escena {
     private Bitmap music, musicoff, vibrate, vibrateoff; // bitmaps para los botones de la escena opciones
 
     boolean musicaActiva = true; // Sirve para mostrar un btn de música activada
-    public static boolean volumen = true; // Índice si hay música o no, se utilizará para las preferencias de ajustes
+    public static boolean volumen = true; // Indice si hay música o no, se utilizará para las preferencias de ajustes
     boolean vibracionActiva = true; // Sirve para mostrar un btn de musica desactivada
-    public static boolean vibracion = true; // Índica si hay vibración o no, se utilizará para las preferencias de ajustes
+    public static boolean vibracion = true; // Indica si hay vibración o no, se utilizará para las preferencias de ajustes
 
     String nombreOpciones, strMusica, strVibracion;
 
@@ -107,10 +103,10 @@ public class Opciones extends Escena {
                 } else if (pulsa(rectMusic, event)) {
                     if (musicaActiva) {
                         // Se para reanuda la música
-                        mediaPlayer.start();
+                        Menu.mediaPlayer.start();
                     } else {
                         // Se pausa la música
-                        mediaPlayer.pause();
+                        Menu.mediaPlayer.pause();
                     }
                     // Invierte los valores de las booleanas cada vez que pasa por aquí
                     musicaActiva = !musicaActiva;
@@ -180,8 +176,6 @@ public class Opciones extends Escena {
 
     /**
      * Método que carga las preferencias de ajustes del juego, vibración y sonido
-     *
-     * @return
      */
     public void cargarPreferencias() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);

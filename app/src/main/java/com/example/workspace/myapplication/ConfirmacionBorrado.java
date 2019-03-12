@@ -2,16 +2,13 @@ package com.example.workspace.myapplication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.MotionEvent;
 
-import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class ConfirmacionBorrado extends Escena {
 
@@ -21,6 +18,13 @@ public class ConfirmacionBorrado extends Escena {
     String strBorra; // recursos de texto para distintos idiomas
     int idUltimaEscena; // almacena el identificador de la última escena que ha sido cargada
 
+    /**
+     * Contructor que inicializa las propiedades de la clase
+     * @param context Contexto de la aplicacion
+     * @param idEscena Numero asociado a la escena
+     * @param anchoPantalla Ancho de pantalla del dispositivo
+     * @param altoPantalla Alto de pantalla del dispositivo
+     */
     public ConfirmacionBorrado(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
         this.idUltimaEscena = idEscena;
@@ -45,11 +49,11 @@ public class ConfirmacionBorrado extends Escena {
     }
 
     /**
-     * Se le pasa un botón y un evento, comprueba con una booleana si ha sido comprobado
+     * Se le pasa un boton y un evento, comprueba con una booleana si ha sido comprobado
      *
-     * @param boton
-     * @param event
-     * @return
+     * @param boton Rect asociado a un boton
+     * @param event Recibe el tipo de evento
+     * @return Devuelve una booleana para detectar si se ha pulsado un recto
      */
     @Override
     public boolean pulsa(Rect boton, MotionEvent event) {
@@ -81,7 +85,7 @@ public class ConfirmacionBorrado extends Escena {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
@@ -89,9 +93,9 @@ public class ConfirmacionBorrado extends Escena {
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c canvas de la aplicación
+     * @param c Canvas de la aplicación
      */
     public void dibujar(Canvas c) {
         try {

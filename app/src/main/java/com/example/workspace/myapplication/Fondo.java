@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 
+import com.example.workspace.myapplication.Juego;
+
 public class Fondo {
 
     public PointF posicion, posicion2; //posiciones de la imagen bitmap
@@ -12,9 +14,10 @@ public class Fondo {
     int velocidad = 0;
 
     /**
-     * @param imagen
-     * @param x
-     * @param y
+     * Constructo que inicializa los parametros de clase
+     * @param imagen Bitmap asociado a una imagen
+     * @param x Posicion eje X
+     * @param y Posicion posicion eje Y
      */
     public Fondo(Bitmap imagen, float x, float y, int velocidad) {
         this.imagen = imagen;
@@ -46,7 +49,7 @@ public class Fondo {
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
      * @param c
      */

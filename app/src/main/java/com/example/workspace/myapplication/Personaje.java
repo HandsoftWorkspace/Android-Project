@@ -2,7 +2,6 @@ package com.example.workspace.myapplication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 
 public class Personaje {
@@ -33,7 +32,7 @@ public class Personaje {
     /**
      * Comprueba mediante booleanas, si se está moviendo o parado, además de la dirección en la que se muestra
      *
-     * @return
+     * @return Devuelve null
      */
     public Bitmap move() {
         int aux = 0;

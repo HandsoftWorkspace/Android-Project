@@ -2,13 +2,10 @@ package com.example.workspace.myapplication;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.Log;
 
 public class DrYones extends Personaje {
     private int posX, posY; // posiciones en eje X y eje Y de personajes
@@ -42,14 +39,14 @@ public class DrYones extends Personaje {
     Utils utils = new Utils(context);
 
     /**
-     * Está clase hereda de la clase pesonaje
+     * Esta clase hereda de la clase pesonaje
      *
      * @param context       Contexto de la app
-     * @param posX          coordenada eje X del DrYones
-     * @param posY          coordenada eje Y del DrYones
-     * @param anchoPantalla ancho pantalla del dispositivo
-     * @param altoPantalla  alto pantalla del dispositivo
-     * @param velocidad     velocidad a la que se mueve el personaje
+     * @param posX          Coordenada eje X del DrYones
+     * @param posY          Coordenada eje Y del DrYones
+     * @param anchoPantalla Ancho pantalla del dispositivo
+     * @param altoPantalla  Alto pantalla del dispositivo
+     * @param velocidad     Velocidad a la que se mueve el personaje
      */
     public DrYones(Context context, int posX, int posY, int anchoPantalla, int altoPantalla, int velocidad) {
         super(context, posX, posY, velocidad, anchoPantalla, altoPantalla);
@@ -94,9 +91,9 @@ public class DrYones extends Personaje {
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c canvas asociado a la aplicación
+     * @param c Canvas asociado a la aplicacion
      */
     public void dibuja(Canvas c) {
         if (enAvance) {
@@ -119,7 +116,7 @@ public class DrYones extends Personaje {
     }
 
     /**
-     * Comprueba que cambia una fracción de tiempo, antes de cambiar el índice
+     * Comprueba que cambia una fraccion de tiempo, antes de cambiar el indice
      */
     public void cambiaFrame() {
         if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
@@ -132,9 +129,9 @@ public class DrYones extends Personaje {
     }
 
     /**
-     * Comprueba mediante booleanas, si se está moviendo o parado, además de la dirección en la que se muestra
+     * Comprueba mediante booleanas, si se esta moviendo o parado, ademas de la direcciOn en la que se muestra
      *
-     * @return
+     * @return Devuelve null
      */
     public Bitmap move() {
         if (seMueve && enAvance) {
@@ -158,18 +155,18 @@ public class DrYones extends Personaje {
     }
 
     /**
-     * Se crea y se asocia una rect, que será el hitbox de nuestro de personaje
+     * Se crea y se asocia una rect, que sera el hitbox de nuestro de personaje
      */
     public void setRectangulo() {
         rectDrYones = new Rect((int) (posX + 0.2 * run[0].getWidth()), (int) (posY + 0.2 * run[0].getHeight()), (int) (posX + 0.8 * run[0].getWidth()), (int) (posY + 0.8 * run[0].getHeight()));
     }
 
     /**
-     * Función que recibe como parámetro un bitmap, el cual será volteado
+     * Funcion que recibe como parámetro un bitmap, el cual sera volteado
      *
-     * @param imagen     Bitmap que será la imagen a mostrar
-     * @param horizontal Índica si se muestra en posición horizontal, en caso de ser true, vértical en caso de ser false
-     * @return
+     * @param imagen     Bitmap que sera la imagen a mostrar
+     * @param horizontal Indica si se muestra en posición horizontal, en caso de ser true, vertical en caso de ser false
+     * @return Devuelve un bitmap aplicando efecto espejo
      */
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
         Matrix matrix = new Matrix();
@@ -179,9 +176,9 @@ public class DrYones extends Personaje {
     }
 
     /**
-     * Método que crea una transparencia sobre un objeto
+     * Metodo que crea una transparencia sobre un objeto
      *
-     * @param alfa Índice el grado de transparencia
+     * @param alfa Indica el grado de transparencia
      */
     public void setAlfa(int alfa) {
         this.alfa = alfa;

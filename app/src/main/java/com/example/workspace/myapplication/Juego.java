@@ -2,26 +2,21 @@ package com.example.workspace.myapplication;
 
 import android.graphics.Canvas;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
     private SurfaceHolder surfaceHolder;      // Interfaz abstracta para manejar la superficie de dibujado
     private Context context;                  // Contexto de la aplicación
     private SensorManager sensorManager;    // Gestión del sensor de luz
     private Sensor sensor;  // Sensor de luz
-    boolean escenaArrancada = false; // Índica si la escena ha sido arrancada
+    boolean escenaArrancada = false; // Indica si la escena ha sido arrancada
     Utils utils;
     private float luz = -1; // cantidad de luz expresadas en lúmenes
     private int anchoPantalla = 1;              // Ancho de la pantalla, su valor se actualiza en el método surfaceChanged
@@ -55,7 +50,6 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
         hilo = new Hilo();                      // Inicializamos el hilo
         setFocusable(true);                     // Aseguramos que reciba eventos de toque
         utils = new Utils(context);
-
         // Sensor luz
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
@@ -66,8 +60,10 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
     }
 
     /**
-     * @param event
-     * @return
+     * Controla los eventos que suceden sobre la pantalla del dispositivo
+     *
+     * @param event Tipo de evento que sucede
+     * @return Devuelve el tipo de evento
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -120,9 +116,9 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
      */
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-//        if (escenaActual == game) {
-//            game.pararMusica();
-//        }
+        if (escenaActual == game) {
+            game.pararMusica(); // paro música juego
+        }
         opciones.guardarPreferencias(); // Guardo preferencias opciones
         hilo.setFuncionando(false);  // Se para el hilo
         try {
@@ -187,14 +183,16 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
     }
 
     /**
-     * Hilo en la cual implementamos el método de dibujo (y física) para que se haga en paralelo con la gestión de la interfaz de usuario
+     * Hilo en la cual implementamos el metodo de dibujo y actualizar física para que se haga en paralelo con la gestión de la interfaz de usuario
      */
-    // Clase Hilo en la cual implementamos el método de dibujo (y física) para que se haga en paralelo con la gestión de la interfaz de usuario
     class Hilo extends Thread {
         public Hilo() {
 
         }
 
+        /**
+         * Hilo de la aplicacion donde ejecutaremos nuestros recursos graficos, ademas de controlar dicho hilo
+         */
         @Override
         public void run() {
             while (funcionando) {
@@ -252,7 +250,7 @@ public class Juego extends SurfaceView implements SurfaceHolder.Callback, Sensor
     public void setLuz(float luz) {
         this.luz = luz;
         if (escenaArrancada) {
-            if (luz < 4) {
+            if (luz < 1) {
                 menu.esDeDia = false;
                 opciones.esDeDia = false;
                 records.esDeDia = false;

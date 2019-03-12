@@ -1,11 +1,8 @@
 package com.example.workspace.myapplication;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -26,12 +23,12 @@ public class Escena {
     Utils utils; // objeto de la clase 'utils'
 
     /**
-     * Método contructor que inicializa las propiedades de la clase 'escena'
+     * Metodo contructor que inicializa las propiedades de la clase
      *
-     * @param context
-     * @param idEscena
-     * @param anchoPantalla
-     * @param altoPantalla
+     * @param context       Contexto de la aplicacion
+     * @param idEscena      Numero que identifica la escena
+     * @param anchoPantalla Ancho pantalla
+     * @param altoPantalla  Alto pantalla
      */
     public Escena(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         this.context = context;
@@ -60,12 +57,18 @@ public class Escena {
      */
     public void dibujar(Canvas c) {
         try {
-            //if(idEscena!=0 &&)
         } catch (Exception e) {
             Log.i("Error al dibujar", e.getLocalizedMessage());
         }
     }
 
+    /**
+     * Controla si se ha pulsado un boton determinado una pulsacion especifica, devuelve true en caso de que se cumpla
+     *
+     * @param boton // Rect asociado a un boton
+     * @param event // Tipo de evento que sucede
+     * @return Devuelve true o false en funcion de si se ha pulsado un boton
+     */
     public boolean pulsa(Rect boton, MotionEvent event) {
         if (boton.contains((int) event.getX(), (int) event.getY())) {
             return true;
@@ -76,8 +79,8 @@ public class Escena {
     /**
      * Controla y gestiona las pulsaciones y gestos en la pantalla
      *
-     * @param event Tipo de evento táctil que sucede
-     * @return Devuelve un entero que índice el número de escena
+     * @param event Tipo de evento tactil que sucede
+     * @return Devuelve un entero que indice el numero de escena
      */
     public int onTouchEvent(MotionEvent event) {
         //synchronized (surfaceHolder) {

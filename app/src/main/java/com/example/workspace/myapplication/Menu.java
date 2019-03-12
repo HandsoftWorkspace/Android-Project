@@ -8,17 +8,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
-
-import java.util.ArrayList;
 
 //public class Menu extends Escena implements SensorEventListener {
 public class Menu extends Escena {
@@ -49,6 +43,7 @@ public class Menu extends Escena {
         super(context, idEscena, anchoPantalla, altoPantalla);
         // Fondo menú principal
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
+        // scroll de nubes
         fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
         // Proporciones pantalla, se divide el alto y ancho de la pantalla del dispositivo, para conseguir asi nuestras proporciones
         // para que se adapten asi a distintos dispositivos
@@ -174,7 +169,7 @@ public class Menu extends Escena {
      * Gestiona el tipo de pulsación mediante la detección de un evento, con el cual devolvera un idEscena
      *
      * @param event conseguimos el tipo de evento que sucede
-     * @return
+     * @return Devuelve un entero identificando la escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -185,18 +180,18 @@ public class Menu extends Escena {
         switch (accion) {
             case MotionEvent.ACTION_DOWN:           // Primer dedo toca
                 refreshBooleanasTexto();
-                if (pulsa(rectJuego, event)) {
-                    boolJuego = true;
-                } else if (pulsa(rectOpciones, event)) {
-                    boolOpciones = true;
-                } else if (pulsa(rectLogros, event)) {
-                    boolRecords = true;
-                } else if (pulsa(rectAyuda, event)) {
-                    boolAyuda = true;
-                } else if (pulsa(rectCreditos, event)) {
-                    boolCreditos = true;
-                } else if (pulsa(rectCierre, event)) {
-                }
+//                if (pulsa(rectJuego, event)) {
+//                    boolJuego = true;
+//                } else if (pulsa(rectOpciones, event)) {
+//                    boolOpciones = true;
+//                } else if (pulsa(rectLogros, event)) {
+//                    boolRecords = true;
+//                } else if (pulsa(rectAyuda, event)) {
+//                    boolAyuda = true;
+//                } else if (pulsa(rectCreditos, event)) {
+//                    boolCreditos = true;
+//                } else if (pulsa(rectCierre, event)) {
+//                }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:  // Segundo y siguientes tocan
                 refreshBooleanasTexto();

@@ -5,13 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.util.Log;
 import android.view.MotionEvent;
 
-import static com.example.workspace.myapplication.Menu.mediaPlayer;
 
 public class Creditos extends Escena {
 
@@ -24,12 +20,11 @@ public class Creditos extends Escena {
     String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos, strCreditos, strMusica, strFuente, strCreadoPor;
 
     /**
-     * Método contructor que inicializa las propiedades de la clase crétidos
-     *
-     * @param context
-     * @param idEscena
-     * @param anchoPantalla
-     * @param altoPantalla
+     * Contructor que inicializa las propiedades de la clase
+     * @param context Contexto de la aplicacion
+     * @param idEscena Numero asociado a la escena
+     * @param anchoPantalla Ancho de pantalla del dispositivo
+     * @param altoPantalla Alto de pantalla del dispositivo
      */
     public Creditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -66,16 +61,16 @@ public class Creditos extends Escena {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
         fondoNubes.mover(); // mueve el scroll
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c canvas de la aplicación
+     * @param c Canvas de la aplicacion
      */
     @Override
     public void dibujar(Canvas c) {
@@ -101,8 +96,8 @@ public class Creditos extends Escena {
     /**
      * Controla y gestiona las pulsaciones y gestos en la pantalla
      *
-     * @param event Tipo de evento táctil que sucede
-     * @return Devuelve un entero que índice el número de escena
+     * @param event Tipo de evento tactil que sucede
+     * @return Devuelve un entero que indice el numero de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {

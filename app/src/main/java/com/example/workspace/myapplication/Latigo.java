@@ -19,12 +19,12 @@ public class Latigo {
     private int anchoPantalla, altoPantalla; // tamaños de pantalla del dispositivo
     int proporcionAncho, proporcionAlto; // proporciones para el dibujado adaptativo
     public Rect rectLatigo; // hitbox del látigo
-    Paint paint;
+    Paint paint; // pincel
 
     /**
-     * Contructor que inicializa las propiedas de la clase 'Latigo'
+     * Contructor que inicializa las propiedas de la clase
      *
-     * @param context       Contexto de la aplicación
+     * @param context       Contexto de la aplicacion
      * @param posX          Posición en el eje X del látigo
      * @param posY          Posicion en el eje Y del látigo
      * @param anchoPantalla Ancho de pantalla del dispositivo
@@ -45,7 +45,7 @@ public class Latigo {
     }
 
     /**
-     * Dibuja el objeto de la clase látigo
+     * Rutina de dibujo
      *
      * @param c Es el canvas asociado a la aplicación
      */
@@ -54,7 +54,7 @@ public class Latigo {
     }
 
     /**
-     * Mueve al objeto látigo en posición horizontal en dirección 'X' negativo y 'X' positivo
+     * Mueve al objeto latigo en posicion horizontal en direccion 'X' negativo y 'X' positivo
      */
     public void move() {
         if (DrYones.enAvance) {
@@ -66,7 +66,7 @@ public class Latigo {
     }
 
     /**
-     * Comprueba mediante booleanas, si se está moviendo o parado, además de la dirección en la que se muestra
+     * Comprueba mediante booleanas, si se está moviendo o parado, ademas de la direccion en la que se muestra
      */
     public void setRectangulo() {
         paint.setColor(Color.GREEN);

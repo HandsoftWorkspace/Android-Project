@@ -17,21 +17,21 @@ public class CaballeroDos extends Personaje {
     private int tiempoFrame = 100; // cada cuanto cambia el frame
     private int tiempoMove = 50; //
     private long tFrameAuxm = 0, tMoveAux = 0;
-    private int indice = 0; // índice para recorrer los array de bitmaps
+    private int indice = 0; // indice para recorrer los array de bitmaps
     Bitmap bitmapsCaba[]; // array de bitmaps enemigos
     public Rect rectEnemigo;    // hitbox enemigos
-    Context context; // contexto de la aplicación
+    Context context; // contexto de la aplicacion
     Utils utils;
 
     /**
      * Contructor que inicializa las propiedas de la clase 'enemigo'
      *
-     * @param context       contexto de la aplicación
-     * @param posX          posición en el eje X
-     * @param posY          posición en el eje Y
-     * @param anchoPantalla ancho pantalla del dispositivo
-     * @param altoPantalla  alto pantalla del dispositivo
-     * @param velocidad     velocidad de movimiento en el eje Y del personaje
+     * @param context       Contexto de la aplicacion
+     * @param posX          Posicion en el eje X
+     * @param posY          Posicion en el eje Y
+     * @param anchoPantalla Ancho pantalla del dispositivo
+     * @param altoPantalla  Alto pantalla del dispositivo
+     * @param velocidad     Velocidad de movimiento en el eje Y del personaje
      */
     public CaballeroDos(Context context, int posX, int posY, int anchoPantalla, int altoPantalla, int velocidad) {
         super(context, posX, posY, anchoPantalla, altoPantalla, velocidad);
@@ -54,16 +54,16 @@ public class CaballeroDos extends Personaje {
     }
 
     /**
-     * Se crea y se asocia una rect, que será el hitbox de nuestro de personaje
+     * Se crea y se asocia una rect, que sera el hitbox de nuestro de personaje
      */
     public void setRectangulo() {
         rectEnemigo = new Rect((int) (posX + 0.2 * bitmapsCaba[0].getWidth()), (int) (posY + 0.2 * bitmapsCaba[0].getHeight()), (int) (posX + 0.8 * bitmapsCaba[0].getWidth()), (int) (posY + 0.8 * bitmapsCaba[0].getHeight()));
     }
 
     /**
-     * Comprueba mediante booleanas, si se está moviendo o parado, además de la dirección en la que se muestra
+     * Comprueba mediante booleanas, si se esta moviendo o parado, ademas de la direccion en la que se muestra
      *
-     * @return
+     * @return Devuelve null
      */
     public Bitmap move() {
         posX -= velocidad;
@@ -76,7 +76,7 @@ public class CaballeroDos extends Personaje {
     }
 
     /**
-     * Comprueba que cambia una fracción de tiempo, antes de cambiar el índice
+     * Comprueba que cambia una fraccion de tiempo, antes de cambiar el indice
      */
     public void cambiaFrame() {
         if (System.currentTimeMillis() - tFrameAuxm > tiempoFrame) {
@@ -89,27 +89,27 @@ public class CaballeroDos extends Personaje {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
 
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c
+     * @param c Canvas de la aplicacion
      */
     public void dibuja(Canvas c) {
         c.drawBitmap(bitmapsCaba[indice], posX, altoPantalla - proporcionAlto * 5, null);
     }
 
     /**
-     * Función que recibe como parámetro un bitmap, el cual será volteado
+     * Funcion que recibe como parametro un bitmap, el cual será volteado
      *
-     * @param imagen     Bitmap que será la imagen a mostrar
-     * @param horizontal Índica si se muestra en posición horizontal, en caso de ser true, vértical en caso de ser false
-     * @return
+     * @param imagen     Bitmap que sera la imagen a mostrar
+     * @param horizontal Indica si se muestra en posición horizontal, en caso de ser true, vertical en caso de ser false
+     * @return Devuelve un bitmap aplicando efecto espejo
      */
     public Bitmap espejo(Bitmap imagen, Boolean horizontal) {
         Matrix matrix = new Matrix();
@@ -119,9 +119,9 @@ public class CaballeroDos extends Personaje {
     }
 
     /**
-     * Índica si el enemigo ha colisionado
+     * Indica si el enemigo ha colisionado
      *
-     * @return devuelve el valor de la booleana
+     * @return Devuelve true en caso de colision
      */
     public boolean isColision() {
         return colision;
@@ -130,10 +130,18 @@ public class CaballeroDos extends Personaje {
     /**
      * Hace un set a la booleana colision
      *
-     * @param colision muestra el valor de si el enemigo está en colisión o no
+     * @param colision Muestra el valor si el enemigo esta en colisian o no
      */
     public void setColision(boolean colision) {
         this.colision = colision;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
     }
 
 }

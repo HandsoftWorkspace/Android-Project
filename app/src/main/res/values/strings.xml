@@ -3,7 +3,7 @@
     <string name="jugar">Jugar</string>
     <string name="opciones">Opciones</string>
     <string name="logros">Logros</string>
-    <string name="creditos">Créditos</string>
+    <string name="creditos">Creditos</string>
     <string name="ayuda">Ayuda</string>
     <string name="hechopor">Creado por</string>
     <string name="fuentes">Recursos</string>
@@ -12,12 +12,12 @@
     <string name="projectname">Nombre proyecto</string>
     <string name="proyecto">Proyecto</string>
     <string name="confirmarsalida">Deseas salir del juego?</string>
-    <string name="confirmarvaciado">Borrar puntuaciones ?</string>
+    <string name="confirmarvaciado">Borrar puntuaciones?</string>
     <string name="nombreversion">La ciudad perdida</string>
     <string name="ronda">Ronda</string>
     <string name="puntos">Puntos</string>
-    <string name="musica">Música</string>
-    <string name="vibracion">Vibración</string>
+    <string name="musica">Musica</string>
+    <string name="vibracion">Vibracion</string>
     <string name="fuente">Fuente</string>
     <string name="ayudaizq">Mover a la izquierda</string>
     <string name="ayudader">Mover a la derecha</string>
@@ -27,5 +27,6 @@
     <string name="ayudavidas">Caliz  y  arcas proporcionan vidas</string>
     <string name="ayudapierdevidas">Rocas y serpientes quitan vidas</string>
     <string name="ayudaronda">Ronda actual</string>
-    <string name="latigo">Látigo</string>
+    <string name="latigo">Latigo</string>
+    <string name="borrapuntos">Borrar records</string>
 </resources>
