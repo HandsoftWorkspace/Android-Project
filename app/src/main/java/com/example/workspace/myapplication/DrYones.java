@@ -8,35 +8,81 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class DrYones extends Personaje {
-    private int posX, posY; // posiciones en eje X y eje Y de personajes
-    private int anchoPantalla, altoPantalla; // tamaño de pantalla del dispositivo
-    private int proporcionAncho, proporcionAlto; // proporciones de pantalla
-
-    int vidas; // cantidad de vidas
-
-    private int velocidad; // velocidad de salto en el eje X
-    private int tiempoFrame = 100; // cada cuanto cambia el frame
-    private int tiempoMove = 50; //
+    /**
+     * posiciones en eje X y eje Y de personajes
+     */
+    private int posX, posY;
+    /**
+     * Tamaño de pantalla del dispositivo
+     */
+    private int anchoPantalla, altoPantalla;
+    /**
+     * Proporciones de pantalla
+     */
+    private int proporcionAncho, proporcionAlto;
+    /**
+     * Entero que indice antidad de vida
+     */
+    int vidas;
+    /**
+     * Velocidad de salto en el eje X
+     */
+    private int velocidad;
+    /**
+     * Cada cuanto cambia el frame
+     */
+    private int tiempoFrame = 100;
+    /**
+     * Transicion entre frames
+     */
+    private int tiempoMove = 50;
+    /**
+     * Control de transicion de los frames
+     */
     private long tFrameAuxm = 0, tMoveAux = 0;
-    private int indice = 0; // índice para recorrer los array de bitmaps
-    private int alfa = 230; // transparencia
-    private Paint p; // pincel para objetos de la clase
-    // gestion de moviento del personaje principal
+    /**
+     * cada cuanto cambia el frame
+     */
+    private int indice = 0;
+    /**
+     * Transparencia
+     */
+    private int alfa = 230;
+    /**
+     * Pincel para objetos de la clase
+     */
+    private Paint p;
+    /**
+     * Gestion de moviento del personaje principal
+     */
     public boolean seMueve = true;
+    /**
+     * Control de movimientos del objeto
+     */
     boolean animado = true;
     boolean avanza = true;
-    boolean pulsado = false; // futuras implementaciones
     public static boolean enAvance = false;
     public static boolean enRetroceso = false;
-    // Arrays de bitmaps para gestionar el movimiento del personaje principal
+    /*
+    Comprueba si se ha pulsado
+     */
+    boolean pulsado = false; // futuras implementaciones
+    /**
+     * Arrays de imagenes para conseguir el movimiento del personaje
+     */
     private Bitmap[] idle;  // en descanso, posición este
     private Bitmap[] idleEspejo; // en descanso posición oeste
     private Bitmap[] run;   // en carrera posición este
     private Bitmap[] runEspejo; // en carrera en posición oeste
     // rect hitbox
-    public Rect rectDrYones; // hitbox del personajes principal
-    Context context; // contexto de la aplicación
-    Utils utils = new Utils(context);
+    /**
+     * Hitbox del personaje
+     */
+    public Rect rectDrYones;
+    /**
+     * Contexto de la aplicacion
+     */
+    Context context;
 
     /**
      * Esta clase hereda de la clase pesonaje

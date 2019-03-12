@@ -10,21 +10,30 @@ import android.view.MotionEvent;
 
 
 public class Creditos extends Escena {
-
+    /**
+     * Contexto de la aplicacion
+     */
     Context context;
-
-    int anchoPantalla, altoPantalla; // Alto y ancho de la pantalla del dispositivo
-    int proporcionAncho, proporcionAlto; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
-
-    // Fuentes que se utilizan para gestionar diferentes idiomas en la aplicación
+    /**
+     * Alto y ancho de la pantalla del dispositivo
+     */
+    int anchoPantalla, altoPantalla;
+    /**
+     * Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
+     */
+    int proporcionAncho, proporcionAlto;
+    /**
+     * Fuentes que se utilizan para gestionar diferentes idiomas en la aplicación
+     */
     String nombreProyecto, proyecto, nombre, hechoPor, nombreJuego, fuentesRecursos, strCreditos, strMusica, strFuente, strCreadoPor;
 
     /**
      * Contructor que inicializa las propiedades de la clase
-     * @param context Contexto de la aplicacion
-     * @param idEscena Numero asociado a la escena
+     *
+     * @param context       Contexto de la aplicacion
+     * @param idEscena      Numero asociado a la escena
      * @param anchoPantalla Ancho de pantalla del dispositivo
-     * @param altoPantalla Alto de pantalla del dispositivo
+     * @param altoPantalla  Alto de pantalla del dispositivo
      */
     public Creditos(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -84,9 +93,9 @@ public class Creditos extends Escena {
         c.drawText(strCreditos, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, p);
         p.setTextSize(30);
         // textos
-        c.drawText(nombreProyecto + ": " + proyecto + " final Android", proporcionAncho * 2, proporcionAlto * 2 + proporcionAlto / 2, p);
+        c.drawText(nombreProyecto + ": " + proyecto + " final Android, Colegio Vivas", proporcionAncho * 2, proporcionAlto * 2 + proporcionAlto / 2, p);
         c.drawText(nombre + ": " + nombreJuego, proporcionAncho * 2, proporcionAlto * 3 + proporcionAlto / 2, p);
-        c.drawText(hechoPor + ": Daniel Vázquez Rodríguez", proporcionAncho * 2, proporcionAlto * 4 + proporcionAlto / 2, p);
+        c.drawText(hechoPor + ": Daniel Vazquez Rodriguez", proporcionAncho * 2, proporcionAlto * 4 + proporcionAlto / 2, p);
         c.drawText(fuentesRecursos + ": Icons Icons, game2Art, craftFix", proporcionAncho * 2, proporcionAlto * 5 + proporcionAlto / 2, p);
         c.drawText(strMusica + ": SoundBible", proporcionAncho * 2, proporcionAlto * 6 + proporcionAlto / 2, p);
         c.drawText(strFuente + " " + strCreadoPor + ": Darrell Flood", proporcionAncho * 2, proporcionAlto * 7 + proporcionAlto / 2, p);

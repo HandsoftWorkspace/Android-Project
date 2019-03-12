@@ -8,16 +8,49 @@ import android.graphics.Rect;
 
 public class Enemigo extends Personaje {
 
-    private int posX, posY; // posiciones en eje X y eje Y
+    /**
+     * posiciones en eje X y eje Y
+     */
+    private int posX, posY;
+    /**
+     * Tamanho de pantalla del dispositivo
+     */
     private int anchoPantalla, altoPantalla;
+    /**
+     * Proporciones para dividir la pantalla y adaptar a distintos dispositivos
+     */
     private int proporcionAncho, proporcionAlto;
-    private boolean colision = false; // detecta si ha colisionado
+    /**
+     * Detecta si el objeto ha entrado en colision
+     */
+    private boolean colision = false;
+    /**
+     * Velocidad del objeto enemigo
+     */
     private int velocidad;
+    /**
+     * Pincel
+     */
     private Paint p;
+    /**
+     * Frames estaticos
+     */
     public Bitmap frameRoca, frameSerpiente;
-    Bitmap bitmaps[]; // array de bitmaps enemigos
-    public Rect rectEnemigo;    // hitbox enemigos
-    Context context; // contexto de la aplicación
+    /**
+     * Array de bitmaps enemigos
+     */
+    Bitmap bitmaps[];
+    /**
+     * Hitbox enemigos
+     */
+    public Rect rectEnemigo;
+    /**
+     * Contexto de la aplicación
+     */
+    Context context;
+    /**
+     * Objeto de la clase utils
+     */
     Utils utils;
 
     /**

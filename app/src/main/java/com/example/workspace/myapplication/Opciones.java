@@ -14,30 +14,64 @@ import android.view.MotionEvent;
 
 
 public class Opciones extends Escena {
-    Canvas c; // canvas de la app
-    Typeface faw; // tipología de fuente
+    /**
+     * Canvas de la app
+     */
+    Canvas c;
+    /**
+     * Tipología de fuente
+     */
+    Typeface faw;
+    /**
+     * Objeto de la clase utils
+     */
     Utils utils;
-    Paint paintTexto = new Paint(); // pincel para gestionar los distintos efectos del texto
-
-    private int proporcionAlto, proporcionAncho; // Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
+    /**
+     * Pincel para gestionar los distintos efectos del texto
+     */
+    Paint paintTexto = new Paint();
+    /**
+     * Divisores del tamaño de la pantalla, para adaptar los distintos objetos a diferentes resoluciones
+     */
+    private int proporcionAlto, proporcionAncho;
+    /**
+     * Tamanhos de pantalla del dispositivo
+     */
     private int anchoPantalla, altoPantalla;
-
-    private Rect rectMusic, rectMusicoff, rectVibracion, getRectVibracionoff; // Rectangulos que nos serviran para detectar pulsaciones en la pantalla del dispositivo
-    private float x;
-    private Bitmap music, musicoff, vibrate, vibrateoff; // bitmaps para los botones de la escena opciones
-
-    boolean musicaActiva = true; // Sirve para mostrar un btn de música activada
-    public static boolean volumen = true; // Indice si hay música o no, se utilizará para las preferencias de ajustes
-    boolean vibracionActiva = true; // Sirve para mostrar un btn de musica desactivada
-    public static boolean vibracion = true; // Indica si hay vibración o no, se utilizará para las preferencias de ajustes
-
+    /**
+     * Rectangulos que nos serviran para detectar pulsaciones en la pantalla del dispositivo
+     */
+    private Rect rectMusic, rectVibracion;
+    /**
+     * Bitmaps para los botones de la escena opciones
+     */
+    private Bitmap music, musicoff, vibrate, vibrateoff;
+    /**
+     * Sirve para mostrar un btn de música activada
+     */
+    boolean musicaActiva = true;
+    /**
+     * Indice si hay música o no, se utilizará para las preferencias de ajustes
+     */
+    public static boolean volumen = true;
+    /**
+     * Sirve para mostrar un btn de vibracion desactivada
+     */
+    boolean vibracionActiva = true;
+    /**
+     * Indica si hay vibración o no, se utilizará para las preferencias de ajustes
+     */
+    public static boolean vibracion = true;
+    /**
+     * Cadenas de texto para los recursos de texto
+     */
     String nombreOpciones, strMusica, strVibracion;
 
     /**
      * Contructor que inicializa las propiedas de la clase
      *
-     * @param context       Contexto de la aplicación
-     * @param idEscena      Número que identifica la escena actual
+     * @param context       Contexto de la aplicacion
+     * @param idEscena      Numero que identifica la escena actual
      * @param anchoPantalla Ancho de la pantalla del dispositivo
      * @param altoPantalla  Alto de la pantalla del dispositivo
      */
@@ -84,8 +118,8 @@ public class Opciones extends Escena {
     /**
      * Controla y gestiona las pulsaciones y gestos en la pantalla
      *
-     * @param event Tipo de evento táctil que sucede
-     * @return Devuelve un entero que índice el número de escena
+     * @param event Tipo de evento tactil que sucede
+     * @return Devuelve un entero que indice el numero de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -126,9 +160,9 @@ public class Opciones extends Escena {
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c canvas de la aplicación
+     * @param c Canvas de la aplicacion
      */
     @Override
     public void dibujar(Canvas c) {
@@ -157,7 +191,7 @@ public class Opciones extends Escena {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
         fondoNubes.mover();
@@ -175,7 +209,7 @@ public class Opciones extends Escena {
     }
 
     /**
-     * Método que carga las preferencias de ajustes del juego, vibración y sonido
+     * Método que carga las preferencias de ajustes del juego, vibracion y sonido
      */
     public void cargarPreferencias() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("preferencias", Context.MODE_PRIVATE);

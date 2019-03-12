@@ -10,15 +10,45 @@ import android.util.Log;
 
 public class Latigo {
 
+    /**
+     * Contexto de la aplicacion
+     */
     Context context; // contexto de la aplicación
+    /**
+     * Objeto de la clase utils
+     */
     private Utils utils;
+    /**
+     * Bitmap estatico para el objeto
+     */
     private Bitmap latigo;
-    private int posX; // posición eje X del personaje
-    private int posY; // posición eje Y del personaje
-    private int velocidadLatigo = 13; // velocidad de movimiento del látigo
-    private int anchoPantalla, altoPantalla; // tamaños de pantalla del dispositivo
-    int proporcionAncho, proporcionAlto; // proporciones para el dibujado adaptativo
-    public Rect rectLatigo; // hitbox del látigo
+    /**
+     * Posicion eje X del personaje
+     */
+    private int posX;
+    /**
+     * Posicion eje Y del personaje
+     */
+    private int posY;
+    /**
+     * Velocidad de movimiento del latigo
+     */
+    private int velocidadLatigo = 13;
+    /**
+     * Tamaños de pantalla del dispositivo
+     */
+    private int anchoPantalla, altoPantalla;
+    /**
+     * Proporciones para el dibujado adaptativo
+     */
+    int proporcionAncho, proporcionAlto;
+    /**
+     * Hitbox del látigo
+     */
+    public Rect rectLatigo;
+    /**
+     * Pincel
+     */
     Paint paint; // pincel
 
     /**

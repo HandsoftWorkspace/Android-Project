@@ -8,16 +8,49 @@ import android.graphics.Rect;
 
 public class Caliz extends Personaje {
 
+    /**
+     * Posiciones en eje X y eje Y
+     */
     private int posX, posY; // posiciones eje X y eje Y
+    /**
+     * Tamaño de pantalla del dispositivo
+     */
     private int anchoPantalla, altoPantalla; // ancho y alto del dispositivo
+    /**
+     * Proporciones de pantalla
+     */
     private int proporcionAncho, proporcionAlto; // proporciones de pantalla
+    /**
+     * Velocidad de movimiento de avance en el eje Y
+     */
     private int velocidad; // velocidad de movimiento del objeto
-    private boolean colision = false; // boolean que muestra si existe colisión
-    private Paint p; // pincel
-    public Bitmap frameArca, frameCaliz; // frames estáticos
-    Bitmap bitmaps[]; // array de bitsmaps, donde se almacenarán los frames de los objetos
-    public Rect rectCaliz; // hitbox del objeto
+    /**
+     * Booleano que muestra si existe colisión
+     */
+    private boolean colision = false;
+    /**
+     * Pincel
+     */
+    private Paint p;
+    /**
+     * Frame estatidos para los objetos de la clase
+     */
+    public Bitmap frameArca, frameCaliz;
+    /**
+     * Array de bitsmaps, donde se almacenarán los frames de los objetos
+     */
+    Bitmap bitmaps[];
+    /**
+     * Hitbox de lo objeto de la clase
+     */
+    public Rect rectCaliz;
+    /**
+     * Contexto de la aplicacion
+     */
     Context context;
+    /**
+     * Objeto de la clase utils
+     */
     Utils utils;
 
     /**

@@ -11,16 +11,46 @@ import android.view.MotionEvent;
 
 public class Escena {
 
-    Bitmap bitmapFondo, volverMenu; // fondo y botones
-    Fondo fondoNubes; // objeto 'fondo' que hará efecto de scroll
-    Boolean esDeDia; // booleana que índice si es día o de noche, para escoger un fondo u otro
-    Rect rectVolverMenu; // sirve para detectar la pulsaciones para volver al menú
-    Context context; // contexto de la aplicación
-    int idEscena; // número que identifica a las distintas escenas escenas
-    static int anchoPantalla, altoPantalla; // tamaños de pantalla del dispositivo
-    public Paint p, pTexto, paintTexto; // pinceles para gestionar los distintos ajustes a la hora de pintar, recs, textos, bitmaps...
-    Typeface faw; // tipología de fuente para los textos
-    Utils utils; // objeto de la clase 'utils'
+    /**
+     * Bitmaps fondo y botones
+     */
+    Bitmap bitmapFondo, volverMenu;
+    /**
+     * Objeto 'fondo' que hará efecto de scroll
+     */
+    Fondo fondoNubes;
+    /**
+     * Booleana que índice si es día o de noche, para escoger un fondo u otro
+     */
+    Boolean esDeDia;
+    /**
+     * Sirve para detectar la pulsaciones para volver al menu
+     */
+    Rect rectVolverMenu;
+    /**
+     * Contexto de la aplicacion
+     */
+    Context context;
+    /**
+     * Numero que identifica a las distintas escenas
+     */
+    int idEscena;
+    /**
+     * Tamaños de pantalla del dispositivo
+     */
+    static int anchoPantalla, altoPantalla;
+    /**
+     * Pinceles para gestionar los distintos ajustes a la hora de pintar, recs, textos, bitmaps...
+     */
+    public Paint p, pTexto, paintTexto; //
+    /**
+     * Tipologia de fuente para los textos
+     */
+    Typeface faw;
+    /**
+     * Objeto de la clase utils
+     */
+    Utils utils;
 
     /**
      * Metodo contructor que inicializa las propiedades de la clase

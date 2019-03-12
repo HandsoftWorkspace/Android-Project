@@ -13,19 +13,50 @@ import android.view.SurfaceView;
 
 public class Juego extends SurfaceView implements SurfaceHolder.Callback, SensorEventListener {
     private SurfaceHolder surfaceHolder;      // Interfaz abstracta para manejar la superficie de dibujado
-    private Context context;                  // Contexto de la aplicación
+    /**
+     * Contexto de la aplicación
+     */
+    private Context context;
     private SensorManager sensorManager;    // Gestión del sensor de luz
     private Sensor sensor;  // Sensor de luz
-    boolean escenaArrancada = false; // Indica si la escena ha sido arrancada
+    /**
+     * Indica si la escena ha sido arrancada
+     */
+    boolean escenaArrancada = false;
     Utils utils;
-    private float luz = -1; // cantidad de luz expresadas en lúmenes
-    private int anchoPantalla = 1;              // Ancho de la pantalla, su valor se actualiza en el método surfaceChanged
-    private int altoPantalla = 1;               // Alto de la pantalla, su valor se actualiza en el método surfaceChanged
-    private Hilo hilo;                        // Hilo encargado de dibujar y actualizar la física
-    private boolean funcionando = false;      // Control del hilo
+    /**
+     * Cantidad de luz expresadas en lumenes
+     */
+    private float luz = -1;
+
+    /**
+     * Ancho de la pantalla, su valor se actualiza en el método surfaceChanged
+     */
+    private int anchoPantalla = 1;
+    /**
+     * Alto de la pantalla, su valor se actualiza en el método surfaceChanged
+     */
+    private int altoPantalla = 1;
+    /**
+     * Hilo encargado de dibujar y actualizar la fisica
+     */
+    private Hilo hilo;
+    /**
+     * Control del hilo
+     */
+    private boolean funcionando = false;
+    /**
+     * Entero que identifica la escena actual
+     */
     public Escena escenaActual;
     // Control temporal
+    /**
+     * Gestion para el cambio de frames y movimientos del mismo
+     */
     long tiempo = 0;
+    /**
+     * Control temporal
+     */
     int tiempoEspera = 1000;
     // Objetos escenas
     private Menu menu;

@@ -19,32 +19,74 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 public class Game extends Escena implements Runnable {
-
+    /**
+     * Proporciones de pantalla a partide del tamanho de la pantalla del dispotiviso
+     */
     private int proporcionAncho, proporcionAlto;
-    private ArrayList<Fondo> parallax; // Array de objetos 'fondo' para realizar el parallax
+    /**
+     * Pinceles
+     */
     private Paint p = new Paint();
+    /**
+     * Pincel para textos
+     */
     private Paint paintTexto = new Paint();
-
-    protected static Bitmap listaNumeros[] = new Bitmap[10];
+    /**
+     * Bitmaps para los botones e iconos
+     */
     private Bitmap btnA, btnB, btnDisparo;
     private Bitmap heart, lose, win;
-
+    /**
+     * Array con donde se almacenaran los objetos enemigos
+     */
     private ArrayList<Enemigo> listaEnemigos = new ArrayList<>();
+    /**
+     * Array con donde se almacenaran los objetos enemigos
+     */
     private ArrayList<Caliz> listaCaliz = new ArrayList<>();
-
-    //Rect rectYones;
+    /**
+     * Rects para los botones
+     */
     Rect rectBtnA, rectBtnB, rectBtnDisparo;
-
-    private boolean dispara = false; // índica si se está disparando el látigo
-    public boolean gameOver = false; // índica si se ha perdido la partida
-    public boolean gameWin = false; // índica si se ha ganado la partida
-    private boolean caballeroHerido = false; // índica si el caballero ha sido impactado por el látigo
+    /**
+     * Indica si se está disparando el latigo
+     */
+    private boolean dispara = false;
+    /**
+     * Indica si se ha perdido la partida
+     */
+    public boolean gameOver = false;
+    /**
+     * Indica si se ha ganado la partida
+     */
+    public boolean gameWin = false;
+    /**
+     * Indica si el caballero ha sido impactado por el latigo
+     */
+    private boolean caballeroHerido = false;
+    /**
+     * Booleana que indica si se ha pulsado el boton volver
+     */
     boolean pusaldo = false;
+    /**
+     * Entero que indice volumen
+     */
     private int volumen;
-    private int vidas = 1; // vidas de la partida en un estado inicial
-    private int puntuacion = 0; // puntos con los que se inicia
-    private int ronda = 1; // ronda desde la que se empieza
-    // Recursos de texto
+    /**
+     * Entero que seran las vidas de la partida
+     */
+    private int vidas = 1;
+    /**
+     * Puntos con los que se inicia
+     */
+    private int puntuacion = 0;
+    /**
+     * Ronda desde la que se empieza
+     */
+    private int ronda = 1;
+    /**
+     * Strings de recursos para la gestion de los textos
+     */
     private String strVidas = "";
     private String strPuntuacion = "";
     private String strPuntos = "";
@@ -52,8 +94,8 @@ public class Game extends Escena implements Runnable {
     // Control de audio
     public MediaPlayer mediaPlayer;
     public static AudioManager audioManager;
+    // Vibracion
     public static Vibrator vibrator;
-    // Personajes
     DrYones drYones;
     CaballeroDos caballeroDos;
     Enemigo enemigo;
@@ -118,11 +160,6 @@ public class Game extends Escena implements Runnable {
         }
         heart = utils.getBitmapFromAssets("varios/heart.png");
         heart = Bitmap.createScaledBitmap(heart, proporcionAncho * 1, proporcionAlto * 1, false);
-        // Bitmaps de números
-        for (int i = 0; i < 10; i++) {
-            listaNumeros[i] = utils.getBitmapFromAssets("varios/" + i + ".png");
-            listaNumeros[i] = Bitmap.createScaledBitmap(listaNumeros[i], proporcionAncho * 1, proporcionAlto * 1, false);
-        }
         lose = utils.getBitmapFromAssets("varios/lose.png");
         lose = Bitmap.createScaledBitmap(lose, proporcionAncho * 8, proporcionAlto * 4, false);
         win = utils.getBitmapFromAssets("varios/win.png");
@@ -221,8 +258,9 @@ public class Game extends Escena implements Runnable {
                 p.setColor(Color.GREEN);
                 c.drawBitmap(bitmapFondo, 0, 0, null);
                 c.drawBitmap(lose, anchoPantalla / 2 - lose.getWidth() / 2, altoPantalla / 2 - lose.getHeight() / 2, null);
-                c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
-                if (pusaldo) c.drawRect(rectVolverMenu, p);
+                if (pusaldo) {
+                    c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
+                }
                 listaEnemigos.clear();
                 listaCaliz.clear();
             } else if (gameWin) {

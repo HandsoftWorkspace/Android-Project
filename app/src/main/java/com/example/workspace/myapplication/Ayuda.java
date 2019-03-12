@@ -10,11 +10,21 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 public class Ayuda extends Escena {
-
+    /**
+     * Contexto de la aplicacion
+     */
     Context context;
-
+    /**
+     * Tamanho de pantalla del dispositivo
+     */
     private int anchoPantalla, altoPantalla;
+    /**
+     * Proporciones que se utilizaran para el pintado en diferentes tamaños de pantalla
+     */
     private int proporcionAncho, proporcionAlto;
+    /**
+     * Contador para recorrer la ayuda
+     */
     private int contador = 0;
 
     Bitmap fondoTutorial, btnNext, btnBack; // fondo y botones
@@ -34,27 +44,20 @@ public class Ayuda extends Escena {
      */
     public Ayuda(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
-
         this.context = context;
         this.anchoPantalla = anchoPantalla;
         this.altoPantalla = altoPantalla;
-
         this.proporcionAncho = anchoPantalla / 18;
         this.proporcionAlto = altoPantalla / 9;
-
         // Bitmaps
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia);
         fondoNubes = new Fondo(utils.setNubes(anchoPantalla, altoPantalla), anchoPantalla, 6);
-
         fondoTutorial = utils.getBitmapFromAssets("varios/fondotutorial.png");
         fondoTutorial = Bitmap.createScaledBitmap(fondoTutorial, anchoPantalla - proporcionAncho * 2 - proporcionAncho / 2, altoPantalla - proporcionAlto * 2 - proporcionAlto / 2, false);
-
         volverMenu = BitmapFactory.decodeResource(context.getResources(), R.drawable.close2);
         volverMenu = Bitmap.createScaledBitmap(volverMenu, proporcionAncho * 2, proporcionAlto * 2, false);
-
         btnNext = utils.getBitmapFromAssets("varios/next.png");
         btnNext = Bitmap.createScaledBitmap(btnNext, proporcionAncho * 2, proporcionAlto * 2, false);
-
         btnBack = utils.getBitmapFromAssets("varios/back.png");
         btnBack = Bitmap.createScaledBitmap(btnBack, proporcionAncho * 2, proporcionAlto * 2, false);
         // Rects
@@ -62,8 +65,6 @@ public class Ayuda extends Escena {
         rectNext = new Rect(anchoPantalla - proporcionAncho * 2, 0, anchoPantalla, proporcionAlto * 2);
         rectBack = new Rect(proporcionAncho * 13, 0, proporcionAncho * 15, proporcionAlto * 2);
         strAyuda = context.getString(R.string.ayuda);
-
-//        ayudaIzq, ayudaDer, ayudaLatigo, ayudaVidasTotales, ayudaRondaActual, ayudaVidas, ayudaPierdeVidas;
         ayudaIzq = context.getString(R.string.ayudaizq);
         ayudaDer = context.getString(R.string.ayudader);
         ayudaLatigo = context.getString(R.string.ayudalatigo);
@@ -73,7 +74,6 @@ public class Ayuda extends Escena {
         ayudaPierdeVidas = context.getString(R.string.ayudapierdevidas);
         ayudaPuntos = context.getString(R.string.ayudapuntos);
         strLatigo = context.getString(R.string.latigo);
-
     }
 
     /**

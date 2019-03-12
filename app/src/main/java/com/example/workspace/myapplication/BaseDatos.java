@@ -9,7 +9,13 @@ import com.example.workspace.myapplication.Juego;
 
 public class BaseDatos extends android.database.sqlite.SQLiteOpenHelper {
     // Querys
+    /**
+     * String para insertar puntuaciones en la tablas de datos
+     */
     private final String crearTabla = "CREATE TABLE puntuaciones (id INTEGER PRIMARY KEY AUTOINCREMENT,puntos INTEGER)";
+    /**
+     * String con el nombre de la tabla
+     */
     private final String tablaPuntuaciones = "puntuaciones";
 
     public BaseDatos(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {

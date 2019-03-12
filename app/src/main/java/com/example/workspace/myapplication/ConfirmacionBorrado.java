@@ -11,19 +11,34 @@ import android.view.MotionEvent;
 
 
 public class ConfirmacionBorrado extends Escena {
-
-    Bitmap btnOk, btnCancel; // bitmaps botones
-    Rect rectBtnOk, rectBtnCancel; // rects asociados a los botones
-    int proporcionAncho, proporcionAlto; // proporciones de pantalla
-    String strBorra; // recursos de texto para distintos idiomas
-    int idUltimaEscena; // almacena el identificador de la última escena que ha sido cargada
+    /**
+     * Bitmaps para los botones
+     */
+    Bitmap btnOk, btnCancel;
+    /**
+     * Rects asociados a los botones
+     */
+    Rect rectBtnOk, rectBtnCancel;
+    /**
+     * Proporciones de pantalla
+     */
+    int proporcionAncho, proporcionAlto;
+    /**
+     * Recursos de texto para distintos idiomas
+     */
+    String strBorra;
+    /**
+     * Almacena el identificador de la última escena que ha sido cargada
+     */
+    int idUltimaEscena;
 
     /**
      * Contructor que inicializa las propiedades de la clase
-     * @param context Contexto de la aplicacion
-     * @param idEscena Numero asociado a la escena
+     *
+     * @param context       Contexto de la aplicacion
+     * @param idEscena      Numero asociado a la escena
      * @param anchoPantalla Ancho de pantalla del dispositivo
-     * @param altoPantalla Alto de pantalla del dispositivo
+     * @param altoPantalla  Alto de pantalla del dispositivo
      */
     public ConfirmacionBorrado(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -45,6 +60,7 @@ public class ConfirmacionBorrado extends Escena {
         faw = Typeface.createFromAsset(context.getAssets(), "fonts/Moonlight.ttf");
         pTexto.setColor(Color.YELLOW);
         pTexto.setTextSize(80);
+        pTexto.setTypeface(faw);
         strBorra = context.getString(R.string.confirmarvaciado);
     }
 
@@ -76,6 +92,7 @@ public class ConfirmacionBorrado extends Escena {
             case MotionEvent.ACTION_POINTER_UP:
                 if (pulsa(rectBtnOk, event)) {
                     context.deleteDatabase("puntuaciones");
+                    Records.listado.clear();
                     return 3;
                 } else if (pulsa(rectBtnCancel, event)) {
                     return 3;
@@ -106,10 +123,9 @@ public class ConfirmacionBorrado extends Escena {
             c.drawBitmap(btnOk, proporcionAncho * 5, proporcionAlto * 3, null);
             c.drawBitmap(btnCancel, proporcionAncho * 11, proporcionAlto * 3, null);
             // Text
-            pTexto.setTypeface(faw);
+
             c.drawText(strBorra, proporcionAncho * 3, proporcionAlto * 2, pTexto);
         } catch (NullPointerException e) {
-            Log.d("Error", "Dibujado canvas Opciones");
         }
     }
 

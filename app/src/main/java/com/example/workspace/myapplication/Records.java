@@ -15,19 +15,34 @@ import android.view.MotionEvent;
 import java.util.ArrayList;
 
 public class Records extends Escena {
-    int proporcionAncho, proporcionAlto; // proporciones que se utilizarán para el pintado en diferentes tamaños de pantalla
-    private Bitmap one, two, three, table, star1, star2, star3, btnBorrado; // dinstintos bitmaps de la clae records
-    private static ArrayList<Integer> listado = new ArrayList<>(); // colección donde se guardan las puntuaciones obtenida de la base de datos 'puntuaciones'
+    /**
+     * Proporciones que se utilizaran para el pintado en diferentes tamaños de pantalla
+     */
+    int proporcionAncho, proporcionAlto;
+    /**
+     * Dinstintos bitmaps de la clae records
+     */
+    private Bitmap one, two, three, table, star1, star2, star3, btnBorrado;
+    /**
+     * Coleccion donde se guardan las puntuaciones obtenidas de la base de datos 'puntuaciones'
+     */
+    public static ArrayList<Integer> listado = new ArrayList<>();
+    /**
+     * Recursos string para distintos idiomas
+     */
     private String strRecords, strBorraRecords; // recurso string para distintos idiomas
-    Rect rectBorrado; // rect para detecar un evento en una zona de pantalla
+    /**
+     * Rect para detecar un evento en una zona de pantalla
+     */
+    Rect rectBorrado;
 
     /**
      * Método contructor que inicializa las propiedades de la clase crétidos
      *
-     * @param context
-     * @param idEscena
-     * @param anchoPantalla
-     * @param altoPantalla
+     * @param context       Contexto de la aplicacion
+     * @param idEscena      Entero que identifica una escena
+     * @param anchoPantalla Ancho pantalla del dispositivo
+     * @param altoPantalla  Alto pantalla del dispositivo
      */
     public Records(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -74,8 +89,8 @@ public class Records extends Escena {
     /**
      * Controla y gestiona las pulsaciones y gestos en la pantalla
      *
-     * @param event Tipo de evento táctil que sucede
-     * @return Devuelve un entero que índice el numero de escena
+     * @param event Tipo de evento tactil que sucede
+     * @return Devuelve un entero que indice el numero de escena
      */
     @Override
     public int onTouchEvent(MotionEvent event) {
@@ -117,19 +132,15 @@ public class Records extends Escena {
         fondoNubes.dibujar(c);
         c.drawBitmap(volverMenu, 0, proporcionAlto * 0, null);
         c.drawBitmap(btnBorrado, anchoPantalla - proporcionAncho * 2, proporcionAlto * 0, null);
-
         c.drawBitmap(one, proporcionAncho * 4, proporcionAlto * 2, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 2, null);
         c.drawBitmap(star3, proporcionAncho * 11, proporcionAlto * 2, null);
-
         c.drawBitmap(two, proporcionAncho * 4, proporcionAlto * 4, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 4, null);
         c.drawBitmap(star2, proporcionAncho * 11, proporcionAlto * 4, null);
-
         c.drawBitmap(three, proporcionAncho * 4, proporcionAlto * 6, null);
         c.drawBitmap(table, proporcionAncho * 6, proporcionAlto * 6, null);
         c.drawBitmap(star1, proporcionAncho * 11, proporcionAlto * 6, null);
-
         c.drawText(strRecords, proporcionAncho * 2 + proporcionAncho / 3, proporcionAlto, paintTexto);
         paintTexto.setTextSize(30);
         c.drawText(strBorraRecords, proporcionAncho * 12 + proporcionAncho / 3, (proporcionAlto * 2) / 2, paintTexto);

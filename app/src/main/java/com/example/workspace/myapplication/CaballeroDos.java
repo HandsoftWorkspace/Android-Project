@@ -8,21 +8,58 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 public class CaballeroDos extends Personaje {
-    private int posX, posY; // posiciones en eje X y eje Y
-    private int anchoPantalla, altoPantalla; // tamaño de pantalla del dispositivo
-    private int proporcionAncho, proporcionAlto; // proporciones de pantalla
-    private boolean colision = false; // detecta si ha colisionado
+    /**
+     * Posiciones en eje X y eje Y
+     */
+    private int posX, posY;
+    /**
+     * Tamaño de pantalla del dispositivo
+     */
+    private int anchoPantalla, altoPantalla;
+    /**
+     * Proporciones de pantalla
+     */
+    private int proporcionAncho, proporcionAlto;
+    /**
+     * Detecta si ha colisionado
+     */
+    private boolean colision = false;
+    /**
+     * Velocidad del personaje
+     */
     private int velocidad;
+    /**
+     * Pincel
+     */
     private Paint p;
-    private int tiempoFrame = 100; // cada cuanto cambia el frame
-    private int tiempoMove = 50; //
+    /**
+     * Cada cuanto cambia el frame
+     */
+    private int tiempoFrame = 100, tiempoMove = 50;
+    /**
+     * Tiempo para controlar cambios de frame
+     */
     private long tFrameAuxm = 0, tMoveAux = 0;
-    private int indice = 0; // indice para recorrer los array de bitmaps
-    Bitmap bitmapsCaba[]; // array de bitmaps enemigos
-    public Rect rectEnemigo;    // hitbox enemigos
-    Context context; // contexto de la aplicacion
+    /**
+     * Indice para recorrer los array de bitmaps
+     */
+    private int indice = 0;
+    /**
+     * Array de bitmaps enemigos
+     */
+    Bitmap bitmapsCaba[];
+    /**
+     * Hitbox del personaje
+     */
+    public Rect rectEnemigo;
+    /**
+     * Contexto de la aplicacion
+     */
+    Context context;
+    /**
+     * Objeto de la clase utils
+     */
     Utils utils;
-
     /**
      * Contructor que inicializa las propiedas de la clase 'enemigo'
      *

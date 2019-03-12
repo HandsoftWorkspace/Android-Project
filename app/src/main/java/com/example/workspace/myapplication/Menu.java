@@ -17,27 +17,48 @@ import android.view.MotionEvent;
 //public class Menu extends Escena implements SensorEventListener {
 public class Menu extends Escena {
 
-    Rect rectJuego, rectOpciones, rectLogros, rectAyuda, rectCreditos, rectCierre; // rects asociados a los botones
-    Bitmap juego, opciones, creditos, leader, ayuda, cierre, down, up, downGrande, upGrande; // bitmaps y recursos gráficos
-    private int proporcionAlto, proporcionAncho; // proporciones para el dibujado en la clase menú
-    private Paint paint = new Paint(); // Pincel para la clase menú
-    Typeface faw; // tipología de fuente
+    /**
+     * Rects asociados a los botones
+     */
+    Rect rectJuego, rectOpciones, rectLogros, rectAyuda, rectCreditos, rectCierre;
+    /**
+     * Bitmaps y recursos graficos
+     */
+    Bitmap juego, opciones, creditos, leader, ayuda, cierre, down, up, downGrande, upGrande;
+    /**
+     * Proporciones para el dibujado en la clase menú
+     */
+    private int proporcionAlto, proporcionAncho;
+    /**
+     * Pincel para la clase menú
+     */
+    private Paint paint = new Paint();
+    /**
+     * Tipología de fuente
+     */
+    Typeface faw;
     public static MediaPlayer mediaPlayer; // gestión de música
     public static AudioManager audioManager; // gestión de música
     private SoundPool efectos; // efectos cortos de audio
     float luz = -1; // muestra la cantidad de luz expresada en lux (lúmenes)
+    /**
+     * Entero que indice la cantidad de volumen
+     */
     public int volumen; // Volumen del menú
+    /**
+     * Cadenas de texto para recursos
+     */
     String nombreJuego, nombreVersion, strOpciones, strRecords, strAyuda, strCreditos; // recursos de texto para distintos idiomas
     private boolean boolJuego, boolOpciones, boolRecords, boolCreditos, boolAyuda;
     public boolean[] arrayBooleanas;
 
     /**
-     * Contructor que inicializa las propiedas de la clase menú
+     * Contructor que inicializa las propiedas de la clase menu
      *
-     * @param context       contexto de la applicación
-     * @param idEscena      número asociado a una escena de la aplicación
-     * @param anchoPantalla ancho pantalla del dispositivo
-     * @param altoPantalla  alto pantalla del dispositivo
+     * @param context       Contexto de la applicacion
+     * @param idEscena      Numero asociado a una escena de la aplicacion
+     * @param anchoPantalla Ancho pantalla del dispositivo
+     * @param altoPantalla  Alto pantalla del dispositivo
      */
     public Menu(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
@@ -108,16 +129,16 @@ public class Menu extends Escena {
     }
 
     /**
-     * Actualizamos la física de los elementos en pantalla
+     * Rutina donde actualizamos la fisica de los elementos en pantalla
      */
     public void actualizarFisica() {
         fondoNubes.mover();
     }
 
     /**
-     * Rutina de dibujo en el lienzo. Se le llamará desde el hilo juego
+     * Rutina de dibujo en el lienzo. Se le llamara desde el hilo juego
      *
-     * @param c
+     * @param c Canvas de la aplicacion
      */
     public void dibujar(Canvas c) {
         try {
@@ -166,9 +187,9 @@ public class Menu extends Escena {
     }
 
     /**
-     * Gestiona el tipo de pulsación mediante la detección de un evento, con el cual devolvera un idEscena
+     * Gestiona el tipo de pulsacion mediante la deteccion de un evento, con el cual devolvera un idEscena
      *
-     * @param event conseguimos el tipo de evento que sucede
+     * @param event Conseguimos el tipo de evento que sucede
      * @return Devuelve un entero identificando la escena
      */
     @Override
@@ -259,6 +280,9 @@ public class Menu extends Escena {
         bitmapFondo = utils.setFondo(anchoPantalla, altoPantalla, esDeDia); // cada vez que asigna una valor de lúmenes, se comprueba que fondo escoger entre dia/noche
     }
 
+    /**
+     * Reinicia un el array de booleanas de la clase
+     */
     public void refreshBooleanasTexto() {
         for (int i = 0; i < arrayBooleanas.length; i++) {
             arrayBooleanas[i] = false;

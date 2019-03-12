@@ -9,8 +9,17 @@ import com.example.workspace.myapplication.Juego;
 
 public class Fondo {
 
-    public PointF posicion, posicion2; //posiciones de la imagen bitmap
-    public Bitmap imagen; // imagen a la que se le asocia un bitmap
+    /**
+     * Numero de coma flotante para definir las posiciones de la imagen
+     */
+    public PointF posicion, posicion2;
+    /**
+     * Bitmap a la que se le asocia una imagen
+     */
+    public Bitmap imagen;
+    /**
+     * Velocidad de movimiento en el eje X
+     */
     int velocidad = 0;
 
     /**

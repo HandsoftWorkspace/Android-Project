@@ -12,18 +12,34 @@ import android.view.MotionEvent;
 
 public class ConfirmacionCierre extends Escena {
 
-    Bitmap btnOk, btnCancel; // botones
-    Rect rectBtnOk, rectBtnCancel; // recs para detección de pulsaciones
-    int proporcionAncho, proporcionAlto; // proporciones para el dibujado de pantalla
-    String strCierra; // recurso de texto para usar distintos idiomas
-    int idUltimaEscena; // entero que nos dará id que índica la última escena
+    /**
+     * Bitmaps para los botones
+     */
+    Bitmap btnOk, btnCancel;
+    /**
+     * Rects asociados a los botones
+     */
+    Rect rectBtnOk, rectBtnCancel;
+    /**
+     * Proporciones de pantalla
+     */
+    int proporcionAncho, proporcionAlto;
+    /**
+     * Recursos de texto para distintos idiomas
+     */
+    String strCierra;
+    /**
+     * Almacena el identificador de la última escena que ha sido cargada
+     */
+    int idUltimaEscena;
 
     /**
      * Contructor que inicializa las propiedades de la clase
-     * @param context Contexto de la aplicacion
-     * @param idEscena Numero asociado a la escena
+     *
+     * @param context       Contexto de la aplicacion
+     * @param idEscena      Numero asociado a la escena
      * @param anchoPantalla Ancho de pantalla del dispositivo
-     * @param altoPantalla Alto de pantalla del dispositivo
+     * @param altoPantalla  Alto de pantalla del dispositivo
      */
     public ConfirmacionCierre(Context context, int idEscena, int anchoPantalla, int altoPantalla) {
         super(context, idEscena, anchoPantalla, altoPantalla);
